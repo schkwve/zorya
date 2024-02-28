@@ -64,3 +64,8 @@ Mkfile.old
 dkms.conf
 
 bin/*
+
+# Emacs
+*~
+\#*\#
+.\#*
