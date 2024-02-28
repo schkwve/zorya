@@ -15,15 +15,17 @@ int main(void)
 	{
 		glfwTerminate();
 		return -1;
-	}
-	// Initialize GLAD
+    }
+
+    glfwMakeContextCurrent(window);
+
+    // Initialize GLAD
 	if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
 	{
-
 		printf("Failed to initialize GLAD.\n");
-		glfwTerminate();
 		return -1;
 	}
+
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 
