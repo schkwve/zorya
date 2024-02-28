@@ -1,6 +1,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
+
+#include "log/logging.h"
+
 int main(void)
 {
 	GLFWwindow* window;
@@ -17,17 +20,15 @@ int main(void)
 		return -1;
     }
 
+	/* Make the window's context current */
     glfwMakeContextCurrent(window);
 
     // Initialize GLAD
 	if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
 	{
-		printf("Failed to initialize GLAD.\n");
+		log_fatal("Failed to initialize GLAD.");
 		return -1;
 	}
-
-	/* Make the window's context current */
-	glfwMakeContextCurrent(window);
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))

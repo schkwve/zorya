@@ -1,8 +1,14 @@
 UNAME_S = $(shell uname -s)
 
+DEBUG ?= y
+
 CC = clang
 CFLAGS  =-Ilib/glad/include  -Ilib/glfw/include -Ilib/imgui
 LDFLAGS =  lib/glad/src/glad.o lib/glfw/src/libglfw3.a -lm
+
+ifeq ($(DEBUG),y)
+CFLAGS += -D__DEBUG
+endif
 
 # GLFW required frameworks on OSX
 ifeq ($(UNAME_S), Darwin)
