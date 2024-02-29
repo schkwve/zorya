@@ -31,7 +31,7 @@ typedef struct {
   char *name;
   char *content;
   attribute_t *next;
-} attribute_t
+} attribute_t;
 
 /**
  * @brief This contains all information about a element.
@@ -45,7 +45,7 @@ typedef struct {
   int id;
   enum ElementType type;
   bool hasClosingTag;
-} element_t
+} element_t;
 
 element_t* parse_html(char* rawData, size_t size);
 
