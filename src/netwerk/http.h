@@ -14,7 +14,6 @@ typedef struct HTTPHeader {
 
 typedef struct HTTPRequest {
     const char *method;
-    const char *host;
     const char *path;
     enum HTTP_VERSION ver;
     size_t header_len;
