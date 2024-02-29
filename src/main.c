@@ -19,6 +19,9 @@ GLFWwindow *mainWindow;
 bool browserInit()
 {
 	setTitle(mainWindow, "TEST - Sovietski Soyuzy");
+
+	// Log OpenGL info
+	log_info("Using OpenGL %s", glGetString(GL_VERSION));
 	return true;
 }
 bool browserUpdate()

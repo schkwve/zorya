@@ -9,6 +9,30 @@
 #include <stdbool.h>
 #include <utils/logging.h>
 #include <stb_image.h>
+/* 
+    @private
+    @brief GLFW error callback
+
+    @param error The error code
+    @param description The error description
+*/
+static void glfw_error_callback(int error, const char *description)
+{
+    log_error("GLFW Error %d: %s", error, description);
+}
+
+/*
+    @private
+    @brief GLFW resize callback
+
+    @param window The window
+    @param width The new width
+    @param height The new height
+*/
+static void glfw_resize_callback(GLFWwindow *window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
 
 /*
     @brief Create a window
@@ -29,9 +53,20 @@ GLFWwindow *createWindow(int width, int height, const char *title)
         exit(-1);
     }
 
+    glfwSetWindowUserPointer(window, NULL);
+    glfwSetWindowSizeCallback(window, glfw_resize_callback);
+    glfwSetErrorCallback(glfw_error_callback);
+
+    //set minimum OpenGL version
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
+    // line 69, nice
     return window;
 }
 
@@ -84,4 +119,21 @@ void setIcon(GLFWwindow *window,char* beegPath, char* smolPath){
     image[1].pixels = stbi_load(smolPath, &image[1].width, &image[1].height, NULL, 4);
 
     glfwSetWindowIcon(window, 1, (const GLFWimage *)&image);
+}
+
+/*
+    @brief Enter fullscreen
+
+    @param window The window to enter fullscreen for
+*/
+void enterFullscreen(GLFWwindow *window){
+	// I have no clue how to do this
+}
+/*
+    @brief Exit fullscreen
+    
+    @param window The window to exit fullscreen for
+*/
+void exitFullscreen(GLFWwindow *window){
+	// I have no clue how to do this
 }

@@ -48,4 +48,16 @@ void setTitle(GLFWwindow *window, const char *title);
 */
 
 void setIcon(GLFWwindow *window, char* beegPath, char* smolPath);
+/*
+    @brief Enter fullscreen
+
+    @param window The window to enter fullscreen for
+*/
+void enterFullscreen(GLFWwindow *window);
+/*
+    @brief Exit fullscreen
+    
+    @param window The window to exit fullscreen for
+*/
+void exitFullscreen(GLFWwindow *window);
 #endif
