@@ -3,11 +3,12 @@ UNAME_S = $(shell uname -s)
 DEBUG ?= y
 
 CC = clang
-CFLAGS  =-Ilib/glad/include  -Ilib/glfw/include -Ilib/imgui -Isrc
+CFLAGS  =  -Isrc -Ilib/glad/include -Ilib/glfw/include -Ilib/stb
 LDFLAGS =  lib/glad/src/glad.o lib/glfw/src/libglfw3.a -lm
 
 ifeq ($(DEBUG),y)
-CFLAGS += -D__DEBUG
+CFLAGS += -D__DEBUG -g
+LDFLAGS += -g # symbols and shit
 endif
 
 # GLFW required frameworks on OSX
