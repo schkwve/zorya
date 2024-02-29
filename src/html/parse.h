@@ -10,43 +10,43 @@
 
 #include <stddef.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include "../log/logging.h"
 
 /**
-* @breif This contains all possible element types
+ * @brief Stores the info about an attribute
 */
 
-enum ElementType { 
-  REGULAR_ELEMENT, 
-  CLOSING_ELEMENT, 
-  DTD_ELEMENT
-};
-
-/**
- * @brief This contains all information about a element attribute.
- */
-
-typedef struct {
+typedef struct attribute {
   char *name;
   char *content;
-  attribute_t *next;
+  struct attribute *next;
 } attribute_t;
 
 /**
- * @brief This contains all information about a element.
- */
+ * @brief Stores the info about a element.
+*/
 
-typedef struct {
+typedef struct element {
   char *tag;
   attribute_t *attributes;
   char *content_until_new_tag;
-  element_t *next;
+  struct element *next;
   int id;
-  enum ElementType type;
+  enum ElementType {
+    REGULAR_ELEMENT, 
+    CLOSING_ELEMENT, 
+    DTD_ELEMENT
+  } type;
   bool hasClosingTag;
 } element_t;
 
+
+/**
+ * @brief Function to actually parse the HTML into a list of elements
+*/
 element_t* parse_html(char* rawData, size_t size);
 
 #endif // __PARSE_H__

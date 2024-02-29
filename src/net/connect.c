@@ -31,6 +31,7 @@
  * @return New connection structure if it was created successfully;
  *         NULL otherwise.
  */
+
 struct net_connection *net_create_connection(char *url, uint16_t port)
 {
   int status = 0;
