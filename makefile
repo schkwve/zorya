@@ -3,7 +3,7 @@ UNAME_S = $(shell uname -s)
 DEBUG ?= y
 
 CC = clang
-CFLAGS  =-Ilib/glad/include  -Ilib/glfw/include -Ilib/imgui
+CFLAGS  =-Ilib/glad/include  -Ilib/glfw/include -Ilib/imgui -Isrc
 LDFLAGS =  lib/glad/src/glad.o lib/glfw/src/libglfw3.a -lm
 
 ifeq ($(DEBUG),y)

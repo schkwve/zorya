@@ -4,30 +4,23 @@
  * @date 29/02/2024
  * @brief Main file
  */
+
+#include <stdio.h>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <stdio.h>
+#include <suzTK/window.h>
 
 #include "utils/logging.h"
 
 int main(void)
 {
-	GLFWwindow* window;
-
-	/* Initialize the library */
+	/* Initialize GLFW */
 	if (!glfwInit())
 		return -1;
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(640, 480, "Sovietski soyuzy", NULL, NULL);
-	if (!window)
-	{
-		glfwTerminate();
-		return -1;
-    }
-
-	/* Make the window's context current */
-    glfwMakeContextCurrent(window);
+	GLFWwindow* mainWindow = createWindow(640, 480, "Sovietski Soyuzy");
 
     // Initialize GLAD
 	if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
@@ -36,17 +29,17 @@ int main(void)
 		return -1;
 	}
 
+	setTitle(mainWindow, "TEST - Sovietski Soyuzy");
+
 	/* Loop until the user closes the window */
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(mainWindow))
 	{
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		/* Swap front and back buffers */
-		glfwSwapBuffers(window);
 
-		/* Poll for and process events */
-		glfwPollEvents();
+		/* finalize the frame */
+		finishFrame(mainWindow);
 	}
 
 	glfwTerminate();
