@@ -11,12 +11,13 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "http.h"
-#include "utils/buffer.h"
+#include "../utils/buffer.h"
+#include "../utils/logging.h"
 
-static const char **http_ver_str = {"0.9", "1.0", "1.1"};
+static const char *http_ver_str[] = {"0.9", "1.0", "1.1"};
 
 /**
- * @brief Converts http_request_t to char *, that can be sent to server
+ * @brief Converts http_request_t to buffer, that can be sent to server
  * 
  * @param request
  *        http request struct which contains data to generate proper http request for server
@@ -36,8 +37,13 @@ buffer_t *http_gen_request(http_request_t *request) {
         buf_len += strlen(request->headers[i].name) + 2 + strlen(request->headers[i].data) + 2;
     }
     buf_len += request->data_len;
+    buf_len += 2; // add \r\n at end
     // And now, generate http request for server.
     char *out = malloc(buf_len);
+    if (out == NULL) {
+        log_fatal("Failed to allocate http request output buffer\n");
+        return 0;
+    }
     memset(out, 0, buf_len);
     int pos = sprintf(out, "%s %s HTTP/%s\r\n", request->method, request->path, http_ver_str[request->ver]);
 
@@ -50,6 +56,8 @@ buffer_t *http_gen_request(http_request_t *request) {
     if (request->data_len) {
         memcpy(out+pos, request->data, request->data_len);
     }
+
+    strcpy(out+buf_len-2, "\r\n");
 
     // Request is generated, put it into buffer struct.
     buffer_t *buf = malloc(sizeof(buffer_t));

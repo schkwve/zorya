@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stddef.h>
+#include "../utils/buffer.h"
 
 enum HTTP_VERSION {
     HTTP_0_9,
@@ -21,3 +22,5 @@ typedef struct HTTPRequest {
     size_t data_len;
     uint8_t *data;
 } http_request_t;
+
+buffer_t *http_gen_request(http_request_t *request);
