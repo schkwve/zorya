@@ -11,6 +11,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include "../log/logging.h"
 
 /**
 * @breif This contains all possible element types
