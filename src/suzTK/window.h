@@ -38,4 +38,14 @@ void finishFrame(GLFWwindow *window);
 */
 void setTitle(GLFWwindow *window, const char *title);
 
+/*
+    @brief Set the icon of a window
+
+    @param window The window to set the icon of
+    @param width The width of the icon
+    @param height The height of the icon
+    @param pixels The pixels of the icon
+*/
+
+void setIcon(GLFWwindow *window, char* beegPath, char* smolPath);
 #endif
