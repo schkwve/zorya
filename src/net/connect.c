@@ -108,8 +108,10 @@ struct net_connection *net_create_connection(char *url, uint16_t port)
  */
 void net_destroy_connection(struct net_connection *conn)
 {
+  if (conn->socket) {
+    close(conn->socket);
+  }
   if (conn) {
-    memset(conn, 0, sizeof(struct net_connection *));
     free(conn);
   }
 }
