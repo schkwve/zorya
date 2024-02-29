@@ -6,12 +6,28 @@
  */
 
 #include <stdio.h>
+#include <stdbool.h>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <suzTK/window.h>
 
 #include "utils/logging.h"
+
+GLFWwindow* mainWindow;
+
+bool browserInit(){
+	setTitle(mainWindow, "TEST - Sovietski Soyuzy");
+	return true;
+}
+bool browserUpdate(){
+	// TODO: Update
+	return true;
+}
+bool browserDestroy(){
+	// TODO: Destroy
+	return true;
+}
 
 int main(void)
 {
@@ -20,7 +36,7 @@ int main(void)
 		return -1;
 
 	/* Create a windowed mode window and its OpenGL context */
-	GLFWwindow* mainWindow = createWindow(640, 480, "Sovietski Soyuzy");
+	mainWindow = createWindow(640, 480, "Sovietski Soyuzy");
 
     // Initialize GLAD
 	if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
@@ -29,19 +45,21 @@ int main(void)
 		return -1;
 	}
 
-	setTitle(mainWindow, "TEST - Sovietski Soyuzy");
+	if(!browserInit()){
+		log_fatal("Failed to initialize browser.");
+		return -1;
+	}
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(mainWindow))
 	{
-		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
-
-
-		/* finalize the frame */
+		if(!browserUpdate()){
+			break;
+		}
 		finishFrame(mainWindow);
 	}
-
+	browserDestroy();
 	glfwTerminate();
 	return 0;
 }
