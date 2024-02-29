@@ -1,5 +1,5 @@
 /**
- * @file net/connect.h
+ * @file netwerk/connect.h
  * @author Jozef Nagy <schkwve@gmail.com>
  * @date 28/02/2024
  * @brief Network connection manager

@@ -31,18 +31,18 @@ typedef struct Element {
   char* tag;                     // Tag is something like: h1.
   bool closing;                  // If true, it means that the tag is a closing one. </h1> is a closing one.
   char* content;                 // Content between two tags (in <h1>Hello</h1) Hello is the content. NULL if its something like a <meta>, <link>. Most of these ones have a closing tag in they self. Example: '<meta name="description" content="" />'.
-  element_t* closing_element;    // Pointer to the closing element (in <h1></h1>) </h1> is the closing element. NULL if the element is self closing. <meta /> is one self closing element. 
-  attribute_t* atributes;        // Attributes. NULL If there is no attributes.
+  struct element_t* closing_element;    // Pointer to the closing element (in <h1></h1>) </h1> is the closing element. NULL if the element is self closing. <meta /> is one self closing element. 
+  struct attribute_t* atributes;        // Attributes. NULL If there is no attributes.
 } element_t;
 
 /**
  * @brief Node struct for element tree
 */
 
-typedef struct Node {
+typedef struct {
   element_t* element;            // Pointer to the element in the node
-  node_t* parent;                // The parent node
-  node_t* child;                 // The child node
+  struct node_t* parent;                // The parent node
+  struct node_t* child;                 // The child node
 } node_t;
 
 #endif // __PARSE_H__

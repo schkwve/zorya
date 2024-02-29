@@ -1,48 +1,48 @@
-/*
-	main.c - Main application entry source code.
-	Author of code written: KapPetrov
-	History: Created on 2/29/2024
-*/
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <stdio.h>
 
-#include <GL/glut.h> // Include Library GLUT
+#include "log/logging.h"
 
-// Define window parameters
-int WIDTH = 800;
-int HEIGHT = 600;
-
-const char* TITLE = "Sovyetski-soyouzy";
-
-// Display function that gets called after window creation.
-void display()
+int main(void)
 {
-	// Clear the buffer bit
-	glClear(GL_COLOR_BUFFER_BIT);
-	
-	glFlush(); // Flush
-	// Swap buffers
-	glutSwapBuffers();
-}
+	GLFWwindow* window;
 
-// Main function
-int main(int argc, char** argv)
-{
-	// Initialize GLUT
-	glutInit(&argc, argv);
-	// Initialize the display mode
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-	// Window size is 800 by 600 for now.
-	glutInitWindowSize(WIDTH, HEIGHT);
-	// Window title
-	glutCreateWindow(TITLE);
-	// Setting the function that gets called after window creation.
-	glutDisplayFunc(display);
-	// Orthographic view
-	gluOrtho2D(0, WIDTH, 0, HEIGHT);
-	// Clear background color to white.
-	glClearColor(1, 1, 1, 0);
-	// This is the main loop
-	glutMainLoop();
-	// Return
+	/* Initialize the library */
+	if (!glfwInit())
+		return -1;
+
+	/* Create a windowed mode window and its OpenGL context */
+	window = glfwCreateWindow(640, 480, "Sovietski soyuzy", NULL, NULL);
+	if (!window)
+	{
+		glfwTerminate();
+		return -1;
+    }
+
+	/* Make the window's context current */
+    glfwMakeContextCurrent(window);
+
+    // Initialize GLAD
+	if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
+	{
+		log_fatal("Failed to initialize GLAD.");
+		return -1;
+	}
+
+	/* Loop until the user closes the window */
+	while (!glfwWindowShouldClose(window))
+	{
+		/* Render here */
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		/* Swap front and back buffers */
+		glfwSwapBuffers(window);
+
+		/* Poll for and process events */
+		glfwPollEvents();
+	}
+
+	glfwTerminate();
 	return 0;
 }
-

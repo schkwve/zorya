@@ -7,6 +7,4 @@
 
 #include "parse.h"
 
-int main() {
-  log_info("HTML Parsing is WIP");
-}
+//"HTML Parsing is WIP"
