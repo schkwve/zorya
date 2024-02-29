@@ -20,7 +20,7 @@ struct net_connection {
     int socket;
 
     bool ssl;
-    char *url;
+    char *host;
     struct sockaddr_in server;
 };
 

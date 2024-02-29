@@ -22,7 +22,7 @@
 /**
  * @brief Creates a new connection entry and connects to a remote server.
  *
- * @param url
+ * @param host
  *        Stripped URL string (only hostname/IP address
  *        should be present). Ex: www.website.com OR 127.0.0.1
  *
@@ -33,14 +33,14 @@
  *         NULL otherwise.
  */
 
-struct net_connection *net_create_connection(char *url, uint16_t port)
+struct net_connection *net_create_connection(char *host, uint16_t port)
 {
   int status = 0;
   struct net_connection *new;
 
-  new = malloc(sizeof(struct net_connection));
+  new = (struct net_connection *)malloc(sizeof(struct net_connection));
   if (new == NULL) {
-    log_error("Failed to allocate memory for connection to %s:%d!", url, port);
+    log_error("Failed to allocate memory for connection to %s:%d!", host, port);
     return NULL;
   }
 
@@ -48,7 +48,9 @@ struct net_connection *net_create_connection(char *url, uint16_t port)
 
   // set up some nice defaults
   // @note: SSL is disabled by default before it is implemented.
-  new->url = strdup(url);
+  size_t hostlen = strlen(host);
+  new->host = (char *)malloc(hostlen);
+  strncpy(new->host, host, hostlen);
   new->ssl = false;
 
   // convert hostname to IP address
@@ -62,7 +64,7 @@ struct net_connection *net_create_connection(char *url, uint16_t port)
   hints.ai_family = AF_UNSPEC;
   hints.ai_socktype = SOCK_STREAM;
 
-  status = getaddrinfo(url, portstr, &hints, &server_info);
+  status = getaddrinfo(host, portstr, &hints, &server_info);
   if (status != 0) {
     log_error("getaddrinfo() returned %d (errno = %s)!", status, strerror(errno));
     free(new);
@@ -97,7 +99,7 @@ struct net_connection *net_create_connection(char *url, uint16_t port)
     return NULL;
   }
 
-  log_debug("Connected to %s:%d", url, port);
+  log_debug("Connected to %s:%d", host, port);
 
   return new;
 }
@@ -112,6 +114,9 @@ void net_destroy_connection(struct net_connection *conn)
 {
   if (conn->socket) {
     close(conn->socket);
+  }
+  if (conn->host) {
+    free(conn->host);
   }
   if (conn) {
     free(conn);
