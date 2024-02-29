@@ -48,7 +48,7 @@ struct net_connection *net_create_connection(char *url, uint16_t port)
 
   // set up some nice defaults
   // @note: SSL is disabled by default before it is implemented.
-  strcpy(new->url, url);
+  new->url = strdup(url);
   new->ssl = false;
 
   // convert hostname to IP address
