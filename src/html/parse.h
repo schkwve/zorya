@@ -20,19 +20,19 @@
 */
 
 typedef struct Attribute {
-  char* name;                    // Name for attribute (in class="test") class is the name
-  char* value;                   // Vale for attribute (in class="test") test is the value
+  char* name;                    // Name for attribute (in class="test") class is the name.
+  char* value;                   // Vale for attribute (in class="test") test is the value.
 } attribute_t;
 
 /**
  * @brief Element struct for storing HTML element info
 */
 typedef struct Element {
-  char* tag;                     // Tag is something like: h1;
+  char* tag;                     // Tag is something like: h1.
   bool closing;                  // If true, it means that the tag is a closing one. </h1> is a closing one.
-  char* content;                
-  element_t* closing_element;    // Pointer to the closing element (in <h1></h1>) </h1> is the closing element.
-  attribute_t* atributes;        // Attributes
+  char* content;                 // Content between two tags (in <h1>Hello</h1) Hello is the content. NULL if its something like a <meta>, <link>. Most of these ones have a closing tag in they self. Example: '<meta name="description" content="" />'.
+  element_t* closing_element;    // Pointer to the closing element (in <h1></h1>) </h1> is the closing element. NULL if the element is self closing. <meta /> is one self closing element. 
+  attribute_t* atributes;        // Attributes. NULL If there is no attributes.
 } element_t;
 
 /**
