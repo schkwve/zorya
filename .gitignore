@@ -72,3 +72,6 @@ bin/*
 
 # Shit
 /.vscode/
+/tests/parse_test.c
+/tests/parse_test.sh
+/tests/test.html

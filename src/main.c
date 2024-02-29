@@ -14,17 +14,20 @@
 
 #include "utils/logging.h"
 
-GLFWwindow* mainWindow;
+GLFWwindow *mainWindow;
 
-bool browserInit(){
+bool browserInit()
+{
 	setTitle(mainWindow, "TEST - Sovietski Soyuzy");
 	return true;
 }
-bool browserUpdate(){
+bool browserUpdate()
+{
 	// TODO: Update
 	return true;
 }
-bool browserDestroy(){
+bool browserDestroy()
+{
 	// TODO: Destroy
 	return true;
 }
@@ -38,14 +41,15 @@ int main(void)
 	/* Create a windowed mode window and its OpenGL context */
 	mainWindow = createWindow(640, 480, "Sovietski Soyuzy");
 
-    // Initialize GLAD
-	if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
+	// Initialize GLAD
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		log_fatal("Failed to initialize GLAD.");
 		return -1;
 	}
 
-	if(!browserInit()){
+	if (!browserInit())
+	{
 		log_fatal("Failed to initialize browser.");
 		return -1;
 	}
@@ -54,7 +58,8 @@ int main(void)
 	while (!glfwWindowShouldClose(mainWindow))
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
-		if(!browserUpdate()){
+		if (!browserUpdate())
+		{
 			break;
 		}
 		finishFrame(mainWindow);
