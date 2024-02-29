@@ -40,13 +40,12 @@ typedef struct element {
     CLOSING_ELEMENT, 
     DTD_ELEMENT
   } type;
-  bool hasClosingTag;
 } element_t;
 
 
 /**
  * @brief Function to actually parse the HTML into a list of elements
 */
-element_t* parse_html(char* rawData, size_t size);
+element_t* parse_html(char* rawData);
 
 #endif // __PARSE_H__
