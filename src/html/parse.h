@@ -32,9 +32,6 @@ typedef struct Element {
   bool closing;           // If true, it means that the tag is a closing one. </h1> is a closing one.
 
   attribute_t* atributes; // Attributes
-
-  element_t* parent;      // Parent element
-  element_t** children;   // Children elements
 } element_t;
 
 /**
