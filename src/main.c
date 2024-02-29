@@ -1,8 +1,14 @@
+/**
+ * @file netwerk/connect.c
+ * @author lolguy91 <retek1544@gmail.com>
+ * @date 29/02/2024
+ * @brief Main file
+ */
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 
-#include "log/logging.h"
+#include "utils/logging.h"
 
 int main(void)
 {

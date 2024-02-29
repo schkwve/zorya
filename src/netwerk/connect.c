@@ -16,7 +16,7 @@
 #include <netdb.h>
 #include <unistd.h>
 
-#include "../log/logging.h"
+#include "../utils/logging.h"
 #include "connect.h"
 
 /**

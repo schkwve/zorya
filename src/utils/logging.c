@@ -1,5 +1,5 @@
 /**
- * @file log/logging.c
+ * @file utils/logging.c
  * @author Jozef Nagy <schkwve@gmail.com>
  * @date 28/02/2024
  * @brief Logging implementation

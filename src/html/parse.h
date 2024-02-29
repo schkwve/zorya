@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "../log/logging.h"
+#include "../utils/logging.h"
 
 /**
  * @brief Attribute struct for storing attribute info
