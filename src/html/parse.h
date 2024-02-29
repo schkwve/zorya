@@ -16,36 +16,35 @@
 #include "../log/logging.h"
 
 /**
- * @brief Stores the info about an attribute
+ * @brief Attribute struct for storing attribute info
 */
 
-typedef struct attribute {
-  char *name;
-  char *content;
-  struct attribute *next;
+typedef struct Attribute {
+  char* name;             // Name for attribute (in class="test") class is the name
+  char* value;            // Vale for attribute (in class="test") test is the value
 } attribute_t;
 
 /**
- * @brief Stores the info about a element.
+ * @brief Element struct for storing HTML element info
 */
+typedef struct Element {
+  char* tag;              // Tag is something like: h1;
+  bool closing;           // If true, it means that the tag is a closing one. </h1> is a closing one.
 
-typedef struct element {
-  char *tag;
-  attribute_t *attributes;
-  char *content_until_new_tag;
-  struct element *next;
-  int id;
-  enum ElementType {
-    REGULAR_ELEMENT, 
-    CLOSING_ELEMENT, 
-    DTD_ELEMENT
-  } type;
+  attribute_t* atributes; // Attributes
+
+  element_t* parent;      // Parent element
+  element_t** children;   // Children elements
 } element_t;
 
-
 /**
- * @brief Function to actually parse the HTML into a list of elements
+ * @brief Node struct for element tree
 */
-element_t* parse_html(char* rawData);
+
+typedef struct Node {
+  element_t* element;     // Pointer to the element in the node
+  node_t* parent;         // The parent node
+  node_t* child;          // The child node
+} node_t;
 
 #endif // __PARSE_H__
