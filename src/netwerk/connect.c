@@ -16,6 +16,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include "../utils/buffer.h"
 #include "../utils/logging.h"
 #include "connect.h"
 
@@ -67,9 +68,29 @@ net_send_data(struct net_connection* connection, char* buffer)
  * @return Length of received message
  */
 size_t
-net_recv_data(struct net_connection* connection, char* buffer)
+net_recv_data(struct net_connection* connection, buffer_t** buffer)
 {
-    log_error("net_recv_data() is not implemented yet!");
+    size_t bytes_received = -1;
+    size_t total_bytes_received = 0;
+    char received_data[NET_BUFFER_SIZE];
+
+    while (bytes_received != 0) {
+        bytes_received =
+            recv(connection->socket, received_data, NET_BUFFER_SIZE, 0);
+
+        if (bytes_received == -1) {
+            log_error("recv() returned -1: %s!", strerror(errno));
+            if (buffer != NULL) {
+                free(buffer);
+            }
+            return -1;
+        } else if (bytes_received == 0) {
+            return total_bytes_received;
+        }
+
+        total_bytes_received += bytes_received;
+        buffer_append_data(*buffer, received_data, strlen(received_data));
+    }
     return 0;
 }
 
