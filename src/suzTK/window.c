@@ -9,6 +9,9 @@
 #include <stdbool.h>
 #include <utils/logging.h>
 #include <stb_image.h>
+
+bool fullscreen = false;
+
 /* 
     @private
     @brief GLFW error callback
@@ -45,7 +48,14 @@ static void glfw_resize_callback(GLFWwindow *window, int width, int height)
 */
 GLFWwindow *createWindow(int width, int height, const char *title)
 {
-    GLFWwindow *window = glfwCreateWindow(width, height, title, NULL, NULL);
+    GLFWwindow *window;
+
+    if(!fullscreen)
+        window = glfwCreateWindow(width, height, title, NULL, NULL);
+    else
+        window =  glfwCreateWindow(glfwGetVideoMode(glfwGetPrimaryMonitor())->width,
+                                            glfwGetVideoMode(glfwGetPrimaryMonitor())->height, title,
+                                            glfwGetPrimaryMonitor(), NULL);
     if (!window)
     {
         log_fatal("Failed to create GLFW window!");
@@ -127,7 +137,9 @@ void setIcon(GLFWwindow *window,char* beegPath, char* smolPath){
     @param window The window to enter fullscreen for
 */
 void enterFullscreen(GLFWwindow *window){
-	// I have no clue how to do this
+	// I have no clue how to do this - lolguy91
+    // But i do                      - KapPetrov
+    fullscreen = true;
 }
 /*
     @brief Exit fullscreen
@@ -135,5 +147,7 @@ void enterFullscreen(GLFWwindow *window){
     @param window The window to exit fullscreen for
 */
 void exitFullscreen(GLFWwindow *window){
-	// I have no clue how to do this
+	// I have no clue how to do this - lolguy91
+    // But i do                      - KapPetrov
+    fullscreen = false;
 }
