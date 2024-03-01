@@ -5,12 +5,12 @@
  * @brief Pages file
  */
 
-#include "pages.h"
+#include "homepage.h"
 
 /*
     @brief Create Home Page
 */
-void createHomePage()
+void renderHomePage()
 {
     
     // Clear the color to shade White.

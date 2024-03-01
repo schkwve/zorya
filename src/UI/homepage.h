@@ -10,8 +10,8 @@
 
 #include <stdio.h>
 #include <glad/glad.h>
-#include "text.h"
+#include <suzTK/text.h>
 
-void createHomePage();
+void renderHomePage();
 
 #endif

@@ -14,7 +14,7 @@
 
 #include "utils/logging.h"
 
-#include "suzTK/pages.h"
+#include "UI/homepage.h"
 
 GLFWwindow *mainWindow;
 
@@ -28,6 +28,8 @@ bool browserInit()
 }
 bool browserUpdate()
 {
+	renderHomePage();
+
 	// TODO: Update
 	return true;
 }
@@ -63,8 +65,6 @@ int main(void)
 	while (!glfwWindowShouldClose(mainWindow))
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
-
-		createHomePage();
 
 		if (!browserUpdate())
 		{
