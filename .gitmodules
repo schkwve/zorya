@@ -2,3 +2,6 @@
 	path = lib/glfw
 	url = https://github.com/glfw/glfw/
 
+[submodule "lib/freetype"]
+	path = lib/freetype
+	url = https://github.com/freetype/freetype

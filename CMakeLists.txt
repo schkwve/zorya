@@ -8,8 +8,10 @@ file(GLOB SRC src/*.c src/**/*.c)
 
 set(SRC ${SRC} lib/glad/src/glad.c)
 add_subdirectory(lib/glfw)
+add_subdirectory(lib/freetype)
 include_directories(lib/glad/include)
 include_directories(lib/glfw/include)
+include_directories(lib/freetype/include)
 include_directories(lib/stb)
 include_directories(src/)
 
@@ -34,4 +36,4 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_executable(SusieBrowser ${SRC})
-target_link_libraries(SusieBrowser glfw ${EXTRA_LIBS})
+target_link_libraries(SusieBrowser glfw freetype ${EXTRA_LIBS})
