@@ -10,6 +10,7 @@
 char **_split_lines(char *data);
 element_t *_parse_element_from_line(char *line);
 node_t *_construct_node_tree(element_t *elements, int element_count);
+void _add_attribute(element_t *element, char *name, char *value);
 
 element_t *_parse_element_from_line(char *line)
 {
@@ -21,8 +22,8 @@ element_t *_parse_element_from_line(char *line)
 		return NULL;
 	}
 
-	int i;
-	for (i = 0; (ch = line[i]) != '\0'; i++)
+	int i = 0;
+	while ((ch = line[i]) != '\0')
 	{
 		if (ch == '<')
 		{
@@ -52,101 +53,96 @@ element_t *_parse_element_from_line(char *line)
 				element->closing = false;
 			}
 
-			log_debug("Found tag: %s", element->tag);
-
 			element->attributes = NULL;
-			attribute_t *last_attribute = NULL;
 
-			int attr_start = end;
-			while (line[attr_start] != '>' && line[attr_start] != '\0')
+			while (line[end] != '>' && line[end] != '\0')
 			{
-				if (line[attr_start] == ' ' || line[attr_start] == '=')
+				while (line[end] == ' ')
 				{
-					attr_start++;
-					int attr_end = attr_start;
-					while (line[attr_end] != ' ' && line[attr_end] != '=' && line[attr_end] != '>' && line[attr_end] != '\0')
+					end++;
+				}
+
+				int attr_start = end;
+				while (line[end] != '=' && line[end] != ' ' && line[end] != '>' && line[end] != '\0')
+				{
+					end++;
+				}
+				char *attribute_name = malloc((end - attr_start + 1) * sizeof(char));
+				if (attribute_name == NULL)
+				{
+					log_fatal("Memory allocation failed!");
+					free(element->tag);
+					free(element);
+					return NULL;
+				}
+				strncpy(attribute_name, line + attr_start, end - attr_start);
+				attribute_name[end - attr_start] = '\0';
+
+				if (line[end] == '=')
+				{
+					end++;
+					while (line[end] == ' ')
 					{
-						attr_end++;
+						end++;
 					}
-					char *attribute_name_temp = malloc((attr_end - attr_start + 1) * sizeof(char));
-					if (attribute_name_temp == NULL)
+					char quote = line[end];
+					if (quote == '\'' || quote == '\"')
 					{
-						log_fatal("Memory allocation failed!");
-						free(element->tag);
-						free(element);
-						return NULL;
-					}
-					strncpy(attribute_name_temp, line + attr_start, attr_end - attr_start);
-					attribute_name_temp[attr_end - attr_start] = '\0';
-
-					log_debug("Found attribute: %s", attribute_name_temp);
-
-					attribute_t *new_attribute = malloc(sizeof(attribute_t));
-					if (new_attribute == NULL)
-					{
-						log_fatal("Memory allocation failed!");
-						free(attribute_name_temp);
-						free(element->tag);
-						free(element);
-						return NULL;
-					}
-
-					new_attribute->name = attribute_name_temp;
-					new_attribute->value = NULL;
-					new_attribute->next = NULL;
-
-					if (last_attribute != NULL)
-					{
-						last_attribute->next = new_attribute;
+						end++;
+						int attr_value_start = end;
+						while (line[end] != quote && line[end] != '\0')
+						{
+							end++;
+						}
+						char *attribute_value = malloc((end - attr_value_start + 1) * sizeof(char));
+						if (attribute_value == NULL)
+						{
+							log_fatal("Memory allocation failed!");
+							free(attribute_name);
+							free(element->tag);
+							free(element);
+							return NULL;
+						}
+						strncpy(attribute_value, line + attr_value_start, end - attr_value_start);
+						attribute_value[end - attr_value_start] = '\0';
+						end++;
+						_add_attribute(element, attribute_name, attribute_value);
+						free(attribute_value);
 					}
 					else
 					{
-						element->attributes = new_attribute;
-					}
-					last_attribute = new_attribute;
-
-					attr_start = attr_end;
-					if (line[attr_start] == '=')
-					{
-						attr_start++;
-						while (line[attr_start] == ' ' && line[attr_start] != '\0')
+						int attr_value_start = end;
+						while (line[end] != ' ' && line[end] != '>' && line[end] != '\0')
 						{
-							attr_start++;
+							end++;
 						}
-						if (line[attr_start] == '"')
+						char *attribute_value = malloc((end - attr_value_start + 1) * sizeof(char));
+						if (attribute_value == NULL)
 						{
-							attr_start++;
-							int attr_value_start = attr_start;
-							while (line[attr_start] != '"' && line[attr_start] != '\0')
-							{
-								attr_start++;
-							}
-							char *attribute_value_temp = malloc((attr_start - attr_value_start + 1) * sizeof(char));
-							if (attribute_value_temp == NULL)
-							{
-								log_fatal("Memory allocation failed!");
-								free(attribute_name_temp);
-								free(element->tag);
-								free(element);
-								return NULL;
-							}
-							strncpy(attribute_value_temp, line + attr_value_start, attr_start - attr_value_start);
-							attribute_value_temp[attr_start - attr_value_start] = '\0';
-
-							log_debug("Found attribute value: %s", attribute_value_temp);
-
-							new_attribute->value = attribute_value_temp;
+							log_fatal("Memory allocation failed!");
+							free(attribute_name);
+							free(element->tag);
+							free(element);
+							return NULL;
 						}
+						strncpy(attribute_value, line + attr_value_start, end - attr_value_start);
+						attribute_value[end - attr_value_start] = '\0';
+						_add_attribute(element, attribute_name, attribute_value);
+						free(attribute_value);
 					}
-					attr_start = attr_end;
 				}
 				else
 				{
-					attr_start++;
+					_add_attribute(element, attribute_name, NULL);
 				}
+				free(attribute_name);
 			}
 
 			i = end;
+		}
+		else
+		{
+			i++;
 		}
 	}
 	return element;
@@ -278,4 +274,51 @@ node_t *_construct_node_tree(element_t *elements, int element_count)
 	}
 	node_t *tree = NULL;
 	return tree;
+}
+
+void _add_attribute(element_t *element, char *name, char *value)
+{
+	attribute_t *new_attribute = malloc(sizeof(attribute_t));
+	if (new_attribute == NULL)
+	{
+		log_fatal("Memory allocation failed!");
+		exit(EXIT_FAILURE);
+	}
+	new_attribute->name = strdup(name);
+	if (new_attribute->name == NULL)
+	{
+		log_fatal("Memory allocation failed!");
+		free(new_attribute);
+		exit(EXIT_FAILURE);
+	}
+	if (value != NULL)
+	{
+		new_attribute->value = strdup(value);
+		if (new_attribute->value == NULL)
+		{
+			log_fatal("Memory allocation failed!");
+			free(new_attribute->name);
+			free(new_attribute);
+			exit(EXIT_FAILURE);
+		}
+	}
+	else
+	{
+		new_attribute->value = NULL;
+	}
+	new_attribute->next = NULL;
+
+	if (element->attributes == NULL)
+	{
+		element->attributes = new_attribute;
+	}
+	else
+	{
+		attribute_t *current = element->attributes;
+		while (current->next != NULL)
+		{
+			current = current->next;
+		}
+		current->next = new_attribute;
+	}
 }
