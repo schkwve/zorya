@@ -20,6 +20,52 @@
 #include "connect.h"
 
 /**
+ * @brief Sends a request to a server.
+ *
+ * @param connection
+ *        Which server to send to
+ *
+ * @param buffer
+ *        Data which will be sent to the server
+ */
+void net_send_data(struct net_connection *connection, char *buffer)
+{
+  int bytes_sent = 0;
+  int total_bytes_sent = 0;
+  const int buffer_len = strlen(buffer);
+
+  // if not everything is sent in one go,
+  // just try to send the rest once again
+  while (total_bytes_sent < buffer_len) {
+    bytes_sent = send(connection->socket, &buffer[total_bytes_sent], buffer_len - total_bytes_sent, 0);
+    if (bytes_sent == -1) {
+      log_error("Failed to send data to %s!", buffer);
+      return;
+    }
+    total_bytes_sent += bytes_sent;
+  }
+
+  log_debug("Sent %d %s to %s", total_bytes_sent, (total_bytes_sent > 1) ? "bytes" : "byte", connection->host);
+}
+
+/**
+ * @brief Receives data from a server.
+ *
+ * @param connection
+ *        Which server to receive from
+ *
+ * @param buffer [out]
+ *        Received data buffer
+ *
+ * @return Length of received message
+ */
+size_t net_recv_data(struct net_connection *connection, char *buffer)
+{
+  log_error("net_recv_data() is not implemented yet!");
+  return 0;
+}
+
+/**
  * @brief Creates a new connection entry and connects to a remote server.
  *
  * @param host
@@ -32,7 +78,6 @@
  * @return New connection structure if it was created successfully;
  *         NULL otherwise.
  */
-
 struct net_connection *net_create_connection(char *host, uint16_t port)
 {
   int status = 0;
@@ -50,6 +95,10 @@ struct net_connection *net_create_connection(char *host, uint16_t port)
   // @note: SSL is disabled by default before it is implemented.
   size_t hostlen = strlen(host);
   new->host = (char *)malloc(hostlen);
+  if (new == NULL) {
+    log_error("Failed to allocate memory for host string!", host, port);
+    return NULL;
+  }
   strncpy(new->host, host, hostlen);
   new->ssl = false;
 
@@ -66,7 +115,7 @@ struct net_connection *net_create_connection(char *host, uint16_t port)
 
   status = getaddrinfo(host, portstr, &hints, &server_info);
   if (status != 0) {
-    log_error("getaddrinfo() returned %d (errno = %s)!", status, strerror(errno));
+    log_error("getaddrinfo() returned %d: %s!", status, strerror(errno));
     free(new);
     return NULL;
   }
@@ -87,14 +136,16 @@ struct net_connection *net_create_connection(char *host, uint16_t port)
   new->server.sin_port = htons(port);
 
   if (new->socket == -1) {
-    log_error("socket() returned %d (errno = %s)!", status, strerror(errno));
+    log_error("socket() returned %d: %s!", status, strerror(errno));
+    free(new->host);
     free(new);
     return NULL;
-}
+  }
 
   status = connect(new->socket, (struct sockaddr *)&new->server, sizeof(new->server));
   if (status != 0) {
-    log_error("connect() returned %d (errno = %s)!", status, strerror(errno));
+    log_error("connect() returned %d: %s!", status, strerror(errno));
+    free(new->host);
     free(new);
     return NULL;
   }

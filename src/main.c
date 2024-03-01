@@ -47,7 +47,7 @@ int main(void)
 
 	/* Create a windowed mode window and its OpenGL context */
 	mainWindow = createWindow(640, 480, "Sovietski Soyuzy");
-	
+
 	// Initialize GLAD
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{

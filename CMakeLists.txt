@@ -15,6 +15,8 @@ include_directories(lib/freetype/include)
 include_directories(lib/stb)
 include_directories(src/)
 
+# Set debug variables
+add_definitions("-D__DEBUG")
 
 if(APPLE)
     list(APPEND EXTRA_LIBS

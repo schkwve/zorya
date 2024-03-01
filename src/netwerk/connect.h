@@ -13,6 +13,11 @@
 #include <netinet/in.h>
 
 /**
+ * @brief Default buffer size for network-related arrays.
+ */
+#define NET_BUFFER_SIZE 1024
+
+/**
  * @brief This contains all information required to open, keep and close
  *        a connection.
  */
@@ -23,6 +28,9 @@ struct net_connection {
     char *host;
     struct sockaddr_in server;
 };
+
+void net_send_data(struct net_connection *connection, char *buffer);
+size_t net_recv_data(struct net_connection *connection, char *buffer);
 
 struct net_connection *net_create_connection(char *url, uint16_t port);
 void net_destroy_connection(struct net_connection *conn);

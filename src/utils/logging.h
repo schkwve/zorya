@@ -25,7 +25,7 @@ enum {
 #if defined(__DEBUG)
 #define LOG_MIN_LEVEL (LOG_TRACE)
 #else
-#define LOG_MIN_LEVEL (LOG_ERROR)
+#define LOG_MIN_LEVEL (LOG_INFO)
 #endif
 
 /**
