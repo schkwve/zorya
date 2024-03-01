@@ -1,13 +1,17 @@
 #include "../src/html/parse.h"
 #include "../src/utils/logging.h"
+#include <stdlib.h>
+#include <stdio.h>
 
-int main(int argc, char *argv[]) {
+int
+main(int argc, char* argv[])
+{
     if (argc != 2) {
         log_info("Usage: %s filename", argv[0]);
         return EXIT_FAILURE;
     }
 
-    FILE *file = fopen(argv[1], "r");
+    FILE* file = fopen(argv[1], "r");
     if (file == NULL) {
         log_error("Error opening file");
         return EXIT_FAILURE;
@@ -17,7 +21,7 @@ int main(int argc, char *argv[]) {
     long file_size = ftell(file);
     rewind(file);
 
-    char *data = (char *)malloc(file_size + 1);
+    char* data = (char*)malloc(file_size + 1);
     if (data == NULL) {
         log_fatal("Memory allocation failed");
         fclose(file);
@@ -35,7 +39,7 @@ int main(int argc, char *argv[]) {
 
     fclose(file);
 
-    node_t *html_tree = parse_html(data);
+    element_t* elements = parse_html(data);
 
     free(data);
 
