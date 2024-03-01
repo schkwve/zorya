@@ -192,19 +192,7 @@ node_t *parse_html(char *data)
 	node_t *root = NULL;
 	if (element_count > 0)
 	{
-		// root = _construct_node_tree(*elements, element_count);
-		for (int i = 0; i < element_count; i++)
-		{
-			element_t curElement = *elements[i];
-			log_info("Found element! Tag: %s", curElement.tag);
-			log_info("Attributes:");
-			attribute_t *curAttr = curElement.attributes;
-			while (curAttr != NULL)
-			{
-				log_info(" - %s: %s", curAttr->name, curAttr->value);
-				curAttr = curAttr->next;
-			}
-		}
+		root = _construct_node_tree(*elements, element_count);
 	}
 
 	for (int i = 0; i < element_count; i++)
@@ -268,13 +256,14 @@ node_t *_construct_node_tree(element_t *elements, int element_count)
 		attribute_t *curAttr = curElement.attributes;
 		while (curAttr != NULL)
 		{
-
-			if (!curElement.closing)
+			if (curAttr->value != NULL && curAttr->name != NULL)
 			{
-
 				log_info(" - %s: %s", curAttr->name, curAttr->value);
+			} else if (curAttr->value == NULL && curAttr->name != NULL) {
+				log_info(" - %s", curAttr->name);
+			} else {
+				log_info("- No attributes");
 			}
-
 			curAttr = curAttr->next;
 		}
 	}

@@ -1,6 +1,6 @@
 /**
- * @file netwerk/connect.c
- * @author lolguy91 <retek1544@gmail.com>
+ * @file main.c
+ * @author lolguy91 <retek1544@gmail.com>, KapPetrov <xicreationsofficial@gmail.com>
  * @date 29/02/2024
  * @brief Main file
  */
@@ -13,6 +13,8 @@
 #include <suzTK/window.h>
 
 #include "utils/logging.h"
+
+#include "suzTK/pages.h"
 
 GLFWwindow *mainWindow;
 
@@ -61,6 +63,9 @@ int main(void)
 	while (!glfwWindowShouldClose(mainWindow))
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		createHomePage();
+
 		if (!browserUpdate())
 		{
 			break;
