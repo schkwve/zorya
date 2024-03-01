@@ -38,10 +38,12 @@ run: all
 	$(BIN)/SusieBrowser
 
 game: $(OBJ)
-	$(CC) -o $(BIN)/SusieBrowser $^ $(LDFLAGS)
+	@echo "  [LINK] $(BIN)/SusieBrowser"
+	@$(CC) -o $(BIN)/SusieBrowser $^ $(LDFLAGS)
 
 %.o: %.c
-	$(CC) -o $@ -c $< $(CFLAGS)
+	@echo "  [  CC] $@"
+	@$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:
 	rm -rf $(BIN) $(OBJ)

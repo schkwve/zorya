@@ -12,6 +12,7 @@
 typedef struct buffer {
     size_t data_len;
     void *data_ptr;
+    size_t buf_cursor;
 } buffer_t;
 
 #endif // UTIL_BUFFER_H
