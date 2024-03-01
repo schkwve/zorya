@@ -64,8 +64,6 @@ int main(void)
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(mainWindow))
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
-
 		if (!browserUpdate())
 		{
 			break;
