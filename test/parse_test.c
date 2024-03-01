@@ -39,7 +39,7 @@ main(int argc, char* argv[])
 
     fclose(file);
 
-    element_t* elements = parse_html(data);
+    element_t* elements = parse_html(data, strlen(data));
 
     free(data);
 
