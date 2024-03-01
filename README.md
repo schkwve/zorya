@@ -8,3 +8,12 @@ We promise to be
 * Customizable
 * Fast
 * Telemetry-free
+
+# Build guide(Linux only cuz fuck windows users)
+```
+git submodule update --init
+mkdir build # create build dir
+cd build # chdir to build
+cmake .. # generate Makefile
+make # build it
+```
