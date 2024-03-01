@@ -5,21 +5,22 @@
  * @brief window management implementation
  */
 #include "window.h"
-#include <stdlib.h>
-#include <stdbool.h>
-#include <utils/logging.h>
 #include <stb_image.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <utils/logging.h>
 
 bool fullscreen = false;
 
-/* 
+/*
     @private
     @brief GLFW error callback
 
     @param error The error code
     @param description The error description
 */
-static void glfw_error_callback(int error, const char *description)
+static void
+glfw_error_callback(int error, const char* description)
 {
     log_error("GLFW Error %d: %s", error, description);
 }
@@ -32,7 +33,8 @@ static void glfw_error_callback(int error, const char *description)
     @param width The new width
     @param height The new height
 */
-static void glfw_resize_callback(GLFWwindow *window, int width, int height)
+static void
+glfw_resize_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
@@ -46,18 +48,21 @@ static void glfw_resize_callback(GLFWwindow *window, int width, int height)
 
     @return A pointer to the created window
 */
-GLFWwindow *createWindow(int width, int height, const char *title)
+GLFWwindow*
+createWindow(int width, int height, const char* title)
 {
-    GLFWwindow *window;
+    GLFWwindow* window;
 
-    if(!fullscreen)
+    if (!fullscreen)
         window = glfwCreateWindow(width, height, title, NULL, NULL);
     else
-        window =  glfwCreateWindow(glfwGetVideoMode(glfwGetPrimaryMonitor())->width,
-                                            glfwGetVideoMode(glfwGetPrimaryMonitor())->height, title,
-                                            glfwGetPrimaryMonitor(), NULL);
-    if (!window)
-    {
+        window =
+            glfwCreateWindow(glfwGetVideoMode(glfwGetPrimaryMonitor())->width,
+                             glfwGetVideoMode(glfwGetPrimaryMonitor())->height,
+                             title,
+                             glfwGetPrimaryMonitor(),
+                             NULL);
+    if (!window) {
         log_fatal("Failed to create GLFW window!");
         glfwTerminate();
         exit(-1);
@@ -67,7 +72,7 @@ GLFWwindow *createWindow(int width, int height, const char *title)
     glfwSetWindowSizeCallback(window, glfw_resize_callback);
     glfwSetErrorCallback(glfw_error_callback);
 
-    //set minimum OpenGL version
+    // set minimum OpenGL version
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -85,7 +90,8 @@ GLFWwindow *createWindow(int width, int height, const char *title)
 
     @param window The window to destroy
 */
-void destroyWindow(GLFWwindow *window)
+void
+destroyWindow(GLFWwindow* window)
 {
     glfwDestroyWindow(window);
 }
@@ -95,7 +101,8 @@ void destroyWindow(GLFWwindow *window)
 
     @param window The window to swap buffers
 */
-void finishFrame(GLFWwindow *window)
+void
+finishFrame(GLFWwindow* window)
 {
     glfwSwapBuffers(window);
     glfwPollEvents();
@@ -107,7 +114,8 @@ void finishFrame(GLFWwindow *window)
     @param window The window to set the title of
     @param title The new title
 */
-void setTitle(GLFWwindow *window, const char *title)
+void
+setTitle(GLFWwindow* window, const char* title)
 {
     glfwSetWindowTitle(window, title);
 }
@@ -120,15 +128,19 @@ void setTitle(GLFWwindow *window, const char *title)
     @param pixels The pixels of the icon
 */
 
-void setIcon(GLFWwindow *window,char* beegPath, char* smolPath){
+void
+setIcon(GLFWwindow* window, char* beegPath, char* smolPath)
+{
     GLFWimage image[2];
 
     stbi_set_flip_vertically_on_load(true);
 
-    image[0].pixels = stbi_load(beegPath, &image[0].width, &image[0].height, NULL, 4);
-    image[1].pixels = stbi_load(smolPath, &image[1].width, &image[1].height, NULL, 4);
+    image[0].pixels =
+        stbi_load(beegPath, &image[0].width, &image[0].height, NULL, 4);
+    image[1].pixels =
+        stbi_load(smolPath, &image[1].width, &image[1].height, NULL, 4);
 
-    glfwSetWindowIcon(window, 1, (const GLFWimage *)&image);
+    glfwSetWindowIcon(window, 1, (const GLFWimage*)&image);
 }
 
 /*
@@ -136,18 +148,22 @@ void setIcon(GLFWwindow *window,char* beegPath, char* smolPath){
 
     @param window The window to enter fullscreen for
 */
-void enterFullscreen(GLFWwindow *window){
-	// I have no clue how to do this - lolguy91
+void
+enterFullscreen(GLFWwindow* window)
+{
+    // I have no clue how to do this - lolguy91
     // But i do                      - KapPetrov
     fullscreen = true;
 }
 /*
     @brief Exit fullscreen
-    
+
     @param window The window to exit fullscreen for
 */
-void exitFullscreen(GLFWwindow *window){
-	// I have no clue how to do this - lolguy91
+void
+exitFullscreen(GLFWwindow* window)
+{
+    // I have no clue how to do this - lolguy91
     // But i do                      - KapPetrov
     fullscreen = false;
 }

@@ -7,18 +7,19 @@
 
 #include "tree_utils.h"
 
-node_t* _tree_pop(node_t *node) {
+node_t*
+_tree_pop(node_t* node)
+{
     if (node == NULL) {
         return NULL;
     }
-    
-    node_t *parent = node->parent;
+
+    node_t* parent = node->parent;
     if (parent != NULL) {
         if (parent->child == node) {
             parent->child = node->child;
-        }
-        else {
-            node_t *sibling = parent->child;
+        } else {
+            node_t* sibling = parent->child;
             while (sibling->child != node) {
                 sibling = sibling->child;
             }
@@ -28,18 +29,20 @@ node_t* _tree_pop(node_t *node) {
             node->child->parent = parent;
         }
     }
-    
+
     node->parent = NULL;
     node->child = NULL;
-    
+
     return node;
 }
 
-void _tree_push(node_t *parent, node_t *node) {
+void
+_tree_push(node_t* parent, node_t* node)
+{
     if (parent == NULL || node == NULL) {
         return;
     }
-    
+
     node->parent = parent;
     node->child = parent->child;
     if (parent->child != NULL) {
@@ -48,15 +51,17 @@ void _tree_push(node_t *parent, node_t *node) {
     parent->child = node;
 }
 
-node_t* _tree_pop_at_index(node_t *parent, int index) {
+node_t*
+_tree_pop_at_index(node_t* parent, int index)
+{
     if (parent == NULL || index < 0) {
         return NULL;
     }
-    
+
     int count = 0;
-    node_t *current = parent->child;
-    node_t *prev = NULL;
-    
+    node_t* current = parent->child;
+    node_t* prev = NULL;
+
     while (current != NULL) {
         if (count == index) {
             if (prev == NULL) {
@@ -72,6 +77,6 @@ node_t* _tree_pop_at_index(node_t *parent, int index) {
         current = current->child;
         count++;
     }
-    
+
     return NULL;
 }

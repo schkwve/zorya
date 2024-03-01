@@ -10,7 +10,8 @@
 /*
     @brief Print a character - Not working as of now
 */
-void printc(char c)
+void
+printc(char c)
 {
     glColor3f(1, 0, 0);
     glBegin(GL_LINES);

@@ -8,9 +8,10 @@
 #ifndef TEXT_H
 #define TEXT_H
 
-#include <stdio.h>
 #include <glad/glad.h>
+#include <stdio.h>
 
-void printc(char c);
+void
+printc(char c);
 
 #endif

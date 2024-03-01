@@ -13,13 +13,14 @@
 /**
  * @brief Log levels
  */
-enum {
-  LOG_TRACE,
-  LOG_DEBUG,
-  LOG_INFO,
-  LOG_WARN,
-  LOG_ERROR,
-  LOG_FATAL
+enum
+{
+    LOG_TRACE,
+    LOG_DEBUG,
+    LOG_INFO,
+    LOG_WARN,
+    LOG_ERROR,
+    LOG_FATAL
 };
 
 #if defined(__DEBUG)
@@ -58,6 +59,7 @@ enum {
  */
 #define log_fatal(...) log_impl(LOG_FATAL, __FILE__, __LINE__, __VA_ARGS__)
 
-void log_impl(int level, const char *file, int line, const char *fmt, ...);
+void
+log_impl(int level, const char* file, int line, const char* fmt, ...);
 
 #endif /* LOG_LOGGING_H */

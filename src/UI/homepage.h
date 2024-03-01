@@ -8,10 +8,11 @@
 #ifndef PAGES_H
 #define PAGES_H
 
-#include <stdio.h>
 #include <glad/glad.h>
+#include <stdio.h>
 #include <suzTK/text.h>
 
-void renderHomePage();
+void
+renderHomePage();
 
 #endif

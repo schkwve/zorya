@@ -8,9 +8,9 @@
 #ifndef NET_CONNECT_H
 #define NET_CONNECT_H
 
+#include <netinet/in.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <netinet/in.h>
 
 /**
  * @brief Default buffer size for network-related arrays.
@@ -21,18 +21,23 @@
  * @brief This contains all information required to open, keep and close
  *        a connection.
  */
-struct net_connection {
+struct net_connection
+{
     int socket;
 
     bool ssl;
-    char *host;
+    char* host;
     struct sockaddr_in server;
 };
 
-void net_send_data(struct net_connection *connection, char *buffer);
-size_t net_recv_data(struct net_connection *connection, char *buffer);
+void
+net_send_data(struct net_connection* connection, char* buffer);
+size_t
+net_recv_data(struct net_connection* connection, char* buffer);
 
-struct net_connection *net_create_connection(char *url, uint16_t port);
-void net_destroy_connection(struct net_connection *conn);
+struct net_connection*
+net_create_connection(char* url, uint16_t port);
+void
+net_destroy_connection(struct net_connection* conn);
 
 #endif /* NET_CONNECT_H */
