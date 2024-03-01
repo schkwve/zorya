@@ -17,26 +17,30 @@
 
     @return A pointer to the created window
 */
-GLFWwindow *createWindow(int width, int height, const char *title);
+GLFWwindow*
+createWindow(int width, int height, const char* title);
 /*
     @brief Destroy a window
 
     @param window The window to destroy
 */
-void destroyWindow(GLFWwindow *window);
+void
+destroyWindow(GLFWwindow* window);
 /*
     @brief Swap the front and back buffers and poll for events
 
     @param window The window to finalize the frame for
 */
-void finishFrame(GLFWwindow *window);
+void
+finishFrame(GLFWwindow* window);
 /*
     @brief Set the title of a window
 
     @param window The window to set the title of
     @param title The new title
 */
-void setTitle(GLFWwindow *window, const char *title);
+void
+setTitle(GLFWwindow* window, const char* title);
 
 /*
     @brief Set the icon of a window
@@ -47,17 +51,20 @@ void setTitle(GLFWwindow *window, const char *title);
     @param pixels The pixels of the icon
 */
 
-void setIcon(GLFWwindow *window, char* beegPath, char* smolPath);
+void
+setIcon(GLFWwindow* window, char* beegPath, char* smolPath);
 /*
     @brief Enter fullscreen
 
     @param window The window to enter fullscreen for
 */
-void enterFullscreen(GLFWwindow *window);
+void
+enterFullscreen(GLFWwindow* window);
 /*
     @brief Exit fullscreen
-    
+
     @param window The window to exit fullscreen for
 */
-void exitFullscreen(GLFWwindow *window);
+void
+exitFullscreen(GLFWwindow* window);
 #endif

@@ -10,6 +10,7 @@
 
 #include "parse.h"
 
-int render_html(node_t* element_tree);
+int
+render_html(node_t* element_tree);
 
 #endif // __HTML_HANDLER_H__

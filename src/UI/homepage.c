@@ -10,7 +10,8 @@
 /*
     @brief Create Home Page
 */
-void renderHomePage()
+void
+renderHomePage()
 {
     // Clear the color to shade White.
     glClearColor(1, 1, 1, 1);
