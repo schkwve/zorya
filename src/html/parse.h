@@ -43,12 +43,12 @@ typedef struct Element
  * @brief Node struct for element tree
  */
 
-typedef struct
-{
+typedef struct node_t {
   element_t *element;    // Pointer to the element in the node
   struct node_t *parent; // The parent node
   struct node_t *child;  // The child node
 } node_t;
+
 
 /**
  * @brief
