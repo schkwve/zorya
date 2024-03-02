@@ -17,7 +17,6 @@ parse_html(const char* data, size_t size)
     root->num_children = 0;
     root->children = NULL;
     root->element = NULL;
-    log_debug("%u", size);
     char* ptr = (char*)data;
     node_t* node = root;
     bool selfClosing = false;
@@ -39,6 +38,7 @@ parse_html(const char* data, size_t size)
         newnode->children = NULL;
         newnode->element = malloc(sizeof(element_t));
         newnode->element->name = NULL;
+        newnode->element->content = NULL;
         newnode->element->attribute_count = 0;
         newnode->element->attributes = NULL;
 
@@ -103,19 +103,29 @@ parse_html(const char* data, size_t size)
                         }
                         struct attribute_t attr = {};
                         attr.name = malloc(equal - ptr + 1);
-                        attr.value = malloc(tmp - equal);
+                        char* openqoute = strchr(ptr, '"');
+                        char* closeqoute = strchr(openqoute+1, '"');
+                        attr.value = malloc(closeqoute - openqoute);
                         memcpy(attr.name, ptr, equal - ptr);
-                        memcpy(attr.value, equal + 1, tmp - equal - 1);
+                        memcpy(attr.value, openqoute + 1, closeqoute - openqoute - 1);
                         attr.name[equal - ptr] = '\0';
-                        attr.value[tmp - equal - 1] = '\0';
+                        attr.value[closeqoute - openqoute - 1] = '\0';
                         newnode->element->attributes = realloc(newnode->element->attributes, sizeof(attribute_t) * (newnode->element->attribute_count + 1));
                         newnode->element->attributes[newnode->element->attribute_count] = attr;
                         newnode->element->attribute_count++;
-                        ptr = tmp;
+                        ptr = closeqoute+1;
                 }
+                ptr = strchr(ptr, '>')+1;
+                
             }
 
-            // @puffer: Content parsing goes here
+
+            char* opening = strchr(ptr, '<');
+            if(*(opening + 1) == '/' && !selfClosing) {
+                newnode->element->content = malloc(opening - ptr + 1);
+                memcpy(newnode->element->content, ptr, opening - ptr);
+                newnode->element->content[opening - ptr] = '\0';
+            }
 
             newnode->parent = node;
             if (node->num_children == 0) {
@@ -146,8 +156,11 @@ void free_html_tree(node_t* node)
             free(node->element->attributes[i].name);
             free(node->element->attributes[i].value);
         }
-        free(node->element->attributes);
+        if (node->element->attributes != NULL)
+            free(node->element->attributes);
         free(node->element->name);
+        if (node->element->content != NULL)
+            free(node->element->content);
         free(node->element);
     }
     free(node);
@@ -162,6 +175,9 @@ void print_html_tree(node_t* node,int lvl){
             printf("%s", node->element->name);
             for (int i = 0; i < node->element->attribute_count; i++) {
                 printf(" %s=\"%s\"", node->element->attributes[i].name, node->element->attributes[i].value);
+            }
+            if (node->element->content != NULL) {
+                printf(" __CONTENT__= \"%s\"", node->element->content, node->element->name);
             }
             printf("\n");
         }
