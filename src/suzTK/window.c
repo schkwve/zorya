@@ -132,8 +132,6 @@ setIcon(GLFWwindow* window, char* beegPath, char* smolPath)
 {
     GLFWimage image[2];
 
-    stbi_set_flip_vertically_on_load(true);
-
     image[0].pixels =
         stbi_load(beegPath, &image[0].width, &image[0].height, NULL, 4);
     image[1].pixels =
