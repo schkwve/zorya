@@ -64,7 +64,7 @@ http_gen_request(http_request_t* request)
     }
 
     // (If data_len is not null) add additional data to request
-    if (request->data_len) {
+    if (request->data && request->data_len) {
         memcpy(out + pos, request->data, request->data_len);
     }
 
