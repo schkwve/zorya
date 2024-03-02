@@ -20,6 +20,8 @@
 #include "../utils/logging.h"
 #include "connect.h"
 
+struct net_connection connections[MAX_CONNECTIONS];
+
 /**
  * @brief Sends a request to a server.
  *
@@ -182,9 +184,26 @@ net_create_connection(char* host, uint16_t port)
         free(new);
         return NULL;
     }
-
+    
+    new->alive = true;
     log_debug("Connected to %s:%d", host, port);
+     
+    if(new != NULL) {
+      int last_index = 0;
 
+      for(int i = 0; i < MAX_CONNECTIONS; i++) {
+        if(connections[i].alive != true) {
+          last_index = i;
+          break;
+        }
+      };  
+    
+      
+      new->id = last_index;
+      connections[new->id] = *new;
+    
+      log_debug("Assign id %d to %s:%d", new->id, host, port);
+    }
     return new;
 }
 
