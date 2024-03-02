@@ -41,6 +41,8 @@ main(int argc, char* argv[])
 
     node_t* tree = parse_html(data, strlen(data));
 
+    print_html_tree(tree,0);
+
     free(data);
     free_html_tree(tree);
 

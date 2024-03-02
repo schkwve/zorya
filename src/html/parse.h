@@ -45,4 +45,7 @@ parse_html(const char* data, size_t size);
 void 
 free_html_tree(node_t* root);
 
+void 
+print_html_tree(node_t* root, int depth);
+
 #endif // __PARSE_H__

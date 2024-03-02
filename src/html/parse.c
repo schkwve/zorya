@@ -6,7 +6,7 @@
  */
 
 #include "parse.h"
-
+#include <stdio.h>
 char**
 _split_lines(char* data);
 
@@ -46,7 +46,6 @@ parse_html(const char* data, size_t size)
 
         char* closing = strchr(ptr, '>');
         char* space = strchr(ptr, ' ');
-        log_debug("space %u closing %u", space, closing);
         if (closing < space || space == NULL) {
             newnode->element->name = malloc(closing - ptr);
             memcpy(newnode->element->name, ptr + 1, closing - ptr - 1);
@@ -57,8 +56,10 @@ parse_html(const char* data, size_t size)
             memcpy(newnode->element->name, ptr + 1, space - ptr - 1);
             newnode->element->name[space - ptr - 1] = '\0';
             ptr = space + 1;
+            // @puffer: Attribute parsing goes here
         }
-        log_debug("Found %s tag \"%s\" at idx %u",newnode->element->closing ? "closing" : "opening" , newnode->element->name, ptr - data);
+
+        // @puffer: Content parsing goes here
         
         newnode->parent = node;
         if (node->num_children == 0) {
@@ -77,7 +78,6 @@ parse_html(const char* data, size_t size)
 
             node = newnode;
         }
-        log_debug("added");
     }
     return root;
 }
@@ -93,4 +93,18 @@ void free_html_tree(node_t* node)
         free(node->element);
     }
     free(node);
+}
+
+void print_html_tree(node_t* node,int lvl){
+    if (node->element != NULL) {
+        if(!node->element->closing && node->element->name != NULL) {
+           for (int i = 0; i < lvl; i++) {
+        printf(" ");
+        }
+        printf("%s\n", node->element->name);
+        }
+    }
+    for (int i = 0; i < node->num_children && node->children != NULL; i++) {
+        print_html_tree(node->children[i],lvl+1);
+    }
 }
