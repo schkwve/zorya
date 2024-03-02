@@ -31,7 +31,7 @@ parse_html(const char* data, size_t size)
 
         node_t* node = malloc(sizeof(node_t));
         node->element = malloc(sizeof(element_t));
-
+        element_t* element = node->element;
         if (*(ptr + 1) == '/') {
             ptr++;
             element->closing = true;
@@ -54,7 +54,7 @@ parse_html(const char* data, size_t size)
         }
 
 
-        log_debug("Found %s tag \"%s\" at idx %u",element->closing ? "closing" : "opening" , element->name, ptr - data);
+        log_debug("Found %s tag \"%s\" at idx %u", element->closing ? "closing" : "opening" , element->name, ptr - data);
         
     }
 
