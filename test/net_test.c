@@ -32,10 +32,11 @@ int main() {
   memset(res, 0, sizeof(buffer_t));
   net_recv_data(con, &res);
 
-  log_debug("data ptr: 0x%lx data len: %u", res->data_ptr, res->data_len);
+  char* ptr = malloc(res->data_len + 1);
+  memcpy(ptr, res->data_ptr, res->data_len);
+  ptr[res->data_len] = '\0';
 
-  //log_debug("%s", (char*)res->data_ptr);
-  log_debug("we received something, idk what");
+  log_debug("%s", ptr);
   buffer_destroy(result);
   buffer_destroy(res);
   net_destroy_connection(con);
