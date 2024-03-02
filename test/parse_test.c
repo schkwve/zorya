@@ -39,9 +39,10 @@ main(int argc, char* argv[])
 
     fclose(file);
 
-    element_t* elements = parse_html(data, strlen(data));
+    node_t* tree = parse_html(data, strlen(data));
 
     free(data);
+    free_html_tree(tree);
 
     return EXIT_SUCCESS;
 }

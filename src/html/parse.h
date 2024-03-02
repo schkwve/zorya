@@ -35,11 +35,14 @@ typedef struct element_t
 typedef struct node_t {
     element_t* element;
     struct node_t* parent;
-    size_t children_count;
-    struct node_t* children;
+    size_t num_children;
+    struct node_t** children;
 } node_t;
 
-element_t*
+node_t*
 parse_html(const char* data, size_t size);
+
+void 
+free_html_tree(node_t* root);
 
 #endif // __PARSE_H__
