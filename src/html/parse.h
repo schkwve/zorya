@@ -39,7 +39,7 @@ typedef struct node_t {
     struct node_t* children;
 } node_t;
 
-element_t*
+node_t*
 parse_html(const char* data, size_t size);
 
 #endif // __PARSE_H__

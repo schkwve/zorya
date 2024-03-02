@@ -13,11 +13,4 @@
 void
 printc(char c)
 {
-    glColor3f(1, 0, 0);
-    glBegin(GL_LINES);
-    glVertex3f(-1, -1, 0);
-    glVertex3f(1, 1, 0);
-    glEnd();
-
-    glFlush();
 }

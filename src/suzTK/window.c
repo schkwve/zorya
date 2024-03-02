@@ -4,166 +4,77 @@
  * @date 29/02/2024
  * @brief window management implementation
  */
-#include "window.h"
-#include <stb_image.h>
-#include <stdbool.h>
+
+#include <SDL2/SDL.h>
+
 #include <stdlib.h>
+#include <stdint.h>
+#include <errno.h>
+
 #include <utils/logging.h>
+#include "window.h"
 
-bool fullscreen = false;
+static struct suztk_winman window_manager = {0};
 
-/*
-    @private
-    @brief GLFW error callback
-
-    @param error The error code
-    @param description The error description
-*/
-static void
-glfw_error_callback(int error, const char* description)
+int suzwin_create_window(int width, int height, uint8_t fullscreen, const char *title)
 {
-    log_error("GLFW Error %d: %s", error, description);
-}
-
-/*
-    @private
-    @brief GLFW resize callback
-
-    @param window The window
-    @param width The new width
-    @param height The new height
-*/
-static void
-glfw_resize_callback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
-}
-
-/*
-    @brief Create a window
-
-    @param width The width of the window
-    @param height The height of the window
-    @param title The title of the window
-
-    @return A pointer to the created window
-*/
-GLFWwindow*
-createWindow(int width, int height, const char* title)
-{
-    GLFWwindow* window;
-
-    if (!fullscreen)
-        window = glfwCreateWindow(width, height, title, NULL, NULL);
-    else
-        window =
-            glfwCreateWindow(glfwGetVideoMode(glfwGetPrimaryMonitor())->width,
-                             glfwGetVideoMode(glfwGetPrimaryMonitor())->height,
-                             title,
-                             glfwGetPrimaryMonitor(),
-                             NULL);
-    if (!window) {
-        log_fatal("Failed to create GLFW window!");
-        glfwTerminate();
-        exit(-1);
+    uint32_t flags = SDL_WINDOW_RESIZABLE;
+    if (!!fullscreen) {
+        flags |= SDL_WINDOW_FULLSCREEN;
     }
 
-    glfwSetWindowUserPointer(window, NULL);
-    glfwSetWindowSizeCallback(window, glfw_resize_callback);
-    glfwSetErrorCallback(glfw_error_callback);
+    SDL_Window *win = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+    if (win == NULL) {
+        log_error("SDL_CreateWindow returned NULL! %s", SDL_GetError());
+        return -1;
+    }
 
-    // set minimum OpenGL version
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    SDL_Renderer *ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (ren == NULL) {
+        log_error("SDL_CreateRenderer returned NULL! %s", SDL_GetError());
+        SDL_DestroyWindow(win);
+        return -1;
+    }
 
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
+    size_t window_count = window_manager.window_count;
 
-    // line 69, nice
-    return window;
+    struct suztk_window *new = &window_manager.windows[window_count];
+    new = (struct suztk_window *)malloc(sizeof(struct suztk_window *));
+    if (new == NULL) {
+        log_error("Failed to malloc() new window: %s!", strerror(errno));
+        SDL_DestroyRenderer(ren);
+        SDL_DestroyWindow(win);
+        return -1;
+    }
+
+    new->window = win;
+    new->renderer = ren;
+    new->flags = flags;
+    new->width = width;
+    new->height = height;
+    new->is_fullscreen = !!fullscreen;
+
+    window_manager.current_window = window_manager.window_count;
+    window_manager.window_count++;
+
+    SDL_RenderPresent(new->renderer);
+
+    return 0;
 }
 
-/*
-    @brief Destroy a window
-
-    @param window The window to destroy
-*/
-void
-destroyWindow(GLFWwindow* window)
+void suzwin_render_current_window(void)
 {
-    glfwDestroyWindow(window);
+    SDL_RenderPresent(window_manager.windows[window_manager.current_window].renderer);
 }
 
-/*
-    @brief Swap buffers
-
-    @param window The window to swap buffers
-*/
-void
-finishFrame(GLFWwindow* window)
+void suzwin_destroy_current_window(void)
 {
-    glfwSwapBuffers(window);
-    glfwPollEvents();
-}
+    int curwin = window_manager.current_window;
 
-/*
-    @brief Set the title of a window
-
-    @param window The window to set the title of
-    @param title The new title
-*/
-void
-setTitle(GLFWwindow* window, const char* title)
-{
-    glfwSetWindowTitle(window, title);
-}
-/*
-    @brief Set the icon of a window
-
-    @param window The window to set the icon of
-    @param width The width of the icon
-    @param height The height of the icon
-    @param pixels The pixels of the icon
-*/
-
-void
-setIcon(GLFWwindow* window, char* beegPath, char* smolPath)
-{
-    GLFWimage image[2];
-
-    stbi_set_flip_vertically_on_load(true);
-
-    image[0].pixels =
-        stbi_load(beegPath, &image[0].width, &image[0].height, NULL, 4);
-    image[1].pixels =
-        stbi_load(smolPath, &image[1].width, &image[1].height, NULL, 4);
-
-    glfwSetWindowIcon(window, 1, (const GLFWimage*)&image);
-}
-
-/*
-    @brief Enter fullscreen
-
-    @param window The window to enter fullscreen for
-*/
-void
-enterFullscreen(GLFWwindow* window)
-{
-    // I have no clue how to do this - lolguy91
-    // But i do                      - KapPetrov
-    fullscreen = true;
-}
-/*
-    @brief Exit fullscreen
-
-    @param window The window to exit fullscreen for
-*/
-void
-exitFullscreen(GLFWwindow* window)
-{
-    // I have no clue how to do this - lolguy91
-    // But i do                      - KapPetrov
-    fullscreen = false;
+    if (window_manager.windows[curwin].renderer == NULL) {
+        SDL_DestroyRenderer(window_manager.windows[curwin].renderer);
+    }
+    SDL_DestroyWindow(window_manager.windows[curwin].window);
+    free(&window_manager.windows[curwin]);
+    window_manager.window_count--;
 }

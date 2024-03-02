@@ -13,6 +13,7 @@ _split_lines(char* data);
 node_t*
 parse_html(const char* data, size_t size)
 {
+    /*
     node_t* root = malloc(sizeof(node_t));
     log_debug("%u", size);
     char* ptr = (char*)data;
@@ -58,5 +59,6 @@ parse_html(const char* data, size_t size)
         
     }
 
+    */
     return NULL;
 }
