@@ -36,7 +36,9 @@ browserInit()
     // Log OpenGL info
     log_info("Using OpenGL %s", glGetString(GL_VERSION));
 
-    char* url = "example.com";
+    char* method = "GET";
+    char* path = "/hypertext/WWW/TheProject.html";
+    char* url = "info.cern.ch";
     int port = 80;
 
     http_header_t *headers = malloc(sizeof(http_header_t)*2);
@@ -47,8 +49,8 @@ browserInit()
     headers[1].data = url;
 
     http_request_t req = {
-      .method = "GET",
-      .path = "/",
+      .method = method,
+      .path = path,
       .ver = HTTP_1_1,
       .headers = headers,
       .header_len = 2,

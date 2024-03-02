@@ -47,20 +47,20 @@ void handle_html(node_t* tree) {
     free(final_title);
 }
 
-
-element_t* _find_in_html_tree(node_t* node, char* name)
-{
+element_t* _find_in_html_tree(node_t* node, char* name) {
   if (node->element != NULL) {
-    if (strcmp(node->element->name, name) == 0) {
+    if (strcasecmp(node->element->name, name) == 0) {
       return node->element;
     }
   }
 
   for (int i = 0; i < node->num_children && node->children != NULL; i++) {
     element_t* e = _find_in_html_tree(node->children[i], name);
-      if (e != NULL) {
-        return e;
-      }
+    if (e != NULL) {
+      return e;
+    }
   }
+
   return NULL;
 }
+
