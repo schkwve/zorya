@@ -225,4 +225,10 @@ net_destroy_connection(struct net_connection* conn)
     if (conn) {
         free(conn);
     }
+
+    if(connections[conn->id].alive) {
+      connections[conn->id].alive = false; // Not really needed :^)
+      struct net_connection blank_conn = {0};
+      connections[conn->id] = blank_conn;
+    }
 }
