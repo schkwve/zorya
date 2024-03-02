@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.5)
 
 project("Sovietski-Soyouzy")
 
-#set(SRC src/main.c src/html/parse.c src/html/tree_utils.c)
-
 file(GLOB SRC src/*.c src/**/*.c)
 
 set(SRC ${SRC} lib/glad/src/glad.c)
