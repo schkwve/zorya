@@ -13,6 +13,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <suzTK/window.h>
+#include <netwerk/connect.h>
+#include <netwerk/http.h>
+#include <utils/buffer.h>
+#include <string.h>
 
 #include "utils/logging.h"
 #include "html/parse.h"
@@ -32,42 +36,49 @@ browserInit()
     // Log OpenGL info
     log_info("Using OpenGL %s", glGetString(GL_VERSION));
 
-    FILE* file = fopen("./res/test.html", "r");
-    if (file == NULL) {
-      log_error("Error opening file");
-      return EXIT_FAILURE;
-    }
+    http_header_t *headers = malloc(sizeof(http_header_t)*2);
+    headers[0].name = "User-Agent";
+    headers[0].data = "USSR; Mozilla/4.0";
 
-    fseek(file, 0, SEEK_END);
-    long file_size = ftell(file);
-    rewind(file);
+    headers[1].name = "Host";
+    headers[1].data = "example.com";
 
-    char* data = (char*)malloc(file_size + 1);
-    if (data == NULL) {
-      log_fatal("Memory allocation failed");
-      fclose(file);
-      return EXIT_FAILURE;
-    }
+    http_request_t req = {
+      .method = "GET",
+      .path = "/",
+      .ver = HTTP_1_1,
+      .headers = headers,
+      .header_len = 2,
+      .data_len = 0,
+      .data = 0
+    };
+  
+    buffer_t* result = http_gen_request(&req);
+  
+    struct net_connection* con = net_create_connection("example.com", 80);
+    net_send_data(con, result);
+  
+    buffer_t* res = malloc(sizeof(buffer_t));
+    memset(res, 0, sizeof(buffer_t));
+    net_recv_data(con, &res);
 
-    size_t bytes_read = fread(data, 1, file_size, file);
-    if (bytes_read != file_size) {
-      log_error("Error reading file");
-      fclose(file);
-      free(data);
-      return EXIT_FAILURE;
-    }
+    char* ptr = malloc(res->data_len + 1);
+    memcpy(ptr, res->data_ptr, res->data_len);
+    ptr[res->data_len] = '\0';
 
-    data[file_size] = '\0';
+    ptr = strchr(ptr, '<');
 
-    fclose(file);
-
-    node_t* tree = parse_html(data, strlen(data));
+    node_t* tree = parse_html(ptr, strlen(ptr));
     print_html_tree(tree, 0);
     handle_html(tree);
 
-    free(data);
+    //free(ptr);
     free_html_tree(tree);
 
+    buffer_destroy(result);
+    buffer_destroy(res);
+    net_destroy_connection(con);
+    free(headers);
     return true;
 }
 bool
