@@ -49,27 +49,30 @@ http_gen_request(http_request_t* request)
         return 0;
     }
     memset(out, 0, buf_len);
-    int pos = sprintf(out,
+    char *out_pos = out;
+    out_pos += sprintf(out_pos,
                       "%s %s HTTP/%s\r\n",
                       request->method,
                       request->path,
                       http_ver_str[request->ver]);
 
+    log_debug("aaaaaaaaaaaaaaaaaaaaaaaaaaaa %u", out_pos - out);
 
     // Add headers to request
     for (size_t i = 0; i < request->header_len; i++) {
-        pos += sprintf(out + pos,
+        out_pos += sprintf(out_pos,
                        "%s: %s\r\n",
                        request->headers[i].name,
                        request->headers[i].data);
+        log_debug("aaaaaaaaaaaaaaaaaaaaaaaaaaaa %u", out_pos - out);
     }
 
     // (If data_len is not null) add additional data to request
     if (request->data && request->data_len) {
-        memcpy(out + pos, request->data, request->data_len);
+        out_pos = memcpy(out_pos, request->data, request->data_len);
     }
 
-    memcpy(out + buf_len - 4, "\r\n\r\n", 4);
+    memcpy(out_pos - 2, "\r\n\r\n", 4);
 
     // Request is generated, put it into buffer struct.
     buffer_t* buf = malloc(sizeof(buffer_t));

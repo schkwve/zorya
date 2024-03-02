@@ -93,7 +93,7 @@ net_recv_data(struct net_connection* connection, buffer_t** buffer)
         }
 
         total_bytes_received += bytes_received;
-        buffer_append_data(*buffer, received_data, strlen(received_data));
+        buffer_append_data(*buffer, received_data, bytes_received);
     }
     return 0;
 }

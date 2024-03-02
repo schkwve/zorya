@@ -6,15 +6,20 @@
 #include <string.h>
 
 int main() {
-  http_header_t *headers[] = {{"User-Agent", "USSR"}};
+  http_header_t *headers = malloc(sizeof(http_header_t)*2);
+  headers[0].name = "User-Agent";
+  headers[0].data = "USSR; Mozilla/4.0";
+
+  headers[1].name = "Host";
+  headers[1].data = "example.com";
 
   http_request_t req = {
     .method = "GET",
     .path = "/",
     .ver = HTTP_1_1,
-    .headers = (http_header_t *)headers,
-    .header_len = 0,
-    .data_len = 100,
+    .headers = headers,
+    .header_len = 2,
+    .data_len = 0,
     .data = 0
   };
   
@@ -34,4 +39,5 @@ int main() {
   buffer_destroy(result);
   buffer_destroy(res);
   net_destroy_connection(con);
+  free(headers);
 }
