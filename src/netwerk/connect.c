@@ -32,30 +32,32 @@ struct net_connection connections[MAX_CONNECTIONS];
  *        Data which will be sent to the server
  */
 void
-net_send_data(struct net_connection* connection, char* buffer)
+net_send_data(struct net_connection* connection, buffer_t* buffer)
 {
     int bytes_sent = 0;
     int total_bytes_sent = 0;
-    const int buffer_len = strlen(buffer);
+    const int buffer_len = buffer->data_len;
+    char *data_cast = (char *)buffer->data_ptr;
 
     // if not everything is sent in one go,
     // just try to send the rest once again
     while (total_bytes_sent < buffer_len) {
         bytes_sent = send(connection->socket,
-                          &buffer[total_bytes_sent],
+                          &data_cast[total_bytes_sent],
                           buffer_len - total_bytes_sent,
                           0);
         if (bytes_sent == -1) {
-            log_error("Failed to send data to %s!", buffer);
+            log_error("Failed to send data to %s!", data_cast);
             return;
         }
         total_bytes_sent += bytes_sent;
     }
-
+#if 0
     log_debug("Sent %d %s to %s",
               total_bytes_sent,
               (total_bytes_sent > 1) ? "bytes" : "byte",
               connection->host);
+#endif
 }
 
 /**
@@ -216,6 +218,11 @@ net_create_connection(char* host, uint16_t port)
 void
 net_destroy_connection(struct net_connection* conn)
 {
+    if(connections[conn->id].alive) {
+        connections[conn->id].alive = false; // Not really needed :^)
+        struct net_connection blank_conn = {0};
+        connections[conn->id] = blank_conn;
+    }
     if (conn->socket) {
         close(conn->socket);
     }
@@ -226,9 +233,5 @@ net_destroy_connection(struct net_connection* conn)
         free(conn);
     }
 
-    if(connections[conn->id].alive) {
-      connections[conn->id].alive = false; // Not really needed :^)
-      struct net_connection blank_conn = {0};
-      connections[conn->id] = blank_conn;
-    }
+    
 }

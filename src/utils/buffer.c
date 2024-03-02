@@ -17,3 +17,11 @@ buffer_append_data(buffer_t* buf, void* ptr, size_t data_len)
     memcpy(buf->data_ptr + buf->buf_cursor, ptr, data_len);
     buf->buf_cursor += data_len;
 }
+
+void
+buffer_destroy(buffer_t *buf) {
+    if (buf->data_ptr && buf->data_len) {
+        free(buf->data_ptr);
+    }
+    free(buf);
+}

@@ -40,7 +40,7 @@ struct net_connection
 };
 
 void
-net_send_data(struct net_connection* connection, char* buffer);
+net_send_data(struct net_connection* connection, buffer_t* buffer);
 size_t
 net_recv_data(struct net_connection* connection, buffer_t** buffer);
 

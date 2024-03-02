@@ -41,7 +41,7 @@ http_gen_request(http_request_t* request)
                    strlen(request->headers[i].data) + 2;
     }
     buf_len += request->data_len;
-    buf_len += 2; // add \r\n at end
+    buf_len += 4; // add \r\n\r\n at end
     // And now, generate http request for server.
     char* out = malloc(buf_len);
     if (out == NULL) {
@@ -54,6 +54,7 @@ http_gen_request(http_request_t* request)
                       request->method,
                       request->path,
                       http_ver_str[request->ver]);
+
 
     // Add headers to request
     for (size_t i = 0; i < request->header_len; i++) {
@@ -68,7 +69,7 @@ http_gen_request(http_request_t* request)
         memcpy(out + pos, request->data, request->data_len);
     }
 
-    memcpy(out + buf_len - 2, "\r\n", 2);
+    memcpy(out + buf_len - 4, "\r\n\r\n", 4);
 
     // Request is generated, put it into buffer struct.
     buffer_t* buf = malloc(sizeof(buffer_t));
