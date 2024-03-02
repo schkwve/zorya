@@ -32,6 +32,13 @@ typedef struct element_t
         attributes; // The list of attributes, Ex: { name: class, value: title }
 } element_t;
 
+typedef struct node_t {
+    element_t* element;
+    struct node_t* parent;
+    size_t children_count;
+    struct node_t* children;
+} node_t;
+
 element_t*
 parse_html(const char* data, size_t size);
 

@@ -10,40 +10,52 @@
 char**
 _split_lines(char* data);
 
-element_t*
+node_t*
 parse_html(const char* data, size_t size)
 {
-    element_t* element = malloc(sizeof(element_t));
+    node_t* root = malloc(sizeof(node_t));
+    log_debug("%u", size);
     char* ptr = (char*)data;
 
     // TODO: Fix this stupid shit... aka add loop protection orwhatever.
     while (1) {
+        
         if (ptr > data + size) {
             break;
         }
+        ptr = strchr(ptr, '<');
 
-        ptr = strtok(ptr, "<") + 1;
-
-        if (ptr != NULL) {
-            if (*(ptr + 1) == '/') {
-                ptr = strtok(ptr, ">");
-
-                if (ptr != NULL) {
-                    element->closing = true;
-                    log_debug("Found closing tag!");
-                } else {
-                    element->closing = false;
-                    log_debug("Found opening tag!");
-                }
-            }
+        if (ptr == NULL) {
+            break;
         }
 
-        char* tmp = strtok(ptr, " ");
+        node_t* node = malloc(sizeof(node_t));
+        node->element = malloc(sizeof(element_t));
 
-        element->name = malloc(ptr - tmp);
-        memcpy(element->name, ptr, ptr - tmp);
-        ptr = strtok(ptr, ">");
-        log_debug("%s", ptr);
+        if (*(ptr + 1) == '/') {
+            ptr++;
+            element->closing = true;
+        }else {
+            element->closing = false;
+        }
+
+        char* closing = strchr(ptr, '>');
+        char* space = strchr(ptr, ' ');
+        if (closing < space) {
+            element->name = malloc(closing - ptr);
+            memcpy(element->name, ptr + 1, closing - ptr - 1);
+            element->name[closing - ptr - 1] = '\0';
+            ptr = closing + 1;
+        } else {
+            element->name = malloc(space - ptr);
+            memcpy(element->name, ptr + 1, space - ptr - 1);
+            element->name[space - ptr - 1] = '\0';
+            ptr = space + 1;
+        }
+
+
+        log_debug("Found %s tag \"%s\" at idx %u",element->closing ? "closing" : "opening" , element->name, ptr - data);
+        
     }
 
     return NULL;
