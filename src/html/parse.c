@@ -38,46 +38,48 @@ parse_html(const char* data, size_t size)
         newnode->element = malloc(sizeof(element_t));
 
         if (*(ptr + 1) == '/') {
-            ptr++;
-            newnode->element->closing = true;
-        }else {
-            newnode->element->closing = false;
-        }
+            free(newnode->element);
+            free(newnode);
 
-        char* closing = strchr(ptr, '>');
-        char* space = strchr(ptr, ' ');
-        if (closing < space || space == NULL) {
-            newnode->element->name = malloc(closing - ptr);
-            memcpy(newnode->element->name, ptr + 1, closing - ptr - 1);
-            newnode->element->name[closing - ptr - 1] = '\0';
-            ptr = closing + 1;
-        } else {
-            newnode->element->name = malloc(space - ptr);
-            memcpy(newnode->element->name, ptr + 1, space - ptr - 1);
-            newnode->element->name[space - ptr - 1] = '\0';
-            ptr = space + 1;
-            // @puffer: Attribute parsing goes here
-        }
-
-        // @puffer: Content parsing goes here
-        
-        newnode->parent = node;
-        if (node->num_children == 0) {
-            node->children = malloc(sizeof(node_t*));
-            node->num_children++;
-            node->children[0] = newnode;
-        } else {
-            node->num_children++;
-            node->children = realloc(node->children, sizeof(node_t*) * node->num_children);
-            node->children[node->num_children - 1] = newnode;
-        }
-        if (newnode->element->closing) {
-            //TODO: check if we are at the right closing tag
+            char* closing = strchr(ptr, '>');
+            char* space = strchr(ptr, ' ');
+            if (closing < space || space == NULL) {
+                ptr = closing + 1;
+            } else {
+                ptr = space + 1;
+            }
             node = node->parent;
+            continue;
         } else {
+            char* closing = strchr(ptr, '>');
+            char* space = strchr(ptr, ' ');
+            if (closing < space || space == NULL) {
+                newnode->element->name = malloc(closing - ptr);
+                memcpy(newnode->element->name, ptr + 1, closing - ptr - 1);
+                newnode->element->name[closing - ptr - 1] = '\0';
+                ptr = closing + 1;
+            } else {
+                newnode->element->name = malloc(space - ptr);
+                memcpy(newnode->element->name, ptr + 1, space - ptr - 1);
+                newnode->element->name[space - ptr - 1] = '\0';
+                ptr = space + 1;
+                // @puffer: Attribute parsing goes here
+            }
 
-            node = newnode;
+            // @puffer: Content parsing goes here
+
+            newnode->parent = node;
+            if (node->num_children == 0) {
+                node->children = malloc(sizeof(node_t*));
+                node->num_children++;
+                node->children[0] = newnode;
+            } else {
+                node->num_children++;
+                node->children = realloc(node->children, sizeof(node_t*) * node->num_children);
+                node->children[node->num_children - 1] = newnode;
+            }
         }
+        node = newnode;
     }
     return root;
 }
@@ -97,7 +99,7 @@ void free_html_tree(node_t* node)
 
 void print_html_tree(node_t* node,int lvl){
     if (node->element != NULL) {
-        if(!node->element->closing && node->element->name != NULL) {
+        if(node->element->name != NULL) {
            for (int i = 0; i < lvl; i++) {
         printf(" ");
         }

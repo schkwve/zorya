@@ -26,7 +26,6 @@ typedef struct attribute_t
 typedef struct element_t
 {
     char* name;          // Opening tag name
-    bool closing;        // True if its a closing tag
     int attribute_count; // The ammount of attributes
     attribute_t*
         attributes; // The list of attributes, Ex: { name: class, value: title }
