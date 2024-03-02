@@ -1,3 +1,7 @@
+
+#ifndef __HTTP_H__
+#define __HTTP_H__
+
 #include "../utils/buffer.h"
 #include <stddef.h>
 #include <stdint.h>
@@ -28,3 +32,5 @@ typedef struct HTTPRequest
 
 buffer_t*
 http_gen_request(http_request_t* request);
+
+#endif // __HTTP_H__

@@ -11,7 +11,7 @@
 
 element_t* _find_in_html_tree(node_t* node, char* name);
 
-void handle_html(node_t* tree) {
+void handle_html(node_t* tree, char* fall_back_title) {
     char* t = "fuck you no title";
     const char* suffix = " · Sovyetski Soyouzy";
 
@@ -26,7 +26,7 @@ void handle_html(node_t* tree) {
         t = title->content;
     } else {
         log_error("Title element not found, using url as title.");
-        t = "example.com"; // Replace this with the actual "shortned" url later. By shortned i mean: https://example.com/?abc=true&suckMyDick -> example.com
+        t = fall_back_title;
     }
 
     log_debug("Title: %s", t);

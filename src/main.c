@@ -13,6 +13,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <suzTK/window.h>
+#include <suzTK/browser.h>
 #include <netwerk/connect.h>
 #include <netwerk/http.h>
 #include <utils/buffer.h>
@@ -36,55 +37,8 @@ browserInit()
     // Log OpenGL info
     log_info("Using OpenGL %s", glGetString(GL_VERSION));
 
-    char* method = "GET";
-    char* path = "/hypertext/WWW/TheProject.html";
-    char* url = "info.cern.ch";
-    int port = 80;
 
-    http_header_t *headers = malloc(sizeof(http_header_t)*2);
-    headers[0].name = "User-Agent";
-    headers[0].data = "USSR; Mozilla/4.0";
-
-    headers[1].name = "Host";
-    headers[1].data = url;
-
-    http_request_t req = {
-      .method = method,
-      .path = path,
-      .ver = HTTP_1_1,
-      .headers = headers,
-      .header_len = 2,
-      .data_len = 0,
-      .data = 0
-    };
-  
-    buffer_t* result = http_gen_request(&req);
-    
-    // TODO: Make this only deafult to 80 if the url begins with http:// same with 433 (https) and other protocols.
-    struct net_connection* con = net_create_connection(url, port);
-    net_send_data(con, result);
-  
-    buffer_t* res = malloc(sizeof(buffer_t));
-    memset(res, 0, sizeof(buffer_t));
-    net_recv_data(con, &res);
-
-    char* ptr = malloc(res->data_len + 1);
-    memcpy(ptr, res->data_ptr, res->data_len);
-    ptr[res->data_len] = '\0';
-
-    ptr = strchr(ptr, '<');
-
-    node_t* tree = parse_html(ptr, strlen(ptr));
-    print_html_tree(tree, 0);
-    handle_html(tree);
-
-    //free(ptr);
-    free_html_tree(tree);
-
-    buffer_destroy(result);
-    buffer_destroy(res);
-    net_destroy_connection(con);
-    free(headers);
+    render_page("http://info.cern.ch/hypertext/WWW/TheProject.html");
     return true;
 }
 bool
