@@ -16,4 +16,7 @@ typedef struct buffer
     size_t buf_cursor;
 } buffer_t;
 
+void
+buffer_append_data(buffer_t* buf, void* ptr, size_t data_len);
+
 #endif // UTIL_BUFFER_H
