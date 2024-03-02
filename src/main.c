@@ -23,6 +23,7 @@ bool
 browserInit()
 {
     setTitle(mainWindow, "TEST - Sovietski Soyuzy");
+    setIcon(mainWindow, "../res/logo.png", "../res/logo.png");
 
     // Log OpenGL info
     log_info("Using OpenGL %s", glGetString(GL_VERSION));
