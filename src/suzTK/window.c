@@ -64,6 +64,7 @@ createWindow(int width, int height, const char* title)
                              NULL);
     if (!window) {
         log_fatal("Failed to create GLFW window!");
+        log_fatal("GLFW error code: 0x000%x", glfwGetError(NULL));
         glfwTerminate();
         exit(-1);
     }
