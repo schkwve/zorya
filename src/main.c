@@ -36,12 +36,15 @@ browserInit()
     // Log OpenGL info
     log_info("Using OpenGL %s", glGetString(GL_VERSION));
 
+    char* url = "example.com";
+    int port = 80;
+
     http_header_t *headers = malloc(sizeof(http_header_t)*2);
     headers[0].name = "User-Agent";
     headers[0].data = "USSR; Mozilla/4.0";
 
     headers[1].name = "Host";
-    headers[1].data = "example.com";
+    headers[1].data = url;
 
     http_request_t req = {
       .method = "GET",
@@ -54,8 +57,9 @@ browserInit()
     };
   
     buffer_t* result = http_gen_request(&req);
-  
-    struct net_connection* con = net_create_connection("example.com", 80);
+    
+    // TODO: Make this only deafult to 80 if the url begins with http:// same with 433 (https) and other protocols.
+    struct net_connection* con = net_create_connection(url, port);
     net_send_data(con, result);
   
     buffer_t* res = malloc(sizeof(buffer_t));
