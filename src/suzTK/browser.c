@@ -8,6 +8,7 @@
 #include "browser.h"
 
 // TODO: Make this handle params.
+// Important TODO: Make this not set port based on protocol. Make it set way to handle the data.
 void render_page(const char* url) {
   const char* protocol_end = strstr(url, "://");
   const char* protocol;
