@@ -68,7 +68,7 @@ http_gen_request(http_request_t* request)
         memcpy(out + pos, request->data, request->data_len);
     }
 
-    strcpy(out + buf_len - 2, "\r\n");
+    memcpy(out + buf_len - 2, "\r\n", 2);
 
     // Request is generated, put it into buffer struct.
     buffer_t* buf = malloc(sizeof(buffer_t));

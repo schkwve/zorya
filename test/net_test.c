@@ -4,13 +4,13 @@
 #include "../src/utils/logging.h"
 
 int main() {
-  http_header_t headers[] = {{"User-Agent", "USSR"}};
+  http_header_t *headers[] = {{"User-Agent", "USSR"}};
 
   http_request_t req = {
     .method = "GET",
     .path = "/",
     .ver = HTTP_1_1,
-    .headers = &headers[0],
+    .headers = (http_header_t *)headers,
     .header_len = 0,
     .data_len = 100,
     .data = 0
