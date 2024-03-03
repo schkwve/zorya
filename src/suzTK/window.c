@@ -84,7 +84,9 @@ int suzwin_create_window(int width, int height, uint8_t fullscreen, const char *
  */
 void suzwin_set_title(const char *title)
 {
-    SDL_SetWindowTitle(window.window, title);
+    char full_title[1024] = {0};
+    sprintf(full_title, "%s | Sovyetski Soyouzy", title);
+    SDL_SetWindowTitle(window.window, full_title);
 }
 
 /**

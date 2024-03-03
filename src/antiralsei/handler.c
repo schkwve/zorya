@@ -12,8 +12,7 @@
 element_t* _find_in_html_tree(node_t* node, char* name);
 
 void handle_html(node_t* tree, char* fall_back_title) {
-    char* t = "fuck you no title";
-    const char* suffix = " · Sovyetski Soyouzy";
+    char* t = "Untitled Page";
 
     if (tree == NULL) {
         log_error("HTML tree is NULL");
@@ -29,23 +28,9 @@ void handle_html(node_t* tree, char* fall_back_title) {
         t = fall_back_title;
     }
 
-    log_debug("Title: %s", t);
+    log_debug("Setting title to '%s'", t);
 
-    size_t final_length = strlen(t) + strlen(suffix) + 1;
-    char* final_title = malloc(final_length);
-
-    if (final_title == NULL) {
-        log_error("Memory allocation failed");
-        return;
-    }
-
-    strcpy(final_title, t);
-    strcat(final_title, suffix);
-
-    //setTitle(mainWindow, final_title);
-
-    if(final_title != NULL)
-      free(final_title);
+    suzwin_set_title(t);
 }
 
 element_t* _find_in_html_tree(node_t* node, char* name) {

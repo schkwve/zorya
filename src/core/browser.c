@@ -14,6 +14,7 @@
 #include <utils/logging.h>
 #include <utils/buffer.h>
 #include <utils/host.h>
+#include <suzTK/window.h>
 #include <main.h>
 
 void loadPage(const char* url);
@@ -24,16 +25,13 @@ bool browserInit()
     #ifndef __APPLE__
         setIcon(mainWindow, "../res/logo.png", "../res/logo.png");
     #endif
-    // Log OpenGL info
-    log_info("Using OpenGL %s", glGetString(GL_VERSION));
-
 
     loadPage("http://lolguy91:supersecurepassword@info.cern.ch/hypertext/WWW/TheProject.html#CERN?someTrackingID=123456789");
     return true;
 }
 bool browserUpdate()
 {
-    renderHomePage();
+    //renderHomePage();
 
     // TODO: Update
     return true;
