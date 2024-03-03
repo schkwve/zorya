@@ -20,15 +20,12 @@ void loadPage(const char* url);
 
 bool browserInit()
 {
-    // dont't set icon icon on  MacOS
-    #ifndef __APPLE__
-        setIcon(mainWindow, "../res/logo.png", "../res/logo.png");
-    #endif
-    // Log OpenGL info
-    log_info("Using OpenGL %s", glGetString(GL_VERSION));
+    // No icon setting for now :(
+    //#ifndef __APPLE__
+    //    setIcon(mainWindow, "../res/logo.png", "../res/logo.png");
+    //#endif
 
-
-    loadPage("http://lolguy91:supersecurepassword@info.cern.ch/hypertext/WWW/TheProject.html#CERN?someTrackingID=123456789");
+    loadPage("http://info.cern.ch/hypertext/WWW/TheProject.html");
     return true;
 }
 bool browserUpdate()

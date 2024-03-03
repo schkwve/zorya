@@ -88,9 +88,7 @@ Url parseUrl(const char *url) {
         result.query = malloc(strlen(queryStart + 1) + 1);
         memcpy(result.query, queryStart + 1, strlen(queryStart + 1));
         result.query[strlen(queryStart + 1)] = '\0';
-
     }
-
     free(urlCopy);
 
     return result;
@@ -99,6 +97,7 @@ Url parseUrl(const char *url) {
 void freeUrl(Url *url) {
     free(url->scheme);
     free(url->authority);
+    free(url->host);
     free(url->path);
     free(url->query);
     free(url->fragment);
