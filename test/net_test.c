@@ -1,5 +1,5 @@
 #include "../src/netwerk/connect.h"
-#include "../src/netwerk/http.h"
+#include "../src/netwerk/protocols/http.h"
 #include "../src/utils/buffer.h"
 #include "../src/utils/logging.h"
 #include <stdlib.h>

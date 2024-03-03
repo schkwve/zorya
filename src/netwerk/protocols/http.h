@@ -2,7 +2,7 @@
 #ifndef __HTTP_H__
 #define __HTTP_H__
 
-#include "../utils/buffer.h"
+#include <utils/buffer.h>
 #include <stddef.h>
 #include <stdint.h>
 

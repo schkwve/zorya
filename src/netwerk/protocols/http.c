@@ -6,9 +6,9 @@
  */
 
 #include "http.h"
-#include "../utils/buffer.h"
-#include "../utils/logging.h"
-#include "connect.h"
+#include <utils/buffer.h>
+#include <utils/logging.h>
+#include <netwerk/connect.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -56,7 +56,6 @@ http_gen_request(http_request_t* request)
                       request->path,
                       http_ver_str[request->ver]);
 
-    log_debug("aaaaaaaaaaaaaaaaaaaaaaaaaaaa %u", out_pos - out);
 
     // Add headers to request
     for (size_t i = 0; i < request->header_len; i++) {
@@ -64,7 +63,6 @@ http_gen_request(http_request_t* request)
                        "%s: %s\r\n",
                        request->headers[i].name,
                        request->headers[i].data);
-        log_debug("aaaaaaaaaaaaaaaaaaaaaaaaaaaa %u", out_pos - out);
     }
 
     // (If data_len is not null) add additional data to request

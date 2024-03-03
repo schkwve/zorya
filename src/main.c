@@ -15,7 +15,7 @@
 #include <suzTK/window.h>
 #include <core/browser.h>
 #include <netwerk/connect.h>
-#include <netwerk/http.h>
+#include <netwerk/protocols/http.h>
 #include <utils/buffer.h>
 #include <string.h>
 

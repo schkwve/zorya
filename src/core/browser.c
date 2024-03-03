@@ -9,7 +9,7 @@
 #include <antiralsei/parse.h>
 #include <antiralsei/handler.h>
 #include <netwerk/connect.h>
-#include <netwerk/http.h>
+#include <netwerk/protocols/http.h>
 #include <netwerk/url.h>
 #include <utils/logging.h>
 #include <utils/buffer.h>
