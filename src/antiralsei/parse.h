@@ -5,48 +5,46 @@
  * @brief A parser for standard HTML 2.0
  */
 
-#ifndef __PARSE_H__
-#define __PARSE_H__
+#ifndef PARSE_H
+#define PARSE_H
 
-#include "../utils/logging.h"
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 
-struct attribute_t;
-struct element_t;
+#include <utils/logging.h>
 
-typedef struct attribute_t
+struct parse_attribute
 {
-    char* name;
-    char* value;
-} attribute_t;
+    char *name;
+    char *value;
+};
 
-typedef struct element_t
+struct parse_element
 {
-    char* name;          // Opening tag name
-    char* content;       // The content of the tag
+    char *name;          // Opening tag name
+    char *content;       // The content of the tag
     int attribute_count; // The ammount of attributes
-    attribute_t*
+    struct parse_attribute *
         attributes; // The list of attributes, Ex: { name: class, value: title }
-} element_t;
+};
 
-typedef struct node_t
+struct parse_node
 {
-    element_t* element;
-    struct node_t* parent;
+    struct parse_element *element;
+    struct parse_node *parent;
     size_t num_children;
-    struct node_t** children;
-} node_t;
+    struct parse_node **children;
+};
 
-node_t*
-parse_html(const char* data, size_t size);
-
-void
-free_html_tree(node_t* root);
+struct parse_node *
+parse_html(const char *data, size_t size);
 
 void
-print_html_tree(node_t* root, int depth);
+free_html_tree(struct parse_node *root);
 
-#endif // __PARSE_H__
+void
+print_html_tree(struct parse_node *root, int depth);
+
+#endif /* PARSE_H */

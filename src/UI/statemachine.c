@@ -5,34 +5,69 @@
  * @brief Pages file
  */
 
-#include "statemachine.h"
-#include "home.h"
-#include "error.h"
 #include <string.h>
-#include <stdlib.h>
 
-page_t pages[] = {
-    {"blank", NULL, NULL, NULL},
-    {"home", initHomePage, renderHomePage, destroyHomePage},
-    {"error", initErrorPage, renderErrorPage, destroyErrorPage},
+#include "error.h"
+#include "home.h"
+#include "statemachine.h"
+
+/**
+ * @brief Array containing built-in pages and their callback functions.
+ */
+struct page pages[] = {
+    { "blank", NULL, NULL, NULL },
+    { "home", ui_homepage_init, ui_homepage_render, ui_homepage_destroy },
+    { "error", ui_errorpage_init, ui_errorpage_render, ui_errorpage_destroy },
 };
+
+/**
+ * @brief Current page index
+ */
 size_t currentPageID = 0;
-void* currentPagePrivatePointer = NULL;
 
+/**
+ * @brief ???
+ */
+void *currentPagePrivatePointer = NULL;
 
-void initStateMachine(){
-    gotoPage("home");
+/**
+ * @brief Initializes the UI state machine.
+ */
+void
+ui_statemachine_init()
+{
+    ui_statemachine_goto_page("home");
 }
-void renderCurrentPage(){
+
+/**
+ * @brief Calls renderer for the current page.
+ */
+void
+ui_statemachine_render_current_page()
+{
     pages[currentPageID].render(currentPagePrivatePointer);
 }
-void destroyCurrentPage(){
+
+/**
+ * @brief Destroys current page.
+ */
+void
+ui_statemachine_destroy_current_page()
+{
     pages[currentPageID].destroy(currentPagePrivatePointer);
 }
 
-void gotoPage(char* pagename){
-    for(int i = 0; i < sizeof(pages)/sizeof(pages[0]); i++){
-        if(strcmp(pages[i].name, pagename) == 0){
+/**
+ * @brief Goes to the current page.
+ *
+ * @param pagename
+ *        Name of the page
+ */
+void
+ui_statemachine_goto_page(char *pagename)
+{
+    for (int i = 0; i < sizeof(pages) / sizeof(pages[0]); i++) {
+        if (strcmp(pages[i].name, pagename) == 0) {
             currentPageID = i;
             break;
         }

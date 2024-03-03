@@ -5,20 +5,27 @@
  * @brief Pages file
  */
 
-#ifndef __UI_STATEMACHINE_H
-#define __UI_STATEMACHINE_H
+#ifndef UI_STATEMACHINE_H
+#define UI_STATEMACHINE_H
 
-typedef struct page {
-    char* name;
-    void* (*init)();
-    void (*render)(void* PP);
-    void (*destroy)(void* PP);
-} page_t;
+struct page
+{
+    char *name;
+    void *(*init)();
+    void (*render)(void *PP);
+    void (*destroy)(void *PP);
+};
 
-void initStateMachine();
-void renderCurrentPage();
-void destroyCurrentPage();
+void
+ui_statemachine_init();
 
-void gotoPage(char* pagename);
+void
+ui_statemachine_render_current_page();
 
-#endif
+void
+ui_statemachine_destroy_current_page();
+
+void
+ui_statemachine_goto_page(char *pagename);
+
+#endif /* UI_STATEMACHINE_H */

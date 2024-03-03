@@ -32,11 +32,11 @@ struct net_connection connections[MAX_CONNECTIONS];
  *        Data which will be sent to the server
  */
 void
-net_send_data(struct net_connection* connection, buffer_t* buffer)
+net_send_data(struct net_connection *connection, buffer_t *buffer)
 {
     int bytes_sent = 0;
     int total_bytes_sent = 0;
-    const int buffer_len = buffer->dataLen;
+    const int buffer_len = buffer->data_len;
     char *data_cast = (char *)buffer->dataPtr;
 
     // if not everything is sent in one go,
@@ -52,12 +52,6 @@ net_send_data(struct net_connection* connection, buffer_t* buffer)
         }
         total_bytes_sent += bytes_sent;
     }
-#if 0
-    log_debug("Sent %d %s to %s",
-              total_bytes_sent,
-              (total_bytes_sent > 1) ? "bytes" : "byte",
-              connection->host);
-#endif
 }
 
 /**
@@ -72,7 +66,7 @@ net_send_data(struct net_connection* connection, buffer_t* buffer)
  * @return Length of received message
  */
 size_t
-net_recv_data(struct net_connection* connection, buffer_t** buffer)
+net_recv_data(struct net_connection *connection, buffer_t **buffer)
 {
     size_t bytes_received = -1;
     size_t total_bytes_received = 0;
@@ -111,13 +105,13 @@ net_recv_data(struct net_connection* connection, buffer_t** buffer)
  * @return New connection structure if it was created successfully;
  *         NULL otherwise.
  */
-struct net_connection*
-net_create_connection(char* host, uint16_t port)
+struct net_connection *
+net_create_connection(char *host, uint16_t port)
 {
     int status = 0;
-    struct net_connection* new;
+    struct net_connection *new;
 
-    new = (struct net_connection*)malloc(sizeof(struct net_connection));
+    new = (struct net_connection *)malloc(sizeof(struct net_connection));
     if (new == NULL) {
         log_error(
             "Failed to allocate memory for connection to %s:%d!", host, port);
@@ -129,7 +123,7 @@ net_create_connection(char* host, uint16_t port)
     // set up some nice defaults
     // @note: SSL is disabled by default before it is implemented.
     size_t hostlen = strlen(host);
-    new->host = (char*)malloc(hostlen);
+    new->host = (char *)malloc(hostlen);
     if (new == NULL) {
         log_error("Failed to allocate memory for host string!", host, port);
         return NULL;
@@ -139,10 +133,10 @@ net_create_connection(char* host, uint16_t port)
 
     // convert hostname to IP address
     char portstr[5] = { 0 };
-    sprintf(portstr, "%d", port);
+    snprintf(portstr, 5, "%d", port);
 
     struct addrinfo hints = { 0 };
-    struct addrinfo* server_info;
+    struct addrinfo *server_info;
 
     // prefer TCP, get IPv4 and/or IPv6
     hints.ai_family = AF_UNSPEC;
@@ -155,11 +149,11 @@ net_create_connection(char* host, uint16_t port)
         return NULL;
     }
 
-    for (struct addrinfo* ptr = server_info; ptr != NULL; ptr = ptr->ai_next) {
+    for (struct addrinfo *ptr = server_info; ptr != NULL; ptr = ptr->ai_next) {
         // only take IPv4 for now
         if (ptr->ai_family == AF_INET) {
-            new->server.sin_addr =
-                (struct in_addr)(((struct sockaddr_in*)ptr->ai_addr)->sin_addr);
+            new->server.sin_addr = (struct in_addr)(
+                ((struct sockaddr_in *)ptr->ai_addr)->sin_addr);
             break;
         }
     }
@@ -179,32 +173,31 @@ net_create_connection(char* host, uint16_t port)
     }
 
     status = connect(
-        new->socket, (struct sockaddr*)&new->server, sizeof(new->server));
+        new->socket, (struct sockaddr *)&new->server, sizeof(new->server));
     if (status != 0) {
         log_error("connect() returned %d: %s!", status, strerror(errno));
         free(new->host);
         free(new);
         return NULL;
     }
-    
+
     new->alive = true;
     log_debug("Connected to %s:%d", host, port);
-     
-    if(new != NULL) {
-      int last_index = 0;
 
-      for(int i = 0; i < MAX_CONNECTIONS; i++) {
-        if(connections[i].alive != true) {
-          last_index = i;
-          break;
-        }
-      };  
-    
-      
-      new->id = last_index;
-      connections[new->id] = *new;
-    
-      log_debug("Assign id %d to %s:%d", new->id, host, port);
+    if (new != NULL) {
+        int last_index = 0;
+
+        for (int i = 0; i < MAX_CONNECTIONS; i++) {
+            if (connections[i].alive != true) {
+                last_index = i;
+                break;
+            }
+        };
+
+        new->id = last_index;
+        connections[new->id] = *new;
+
+        log_debug("Assign id %d to %s:%d", new->id, host, port);
     }
     return new;
 }
@@ -216,11 +209,11 @@ net_create_connection(char* host, uint16_t port)
  *        Connection to be destroyed
  */
 void
-net_destroy_connection(struct net_connection* conn)
+net_destroy_connection(struct net_connection *conn)
 {
-    if(connections[conn->id].alive) {
+    if (connections[conn->id].alive) {
         connections[conn->id].alive = false; // Not really needed :^)
-        struct net_connection blank_conn = {0};
+        struct net_connection blank_conn = { 0 };
         connections[conn->id] = blank_conn;
     }
     if (conn->socket) {
@@ -232,6 +225,4 @@ net_destroy_connection(struct net_connection* conn)
     if (conn) {
         free(conn);
     }
-
-    
 }

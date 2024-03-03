@@ -1,16 +1,17 @@
 /**
  * @file handler.h
- * @brief Impelementation of the HTML hander
  * @author Kevin Alavik <kevin@alavik.se>
- * @date 2/03/2024
+ * @date 02/03/2024
+ * @brief Impelementation of the HTML hander
  */
 
-#ifndef __HANDLER_H__
-#define __HANDLER_H__
+#ifndef HANDLER_H
+#define HANDLER_H
 
 #include "parse.h"
-#include "../utils/logging.h"
+#include <utils/logging.h>
 
-void handle_html(node_t* tree, char* fall_back_title);
+void
+handle_html(struct parse_node *tree, char *fall_back_title);
 
-#endif // __HANDLER_H__
+#endif /* HANDLER_H */

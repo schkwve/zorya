@@ -1,31 +1,37 @@
 /**
  * @file netwerk/resolver.h
- * @author TendingStream73 <root@tendhost.ddns.net> lolguy91 <retek1544@gmail.com>
+ * @authors TendingStream73 <sasasabaev679@gmail.com>
+ *          lolguy91 <retek1544@gmail.com>
  * @date 29/02/2024
  * @brief URL resolver
  */
 
-#ifndef __NETWERK_RESOLVER_H__
-#define __NETWERK_RESOLVER_H__
+#ifndef NETWERK_RESOLVER_H
+#define NETWERK_RESOLVER_H
 
-#include <utils/buffer.h>
 #include <netwerk/url.h>
+#include <utils/buffer.h>
 
-#define RESPONSE_OK         0
-#define RESPONSE_ERROR      1
+#define RESPONSE_OK 0
+#define RESPONSE_ERROR 1
 #define RESPONSE_HTTP_ERROR 2
-#define RESPONSE_BUILTIN    3
+#define RESPONSE_BUILTIN 3
 
-#define ERR_BAD_SCHEME      0
-#define ERR_UNIMPLEMENTED   1
+#define ERR_BAD_SCHEME 0
+#define ERR_UNIMPLEMENTED 1
 
-typedef struct {
+/**
+ * @brief Network response structure
+ */
+struct net_response
+{
     char status;
     int code;
     buffer_t pageData;
-    //TODO: Media types
-} response_t;
+    // TODO: Media types
+};
 
-response_t resolveUrl(Url url);
+struct net_response
+resolve_url(struct url url);
 
-#endif // __NETWERK_RESOLVER_H__
+#endif /* NETWERK_RESOLVER_H */

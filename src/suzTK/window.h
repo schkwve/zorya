@@ -1,8 +1,8 @@
 /**
- * @file utils/logging.h
- * @author lolguy91 <retek1544@gmail.com>
+ * @file suzTK/window.h
+ * @author Jozef Nagy <schkwve@gmail.com>
  * @date 29/02/2024
- * @brief Utility for window management
+ * @brief Window utilities
  */
 #ifndef SUZTK_WINDOW_H
 #define SUZTK_WINDOW_H
@@ -10,33 +10,37 @@
 #include <SDL.h>
 #include <stdint.h>
 
-struct suztk_window {
-  SDL_Renderer *renderer;
+/**
+ * @brief Window structure
+ *
+ * This structure holds all important information about a window.
+ */
+struct suztk_window
+{
+    SDL_Renderer *renderer;
 
-  SDL_Window *window;
-  uint32_t flags;
+    SDL_Window *window;
+    uint32_t flags;
 
-  int width;
-  int height;
-  uint8_t is_fullscreen;
+    int width;
+    int height;
+    uint8_t is_fullscreen;
 };
 
-struct suztk_winman {
-  struct suztk_window *windows;
-  size_t window_count;
+struct suztk_window *
+suzwin_create_window(int width,
+                     int height,
+                     uint8_t fullscreen,
+                     const char *title);
+void
+suzwin_destroy_window(struct suztk_window *win);
 
-  int current_window;
-};
+void
+suzwin_set_title(struct suztk_window *win, const char *title);
+void
+suzwin_set_icon(struct suztk_window *win, const char *iconpath);
 
-int suzwin_create_window(int width, int height, uint8_t fullscreen, const char *title);
-
-void suzwin_set_title(const char *title);
-void suzwin_set_icon(const char *iconpath);
-
-void suzwin_render_current_window();
-void suzwin_destroy_current_window();
-
-// this is temporary
-extern struct suztk_window window;
+void
+suzwin_render_window(struct suztk_window *win);
 
 #endif /* SUZTK_WINDOW_H  */

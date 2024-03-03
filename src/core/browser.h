@@ -1,20 +1,22 @@
 /**
  * @file browser.h
- * @brief Imepelementation for the browser part of the core
  * @author Kevin Alavik <kevin@alavik.se>
- * @date 2/03/2024
+ * @date 02/03/2024
+ * @brief Imepelementation for the browser part of the core
  */
 
-#ifndef __BROWSER_H__
-#define __BROWSER_H__
+#ifndef BROWSER_H
+#define BROWSER_H
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <stdbool.h>
 
-bool browserInit();
-bool browserUpdate();
-bool browserDestroy();
+bool
+browser_init();
 
-#endif // __BROWSER_H__
+bool
+browser_update();
+
+void
+browser_destroy();
+
+#endif /* BROWSER_H */

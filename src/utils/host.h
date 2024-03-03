@@ -2,22 +2,26 @@
  * @file host.h
  * @brief Host information getter
  * @author lolguy91 <retek1544@gmail.com>
- * @date 2/03/2024
+ * @date 02/03/2024
  */
 
-#ifndef __HOST_UTILS_H__
-#define __HOST_UTILS_H__
+#ifndef HOST_UTILS_H
+#define HOST_UTILS_H
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct {
+struct host_info
+{
     char *name;
     char *version;
-} HostInfo;
+};
 
-HostInfo getHostInfo();
-void freeHostInfo(HostInfo *info);
+struct host_info
+get_host_info();
 
-#endif // __CORE_UTILS_H__
+void
+free_host_info(struct host_info *info);
+
+#endif /* CORE_UTILS_H */

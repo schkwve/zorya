@@ -14,13 +14,13 @@
 /**
  * @brief Log Level strings
  */
-static const char* log_level_str[] = { "TRACE", "DEBUG", "INFO",
+static const char *log_level_str[] = { "TRACE", "DEBUG", "INFO",
                                        "WARN",  "ERROR", "FATAL" };
 
 /**
  * @brief Log Level color escape sequences
  */
-static const char* log_level_col[] = { "\x1b[94m", "\x1b[36m", "\x1b[32m",
+static const char *log_level_col[] = { "\x1b[94m", "\x1b[36m", "\x1b[32m",
                                        "\x1b[33m", "\x1b[31m", "\x1b[35m" };
 
 /**
@@ -43,7 +43,7 @@ static const char* log_level_col[] = { "\x1b[94m", "\x1b[36m", "\x1b[32m",
  *        Optional arguments
  */
 void
-log_impl(int level, const char* file, int line, const char* fmt, ...)
+log_impl(int level, const char *file, int line, const char *fmt, ...)
 {
     if (level < LOG_MIN_LEVEL)
         return;
@@ -53,7 +53,7 @@ log_impl(int level, const char* file, int line, const char* fmt, ...)
 
     // set up time
     time_t t = time(NULL);
-    struct tm* cur_time = localtime(&t);
+    struct tm *cur_time = localtime(&t);
 
     // print to stderr
     char time_buf[16];

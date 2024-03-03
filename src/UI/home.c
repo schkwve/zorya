@@ -5,26 +5,39 @@
  * @brief Homepage
  */
 
+#include <stdlib.h>
+
 #include "home.h"
 
-/*
-    @brief Initialize Home Page
-*/
-void* initHomePage() {
-
+/**
+ * @brief Initializes Home Page
+ *
+ * @return ???
+ */
+void *
+ui_homepage_init()
+{
+    return NULL;
 }
 
-/*
-    @brief Render Home Page
-*/
-void renderHomePage(void* PP)
+/**
+ * @brief Renders Home Page
+ *
+ * @param pp
+ *        ???
+ */
+void
+ui_homepage_render(void *pp)
 {
-
 }
-/* 
-    @brief Destroy Home Page
-*/
-void destroyHomePage(void* PP)
-{
 
+/**
+ * @brief Destroys Home Page
+ *
+ * @param pp
+ *        ???
+ */
+void
+ui_homepage_destroy(void *pp)
+{
 }

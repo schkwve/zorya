@@ -8,20 +8,13 @@
 #ifndef UI_HOME_H
 #define UI_HOME_H
 
-#include <stdio.h>
+void *
+ui_homepage_init();
 
-/*
-    @brief Initialize Home Page
-*/
-void* initHomePage();
+void
+ui_homepage_render(void *pp);
 
-/*
-    @brief Render Home Page
-*/
-void renderHomePage(void* PP);
-/* 
-    @brief Destroy Home Page
-*/
-void destroyHomePage(void* PP);
+void
+ui_homepage_destroy(void *pp);
 
 #endif

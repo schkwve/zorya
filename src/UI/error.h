@@ -8,20 +8,13 @@
 #ifndef UI_ERROR_H
 #define UI_ERROR_H
 
-#include <stdio.h>
+void *
+ui_errorpage_init();
 
-/*
-    @brief Initialize Home Page
-*/
-void* initErrorPage();
+void
+ui_errorpage_render(void *pp);
 
-/*
-    @brief Render Home Page
-*/
-void renderErrorPage(void* PP);
-/* 
-    @brief Destroy Home Page
-*/
-void destroyErrorPage(void* PP);
+void
+ui_errorpage_destroy(void *pp);
 
 #endif

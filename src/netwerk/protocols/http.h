@@ -1,48 +1,64 @@
 /**
  * @file netwerk/protocols/http.h
- * @author TendingStream73 <root@tendhost.ddns.net> lolguy91 <retek1544@gmail.com>
+ * @authors TendingStream73 <sasasabaev679@gmail.com>
+ *          lolguy91 <retek1544@gmail.com>
  * @date 29/02/2024
  * @brief HTTP implementation
  */
-#ifndef __HTTP_H__
-#define __HTTP_H__
+#ifndef NET_PROTOCOLS_HTTP_H
+#define NET_PROTOCOLS_HTTP_H
 
-#include <utils/buffer.h>
 #include <netwerk/url.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <utils/buffer.h>
 
-enum HTTP_VERSION
+/**
+ * @brief HTTP Version enumeration
+ */
+enum http_version
 {
     HTTP_0_9,
     HTTP_1_0,
     HTTP_1_1
 };
 
-typedef struct HTTPHeader
+/**
+ * @brief HTTP Header structure
+ */
+struct http_header
 {
-    const char* name;
-    const char* data;
-} http_header_t;
+    char *name;
+    char *data;
+};
 
-typedef struct HTTPRequest
+/**
+ * @brief HTTP Request structure
+ */
+struct http_request
 {
-    const char* method;
-    const char* path;
-    enum HTTP_VERSION ver;
+    char *method;
+    char *path;
+    enum http_version ver;
     size_t header_len;
-    http_header_t* headers;
-    size_t dataLen;
-    uint8_t* data;
-} http_request_t;
+    struct http_header *headers;
+    size_t data_len;
+    uint8_t *data;
+};
 
-typedef struct HTTPResponse
+/**
+ * @brief HTTP Response structure
+ */
+struct http_response
 {
     int status;
-    char* data;
-} http_response_t;
+    char *data;
+};
 
-buffer_t* httpGenRequest(http_request_t* request);
+buffer_t *
+http_gen_request(struct http_request *request);
 
-http_response_t httpGET(Url url);
-#endif // __HTTP_H__
+struct http_response
+http_get(struct url url);
+
+#endif /* NET_PROTOCOLS_HTTP_H */

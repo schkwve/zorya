@@ -31,22 +31,24 @@
  */
 struct net_connection
 {
-    int id; 
+    int id;
     int socket;
     bool alive;
     bool ssl;
-    char* host;
+    char *host;
     struct sockaddr_in server;
 };
 
 void
-net_send_data(struct net_connection* connection, buffer_t* buffer);
-size_t
-net_recv_data(struct net_connection* connection, buffer_t** buffer);
+net_send_data(struct net_connection *connection, buffer_t *buffer);
 
-struct net_connection*
-net_create_connection(char* url, uint16_t port);
+size_t
+net_recv_data(struct net_connection *connection, buffer_t **buffer);
+
+struct net_connection *
+net_create_connection(char *url, uint16_t port);
+
 void
-net_destroy_connection(struct net_connection* conn);
+net_destroy_connection(struct net_connection *conn);
 
 #endif /* NET_CONNECT_H */

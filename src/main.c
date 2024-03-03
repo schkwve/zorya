@@ -13,18 +13,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <suzTK/window.h>
 #include <core/browser.h>
 #include <netwerk/connect.h>
 #include <netwerk/protocols/http.h>
-#include <utils/buffer.h>
 #include <string.h>
+#include <suzTK/window.h>
+#include <utils/buffer.h>
 
-#include "utils/logging.h"
-#include "antiralsei/parse.h"
 #include "antiralsei/handler.h"
+#include "antiralsei/parse.h"
+#include "utils/logging.h"
 
-
+/**
+ * @brief Browser entry point.
+ */
 int
 main(void)
 {
@@ -34,23 +36,26 @@ main(void)
     status = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     if (status != 0) {
         log_fatal("SDL failed to initialize! (return code: %d)", status);
-        return -1;
+        return EXIT_FAILURE;
     }
 
-    int sdlimg_flags = IMG_INIT_PNG;
-    if ((IMG_Init(sdlimg_flags) & sdlimg_flags) != sdlimg_flags) {
+    // initialize SDL_Image
+    status = IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG;
+    if (status != IMG_INIT_PNG) {
         log_fatal("SDL_Image failed to initialize!");
         SDL_Quit();
-        return -1;
+        return EXIT_FAILURE;
     }
 
     // create a window
     suzwin_create_window(1280, 720, 0, "Sovyetski Soyuzy");
 
     // initialize browser
-    if (!browserInit()) {
+    if (!browser_init()) {
         log_fatal("Failed to initialize browser.");
-        return -1;
+        IMG_Quit();
+        SDL_Quit();
+        return EXIT_FAILURE;
     }
 
     bool should_quit = false;
@@ -63,16 +68,16 @@ main(void)
                 should_quit = true;
             }
         }
-        if(!browserUpdate()){
+        if (!browser_update()) {
             log_fatal("Failed to update browser.");
-            return -1;
+            should_quit = true;
         }
     }
 
-    browserDestroy();
+    browser_destroy();
 
     IMG_Quit();
     SDL_Quit();
 
-    return 0;
+    return EXIT_SUCCESS;
 }
