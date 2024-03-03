@@ -36,7 +36,9 @@ main(void)
     // initialize SDL
     status = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     if (status != 0) {
-        log_fatal("SDL failed to initialize: %s (return code: %d)", SDL_GetError(), status);
+        log_fatal("SDL failed to initialize: %s (return code: %d)",
+                  SDL_GetError(),
+                  status);
         return EXIT_FAILURE;
     }
 
@@ -51,12 +53,12 @@ main(void)
     // initialize SDL_Ttf
     status = TTF_Init();
     if (status != 0) {
-           log_fatal("SDL_TTF failed to initialize: %s", TTF_GetError());
+        log_fatal("SDL_TTF failed to initialize: %s", TTF_GetError());
         IMG_Quit();
-         SDL_Quit();
-         return EXIT_FAILURE;
-     }
- 
+        SDL_Quit();
+        return EXIT_FAILURE;
+    }
+
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 
     // create a window
