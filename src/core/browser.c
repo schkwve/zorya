@@ -38,12 +38,13 @@ bool browserUpdate()
     // TODO: Update
     return true;
 }
-bool browserDestroy()
+bool
+browserDestroy()
 {
-    // TODO: Destroy
+    //suzwin_destroy_all_windows();
+    suzwin_destroy_current_window();
     return true;
 }
-
 
 void loadPage(const char* url){
     HostInfo host = getHostInfo();

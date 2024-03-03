@@ -6,12 +6,12 @@
  * @brief Main file
  */
 
+#include <SDL2/SDL.h>
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <suzTK/window.h>
 #include <core/browser.h>
 #include <netwerk/connect.h>
@@ -25,37 +25,43 @@
 
 #include "UI/homepage.h"
 
-GLFWwindow* mainWindow;
 
 int
 main(void)
 {
-    /* Initialize GLFW */
-    if (!glfwInit())
-        return -1;
+    int status = 0;
 
-    /* Create a windowed mode window and its OpenGL context */
-    mainWindow = createWindow(640, 480, "Sovietski Soyuzy");
-
-    // Initialize GLAD
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        log_fatal("Failed to initialize GLAD.");
+    // initialize SDL
+    status = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+    if (status != 0) {
+        log_fatal("SDL failed to initialize! (return code: %d)", status);
         return -1;
     }
 
+    // create a window
+    suzwin_create_window(1280, 720, 0, "I can't spell the name of this fucking browser");
+
+    // initialize browser
     if (!browserInit()) {
         log_fatal("Failed to initialize browser.");
         return -1;
     }
 
-    /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(mainWindow)) {
-        if (!browserUpdate()) {
-            break;
+    bool should_quit = false;
+    SDL_Event event;
+
+    // browser loop
+    while (should_quit != true) {
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                should_quit = true;
+            }
         }
-        finishFrame(mainWindow);
     }
+
     browserDestroy();
-    glfwTerminate();
+
+    SDL_Quit();
+
     return 0;
 }
