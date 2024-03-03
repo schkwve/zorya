@@ -42,7 +42,7 @@ void handle_html(node_t* tree, char* fall_back_title) {
     strcpy(final_title, t);
     strcat(final_title, suffix);
 
-    setTitle(mainWindow, final_title);
+    //setTitle(mainWindow, final_title);
 
     if(final_title != NULL)
       free(final_title);
