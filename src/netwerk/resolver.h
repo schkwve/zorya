@@ -11,13 +11,18 @@
 #include <utils/buffer.h>
 #include <netwerk/url.h>
 
-#define RESPONSE_OK     0
-#define RESPONSE_ERROR  1
+#define RESPONSE_OK         0
+#define RESPONSE_ERROR      1
+#define RESPONSE_HTTP_ERROR 2
+#define RESPONSE_BUILTIN    3
+
+#define ERR_BAD_SCHEME      0
+#define ERR_UNIMPLEMENTED   1
 
 typedef struct {
     char status;
     int code;
-    buffer_t* pageData;
+    buffer_t pageData;
     //TODO: Media types
 } response_t;
 

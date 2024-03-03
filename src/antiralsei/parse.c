@@ -89,6 +89,9 @@ parse_html(const char* data, size_t size)
                             tmp = space2;
                         }
                         if (equal > tmp || equal == NULL) {
+                            if (ptr > tmp || tmp == NULL) {
+                                continue;
+                            }
                             //attribute has no value, add a null
                             struct attribute_t attr = {};
                             attr.name = malloc(tmp - ptr + 1);

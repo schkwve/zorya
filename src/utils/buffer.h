@@ -11,13 +11,13 @@
 
 typedef struct buffer
 {
-    size_t data_len;
-    void* data_ptr;
+    size_t dataLen;
+    void* dataPtr;
     size_t buf_cursor;
 } buffer_t;
 
 void
-buffer_append_data(buffer_t* buf, void* ptr, size_t data_len);
+buffer_append_data(buffer_t* buf, void* ptr, size_t dataLen);
 
 void
 buffer_destroy(buffer_t *buf);
