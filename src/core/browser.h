@@ -9,8 +9,8 @@
 #define __BROWSER_H__
 
 #include "../main.h"
-#include "../html/parse.h"
-#include "../html/handler.h"
+#include "../antiralsei/parse.h"
+#include "../antiralsei/handler.h"
 #include "../netwerk/connect.h"
 #include "../netwerk/http.h"
 #include "../utils/logging.h"

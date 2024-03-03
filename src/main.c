@@ -20,8 +20,8 @@
 #include <string.h>
 
 #include "utils/logging.h"
-#include "html/parse.h"
-#include "html/handler.h"
+#include "antiralsei/parse.h"
+#include "antiralsei/handler.h"
 
 #include "UI/homepage.h"
 
@@ -38,7 +38,7 @@ browserInit()
     log_info("Using OpenGL %s", glGetString(GL_VERSION));
 
 
-    render_page("info.cern.ch/hypertext/WWW/TheProject.html");
+    render_page("http://info.cern.ch/hypertext/WWW/TheProject.html");
     return true;
 }
 bool
