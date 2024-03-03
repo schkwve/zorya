@@ -13,7 +13,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <suzTK/window.h>
-#include <suzTK/browser.h>
+#include <core/browser.h>
 #include <netwerk/connect.h>
 #include <netwerk/http.h>
 #include <utils/buffer.h>
@@ -38,7 +38,7 @@ browserInit()
     log_info("Using OpenGL %s", glGetString(GL_VERSION));
 
 
-    render_page("http://info.cern.ch/hypertext/WWW/TheProject.html");
+    render_page("info.cern.ch/hypertext/WWW/TheProject.html");
     return true;
 }
 bool

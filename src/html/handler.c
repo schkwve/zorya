@@ -44,7 +44,8 @@ void handle_html(node_t* tree, char* fall_back_title) {
 
     setTitle(mainWindow, final_title);
 
-    free(final_title);
+    if(final_title != NULL)
+      free(final_title);
 }
 
 element_t* _find_in_html_tree(node_t* node, char* name) {

@@ -1,6 +1,6 @@
 /**
  * @file browser.h
- * @brief Imepelementation for the browser part of the suzTK framework
+ * @brief Imepelementation for the browser part of the core
  * @author Kevin Alavik <kevin@alavik.se>
  * @date 2/03/2024
  */
@@ -17,6 +17,7 @@
 #include "../utils/buffer.h"
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 void render_page(const char* url);

@@ -24,12 +24,16 @@ elseif(WIN32)
     list(APPEND EXTRA_LIBS
         "-lglu32 -lopengl32"
     )
-    set(CMAKE_EXE_LINKER_FLAGS "-std=gnu99 -static -static-libgcc -static-libstdc++ -mwindows")
+    set(CMAKE_EXE_LINKER_FLAGS "-std=gnu99 -static -static-libgcc -static-libstdc++ -mwindows ")
 else()
     list(APPEND EXTRA_LIBS
         "-lGL -lGLU -lX11"
     )
 endif()
+
+list(APPEND EXTRA_LIBS
+    "-g -fsanitize=address"
+)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
