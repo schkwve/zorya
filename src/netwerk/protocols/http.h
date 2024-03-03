@@ -1,4 +1,9 @@
-
+/**
+ * @file netwerk/protocols/http.h
+ * @author TendingStream73 <root@tendhost.ddns.net> lolguy91 <retek1544@gmail.com>
+ * @date 29/02/2024
+ * @brief HTTP implementation
+ */
 #ifndef __HTTP_H__
 #define __HTTP_H__
 

@@ -1,8 +1,8 @@
 /**
- * @file netwerk/http.c
- * @author TendingStream73 <root@tendhost.ddns.net> <sasasabaev679@gmail.com>
+ * @file netwerk/protocols/http.c
+ * @author TendingStream73 <root@tendhost.ddns.net> lolguy91 <retek1544@gmail.com>
  * @date 29/02/2024
- * @brief HTTP Stuff, generates http requests and parses http response
+ * @brief HTTP implementation
  */
 
 #include "http.h"
