@@ -63,6 +63,10 @@ main(void)
                 should_quit = true;
             }
         }
+        if(!browserUpdate()){
+            log_fatal("Failed to update browser.");
+            return -1;
+        }
     }
 
     browserDestroy();

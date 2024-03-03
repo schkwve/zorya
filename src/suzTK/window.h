@@ -33,7 +33,10 @@ int suzwin_create_window(int width, int height, uint8_t fullscreen, const char *
 void suzwin_set_title(const char *title);
 void suzwin_set_icon(const char *iconpath);
 
-void suzwin_render_current_window(void);
-void suzwin_destroy_current_window(void);
+void suzwin_render_current_window();
+void suzwin_destroy_current_window();
+
+// this is temporary
+extern struct suztk_window window;
 
 #endif /* SUZTK_WINDOW_H  */

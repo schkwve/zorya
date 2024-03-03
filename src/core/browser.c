@@ -15,6 +15,7 @@
 #include <utils/logging.h>
 #include <utils/buffer.h>
 #include <utils/host.h>
+#include <SDL.h>
 #include <suzTK/window.h>
 #include <main.h>
 
@@ -31,6 +32,22 @@ bool browserUpdate()
 {
     //renderHomePage();
 
+    //make the whole screen red
+    SDL_SetRenderDrawColor(window.renderer, 0xFF, 0x00, 0x00, 0xFF);
+    SDL_RenderClear(window.renderer);
+
+    //add a green bar at the top of the window
+    SDL_Rect rect = (SDL_Rect){0, 0, window.width, window.height / 10};
+    SDL_SetRenderDrawColor(window.renderer, 0x00, 0xFF, 0x00, 0xFF);
+    SDL_RenderFillRect(window.renderer, &rect);
+
+    //add a blue bare half the height of the last one at the top
+    rect = (SDL_Rect){0, 0, window.width, window.height / 20};
+    SDL_SetRenderDrawColor(window.renderer, 0x00, 0x00, 0xFF, 0xFF);
+    SDL_RenderFillRect(window.renderer, &rect);
+
+
+    suzwin_render_current_window();
     // TODO: Update
     return true;
 }
