@@ -11,6 +11,7 @@
 #include <netwerk/connect.h>
 #include <netwerk/protocols/http.h>
 #include <netwerk/url.h>
+#include <netwerk/resolver.h>
 #include <utils/logging.h>
 #include <utils/buffer.h>
 #include <utils/host.h>
@@ -47,12 +48,16 @@ void loadPage(const char* url){
     freeHostInfo(&host);
 
     Url urlInfo = parseUrl(url);
-    log_debug("Scheme: %s", urlInfo.scheme);
-    log_debug("Authority: %s", urlInfo.authority);
-    log_debug("Host: %s", urlInfo.host);
-    log_debug("Path: %s", urlInfo.path);
-    log_debug("Fragment: %s", urlInfo.fragment);
-    log_debug("Query: %s", urlInfo.query);
+    response_t res = resolveUrl(urlInfo);
+    if(res.status == RESPONSE_OK){
+        node_t* tree = parse_html(res.pageData, strlen(res.pageData));
+        //TODO: transition to browser view with tree
+        handle_html(tree,urlInfo.host);
+        free(tree);
+    }else {
+        //TODO: transition to error screen
+        log_error("Failed to load page \"%s\" with error code %d", url, res.code);
+    }
     freeUrl(&urlInfo);
 }
 
