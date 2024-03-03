@@ -5,7 +5,8 @@
  * @brief window management implementation
  */
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
+#include <SDL_image.h>
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -73,6 +74,28 @@ int suzwin_create_window(int width, int height, uint8_t fullscreen, const char *
     SDL_RenderPresent(window.renderer);
 
     return 0;
+}
+
+/**
+ * @brief Updates the window's title with a new one
+ *
+ * @param title
+ *        New window title
+ */
+void suzwin_set_title(const char *title)
+{
+    SDL_SetWindowTitle(window.window, title);
+}
+
+/**
+ * @brief Sets the window's icon.
+ *
+ * @param iconpath
+ *        Path to an icon file
+ */
+void suzwin_set_icon(const char *iconpath)
+{
+    SDL_SetWindowIcon(window.window, NULL);
 }
 
 void suzwin_render_current_window(void)

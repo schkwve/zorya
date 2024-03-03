@@ -7,7 +7,7 @@
 #ifndef SUZTK_WINDOW_H
 #define SUZTK_WINDOW_H
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <stdint.h>
 
 struct suztk_window {
@@ -29,6 +29,8 @@ struct suztk_winman {
 };
 
 int suzwin_create_window(int width, int height, uint8_t fullscreen, const char *title);
+
+void suzwin_set_title(const char *title);
 
 void suzwin_render_current_window(void);
 void suzwin_destroy_current_window(void);
