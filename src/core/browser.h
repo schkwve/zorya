@@ -8,18 +8,13 @@
 #ifndef __BROWSER_H__
 #define __BROWSER_H__
 
-#include "../main.h"
-#include "../antiralsei/parse.h"
-#include "../antiralsei/handler.h"
-#include "../netwerk/connect.h"
-#include "../netwerk/http.h"
-#include "../utils/logging.h"
-#include "../utils/buffer.h"
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
-void render_page(const char* url);
+bool browserInit();
+bool browserUpdate();
+bool browserDestroy();
 
 #endif // __BROWSER_H__

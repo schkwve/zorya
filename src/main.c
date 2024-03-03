@@ -27,35 +27,6 @@
 
 GLFWwindow* mainWindow;
 
-bool
-browserInit()
-{
-    // dont't set icon ion MacOS
-    #ifndef __APPLE__
-        setIcon(mainWindow, "../res/logo.png", "../res/logo.png");
-    #endif
-    // Log OpenGL info
-    log_info("Using OpenGL %s", glGetString(GL_VERSION));
-
-
-    render_page("http://info.cern.ch/hypertext/WWW/TheProject.html");
-    return true;
-}
-bool
-browserUpdate()
-{
-    renderHomePage();
-
-    // TODO: Update
-    return true;
-}
-bool
-browserDestroy()
-{
-    // TODO: Destroy
-    return true;
-}
-
 int
 main(void)
 {
