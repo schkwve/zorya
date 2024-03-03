@@ -1,43 +1,22 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.28)
+project(SovietskiSoyouzy)
 
-project("Sovietski-Soyouzy")
+# Make sure every prerequisite is installed
+find_package(SDL2 REQUIRED)
 
-file(GLOB SRC src/*.c src/**/*.c)
-
-set(SRC ${SRC} lib/glad/src/glad.c)
-add_subdirectory(lib/glfw)
-add_subdirectory(lib/freetype)
-include_directories(lib/glad/include)
-include_directories(lib/glfw/include)
-include_directories(lib/freetype/include)
-include_directories(lib/stb)
-include_directories(src/)
+# Includesssss
+include_directories(src)
+include_directories(${SDL2_INCLUDE_DIRS})
 
 # Set debug variables
 add_definitions("-D__DEBUG")
 
-if(APPLE)
-    list(APPEND EXTRA_LIBS
-        "-framework OpenGL"
-    )
-elseif(WIN32)
-    list(APPEND EXTRA_LIBS
-        "-lglu32 -lopengl32"
-    )
-    set(CMAKE_EXE_LINKER_FLAGS "-std=gnu99 -static -static-libgcc -static-libstdc++ -mwindows ")
-else()
-    list(APPEND EXTRA_LIBS
-        "-lGL -lGLU -lX11"
-    )
-endif()
-
-list(APPEND EXTRA_LIBS
-    "-g -fsanitize=address"
-)
-
+# Set output directories
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+# Compile everything
+file(GLOB_RECURSE SRC src/*.c)
 add_executable(SusieBrowser ${SRC})
-target_link_libraries(SusieBrowser glfw freetype ${EXTRA_LIBS})
+target_link_libraries(SusieBrowser PUBLIC ${SDL2_LIBRARIES})

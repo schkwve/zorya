@@ -8,7 +8,6 @@
 #ifndef PAGES_H
 #define PAGES_H
 
-#include <glad/glad.h>
 #include <stdio.h>
 
 void

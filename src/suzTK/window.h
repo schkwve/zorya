@@ -6,64 +6,31 @@
  */
 #ifndef SUZTK_WINDOW_H
 #define SUZTK_WINDOW_H
-#include <GLFW/glfw3.h>
 
-/*
-    @brief Create a window
+#include <SDL2/SDL.h>
+#include <stdint.h>
 
-    @param width The width of the window
-    @param height The height of the window
-    @param title The title of the window
+struct suztk_window {
+  SDL_Renderer *renderer;
 
-    @return A pointer to the created window
-*/
-GLFWwindow*
-createWindow(int width, int height, const char* title);
-/*
-    @brief Destroy a window
+  SDL_Window *window;
+  uint32_t flags;
 
-    @param window The window to destroy
-*/
-void
-destroyWindow(GLFWwindow* window);
-/*
-    @brief Swap the front and back buffers and poll for events
+  int width;
+  int height;
+  uint8_t is_fullscreen;
+};
 
-    @param window The window to finalize the frame for
-*/
-void
-finishFrame(GLFWwindow* window);
-/*
-    @brief Set the title of a window
+struct suztk_winman {
+  struct suztk_window *windows;
+  size_t window_count;
 
-    @param window The window to set the title of
-    @param title The new title
-*/
-void
-setTitle(GLFWwindow* window, const char* title);
+  int current_window;
+};
 
-/*
-    @brief Set the icon of a window
+int suzwin_create_window(int width, int height, uint8_t fullscreen, const char *title);
 
-    @param window The window to set the icon of
-    @param beegPath The path to the big icon
-    @param smolPath The path to the small icon
-*/
+void suzwin_render_current_window(void);
+void suzwin_destroy_current_window(void);
 
-void
-setIcon(GLFWwindow* window, char* beegPath, char* smolPath);
-/*
-    @brief Enter fullscreen
-
-    @param window The window to enter fullscreen for
-*/
-void
-enterFullscreen(GLFWwindow* window);
-/*
-    @brief Exit fullscreen
-
-    @param window The window to exit fullscreen for
-*/
-void
-exitFullscreen(GLFWwindow* window);
-#endif
+#endif /* SUZTK_WINDOW_H  */
