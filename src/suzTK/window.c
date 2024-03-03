@@ -14,7 +14,9 @@
 #include <utils/logging.h>
 #include "window.h"
 
-static struct suztk_winman window_manager = {0};
+//static struct suztk_winman window_manager = {0};
+
+static struct suztk_window window = {0};
 
 int suzwin_create_window(int width, int height, uint8_t fullscreen, const char *title)
 {
@@ -36,6 +38,7 @@ int suzwin_create_window(int width, int height, uint8_t fullscreen, const char *
         return -1;
     }
 
+    /*
     size_t window_count = window_manager.window_count;
 
     struct suztk_window *new = &window_manager.windows[window_count];
@@ -58,17 +61,29 @@ int suzwin_create_window(int width, int height, uint8_t fullscreen, const char *
     window_manager.window_count++;
 
     SDL_RenderPresent(new->renderer);
+    */
+
+    window.window = win;
+    window.renderer = ren;
+    window.flags = flags;
+    window.width = width;
+    window.height = height;
+    window.is_fullscreen = !!fullscreen;
+
+    SDL_RenderPresent(window.renderer);
 
     return 0;
 }
 
 void suzwin_render_current_window(void)
 {
-    SDL_RenderPresent(window_manager.windows[window_manager.current_window].renderer);
+    //SDL_RenderPresent(window_manager.windows[window_manager.current_window].renderer);
+    SDL_RenderPresent(window.renderer);
 }
 
 void suzwin_destroy_current_window(void)
 {
+    /*
     int curwin = window_manager.current_window;
 
     if (window_manager.windows[curwin].renderer == NULL) {
@@ -77,4 +92,5 @@ void suzwin_destroy_current_window(void)
     SDL_DestroyWindow(window_manager.windows[curwin].window);
     free(&window_manager.windows[curwin]);
     window_manager.window_count--;
+    */
 }
