@@ -5,8 +5,8 @@
  * @brief ErrorPage
  */
 
-#ifndef PAGES_H
-#define PAGES_H
+#ifndef UI_ERROR_H
+#define UI_ERROR_H
 
 #include <stdio.h>
 

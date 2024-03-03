@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.26)
 project(SovietskiSoyouzy
 	VERSION 0.0.1
 	DESCRIPTION ""
-	HOMEPAGE_URL is https://sovyetskisoyouzy.github.io
+	HOMEPAGE_URL "https://sovyetskisoyouzy.github.io"
 	LANGUAGES C CXX)
 
 # Include FindSDL2 packages

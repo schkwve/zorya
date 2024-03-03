@@ -8,12 +8,14 @@
 #include "statemachine.h"
 #include "home.h"
 #include "error.h"
+#include <string.h>
+#include <stdlib.h>
 
 page_t pages[] = {
     {"blank", NULL, NULL, NULL},
     {"home", initHomePage, renderHomePage, destroyHomePage},
     {"error", initErrorPage, renderErrorPage, destroyErrorPage},
-}
+};
 size_t currentPageID = 0;
 void* currentPagePrivatePointer = NULL;
 

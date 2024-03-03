@@ -5,8 +5,8 @@
  * @brief Homepage
  */
 
-#ifndef PAGES_H
-#define PAGES_H
+#ifndef UI_HOME_H
+#define UI_HOME_H
 
 #include <stdio.h>
 
