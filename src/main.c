@@ -25,33 +25,6 @@
 
 #include "UI/homepage.h"
 
-bool
-browserInit()
-{
-    // dont't set icon ion MacOS
-    #ifndef __APPLE__
-        //setIcon(mainWindow, "../res/logo.png", "../res/logo.png");
-    #endif
-
-    render_page("http://info.cern.ch/hypertext/WWW/TheProject.html");
-    return true;
-}
-
-bool
-browserUpdate()
-{
-    renderHomePage();
-
-    // TODO: Update
-    return true;
-}
-bool
-browserDestroy()
-{
-    //suzwin_destroy_all_windows();
-    suzwin_destroy_current_window();
-    return true;
-}
 
 int
 main(void)
