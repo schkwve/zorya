@@ -13,9 +13,20 @@ find_package(SDL2_ttf REQUIRED)
 include_directories(src)
 include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
 
-# Set debug variables
-add_definitions("-D__DEBUG -g -fsanitize=address")
+# If CMAKE_BUILD_TYPE is not specified, default to Release build
+if (NOT CMAKE_BUILD_TYPE)
+  message(WARNING "CMAKE_BUILD_TYPE not set, defaulting to DEBUG...")
+    set(CMAKE_BUILD_TYPE DEBUG)
+endif()
 
+string(TOLOWER ${CMAKE_BUILD_TYPE} build_type)
+if (build_type STREQUAL debug)
+  set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} " -D__DEBUG -g -fsanitize=address")
+elseif (build_type STREQUAL release)
+  set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} " -O3")
+else ()
+  message(FATAL_ERROR "Unknown build type specified in CMAKE_BUILD_TYPE!")
+endif()
 
 # Set output directories
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
