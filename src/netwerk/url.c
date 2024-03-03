@@ -43,12 +43,12 @@ Url parseUrl(const char *url) {
         memcpy(result.authority, schemeTok + 3, atTok - schemeTok - 3);
         result.authority[atTok - schemeTok - 3] = '\0';
 
-        // host is between the at and moveOn
+        // host is between AtTok and moveOn
         result.host = malloc (moveOnTok - atTok);
         memcpy(result.host, atTok + 1, moveOnTok - atTok - 1);
         result.host[moveOnTok - atTok - 1] = '\0';
     } else { 
-        // no authority
+        // no authority, path is between schemeTok and moveOn
         result.host = malloc (moveOnTok - schemeTok + 4);
         memcpy(result.host, schemeTok + 3,moveOnTok - schemeTok + 3);
         result.host[moveOnTok - schemeTok + 3] = '\0';
@@ -57,34 +57,42 @@ Url parseUrl(const char *url) {
     char* fragmentStart = strchr(moveOnTok, '#');
     char* queryStart = strchr(moveOnTok, '?');
     if (fragmentStart == NULL && queryStart == NULL) {
+        // no query or fragment, path is everything after moveOn
         result.path = malloc(strlen(moveOnTok+1) + 1);
         memcpy(result.path, moveOnTok+1, strlen(moveOnTok+1));
         result.path[strlen(moveOnTok+1)] = '\0';
     }else if (fragmentStart != NULL && queryStart == NULL) {
+        // path is between moveOn and fragment
         result.path = malloc(fragmentStart - moveOnTok);
         memcpy(result.path, moveOnTok+1, fragmentStart - moveOnTok - 1);
         result.path[fragmentStart - moveOnTok - 1] = '\0';
 
+        // fragment is everything after fragmentStart
         result.fragment = malloc(strlen(fragmentStart + 1) + 1);
         memcpy(result.fragment, fragmentStart + 1, strlen(fragmentStart + 1));
         result.fragment[strlen(fragmentStart + 1)] = '\0';
     }else if (queryStart != NULL && fragmentStart == NULL) {
+        // path is between moveOn and queryStart
         result.path = malloc(queryStart - moveOnTok );
         memcpy(result.path, moveOnTok, queryStart - moveOnTok -1);
         result.path[queryStart - moveOnTok - 1] = '\0';
 
+        // query is everything after queryStart
         result.query = malloc(strlen(queryStart + 1) + 1);
         memcpy(result.query, queryStart + 1, strlen(queryStart + 1));
         result.query[strlen(queryStart + 1)] = '\0';
     }else {
+        // path is between moveOn and fragment
         result.path = malloc(fragmentStart - moveOnTok);
         memcpy(result.path, moveOnTok + 1, fragmentStart - moveOnTok - 1);
         result.path[fragmentStart - moveOnTok - 1] = '\0';
 
+        // fragment is between fragmentStart and queryStart
         result.fragment = malloc(queryStart - fragmentStart);
         memcpy(result.fragment, fragmentStart + 1, queryStart - fragmentStart - 1);
         result.fragment[queryStart - fragmentStart - 1] = '\0';
 
+        // query is everything after queryStart
         result.query = malloc(strlen(queryStart + 1) + 1);
         memcpy(result.query, queryStart + 1, strlen(queryStart + 1));
         result.query[strlen(queryStart + 1)] = '\0';
