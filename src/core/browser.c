@@ -53,7 +53,7 @@ void loadPage(const char* url){
         node_t* tree = parse_html(res.pageData, strlen(res.pageData));
         //TODO: transition to browser view with tree
         handle_html(tree,urlInfo.host);
-        free(tree);
+        free_html_tree(tree);
     }else {
         //TODO: transition to error screen
         log_error("Failed to load page \"%s\" with error code %d", url, res.code);
