@@ -72,6 +72,12 @@ bin/*
 \#*\#
 .\#*
 
+# Vim
+.*.swp
+
+# macOS junk
+.DS_Store
+
 # Shit
 /.vscode/
 /tests/parse_test.c
