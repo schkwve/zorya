@@ -37,7 +37,7 @@ Url parseUrl(const char *url) {
 
     char* atTok = strchr(schemeTok + 3, '@');
     char* moveOnTok = strchr(schemeTok + 3, '/');
-    if(atTok < moveOnTok || atTok != NULL) {
+    if(atTok < moveOnTok && atTok != NULL) {
         //Authority is present
         result.authority = malloc (atTok - schemeTok - 3 + 1);
         memcpy(result.authority, schemeTok + 3, atTok - schemeTok - 3);
