@@ -12,7 +12,7 @@ A small, lightweight web browser built (mainly) by Slavs.
 TBA
 
 </details>
-<br/>
+
 <details>
 <summary>macOS</summary>
 
@@ -23,7 +23,7 @@ brew bundle
 ```
 
 </details>
-<br/>
+
 <details>
 <summary>Debian-based distributions</summary>
 
@@ -32,7 +32,7 @@ sudo apt install cmake clang libsdl2{-dev,} libsdl2{-image,} libsdl2{-ttf.}
 ```
 
 </details>
-<br/>
+
 <details>
 <summary>Arch-based distributions</summary>
 
