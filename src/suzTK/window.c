@@ -17,7 +17,7 @@
 
 //static struct suztk_winman window_manager = {0};
 
-static struct suztk_window window = {0};
+struct suztk_window window = {0};
 
 int suzwin_create_window(int width, int height, uint8_t fullscreen, const char *title)
 {
