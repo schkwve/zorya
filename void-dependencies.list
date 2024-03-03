@@ -1,0 +1,5 @@
+cmake
+SDL2_ttf-devel
+SDL2_image-devel
+SDL2-devel
+libsanitizer-devel
