@@ -10,16 +10,30 @@
 
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <suzTK/window.h>
+#include <core/browser.h>
+#include <netwerk/connect.h>
+#include <netwerk/http.h>
+#include <utils/buffer.h>
+#include <string.h>
 
 #include "utils/logging.h"
+#include "antiralsei/parse.h"
+#include "antiralsei/handler.h"
 
 #include "UI/homepage.h"
 
 bool
 browserInit()
 {
+    // dont't set icon ion MacOS
+    #ifndef __APPLE__
+        //setIcon(mainWindow, "../res/logo.png", "../res/logo.png");
+    #endif
+
+    render_page("http://info.cern.ch/hypertext/WWW/TheProject.html");
     return true;
 }
 

@@ -1,7 +1,8 @@
+#include "../src/html/handler.h"
 #include "../src/html/parse.h"
 #include "../src/utils/logging.h"
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 int
 main(int argc, char* argv[])
@@ -39,9 +40,12 @@ main(int argc, char* argv[])
 
     fclose(file);
 
-    element_t* elements = parse_html(data, strlen(data));
+    node_t* tree = parse_html(data, strlen(data));
+    print_html_tree(tree, 0);
+    handle_html(tree);
 
     free(data);
+    free_html_tree(tree);
 
     return EXIT_SUCCESS;
 }

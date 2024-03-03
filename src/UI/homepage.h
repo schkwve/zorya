@@ -9,7 +9,6 @@
 #define PAGES_H
 
 #include <stdio.h>
-#include <suzTK/text.h>
 
 void
 renderHomePage();

@@ -26,20 +26,27 @@ typedef struct attribute_t
 typedef struct element_t
 {
     char* name;          // Opening tag name
-    bool closing;        // True if its a closing tag
+    char* content;       // The content of the tag
     int attribute_count; // The ammount of attributes
     attribute_t*
         attributes; // The list of attributes, Ex: { name: class, value: title }
 } element_t;
 
-typedef struct node_t {
+typedef struct node_t
+{
     element_t* element;
     struct node_t* parent;
-    size_t children_count;
-    struct node_t* children;
+    size_t num_children;
+    struct node_t** children;
 } node_t;
 
 node_t*
 parse_html(const char* data, size_t size);
+
+void
+free_html_tree(node_t* root);
+
+void
+print_html_tree(node_t* root, int depth);
 
 #endif // __PARSE_H__

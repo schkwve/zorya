@@ -15,6 +15,12 @@
 #include "../utils/buffer.h"
 
 /**
+ * @brief The max ammount of allowed connections
+ */
+
+#define MAX_CONNECTIONS 256
+
+/**
  * @brief Default buffer size for network-related arrays.
  */
 #define NET_BUFFER_SIZE 1024
@@ -25,15 +31,16 @@
  */
 struct net_connection
 {
+    int id; 
     int socket;
-
+    bool alive;
     bool ssl;
     char* host;
     struct sockaddr_in server;
 };
 
 void
-net_send_data(struct net_connection* connection, char* buffer);
+net_send_data(struct net_connection* connection, buffer_t* buffer);
 size_t
 net_recv_data(struct net_connection* connection, buffer_t** buffer);
 
