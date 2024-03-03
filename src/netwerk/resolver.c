@@ -4,6 +4,9 @@
  * @date 29/02/2024
  * @brief URL resolver
  */
+
+#include <string.h>
+
 #include "resolver.h"
 #include <netwerk/url.h>
 #include <netwerk/protocols/http.h>

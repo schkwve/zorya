@@ -52,10 +52,8 @@ endif()
 string(TOLOWER ${CMAKE_BUILD_TYPE} build_type)
 if (build_type STREQUAL debug)
   set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} " -D__DEBUG -g3 -fsanitize=address")
-  set(PACKAGE_NAME "${PROJECT_NAME} (Debug)")
 elseif (build_type STREQUAL release)
   set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} " -O3")
-  set(PACKAGE_NAME "${PROJECT_NAME}")
 else ()
   message(FATAL_ERROR "Unknown build type specified in CMAKE_BUILD_TYPE!")
 endif()
@@ -70,11 +68,10 @@ add_executable(${EXECUTABLE_NAME} ${SRC})
 target_link_libraries(${EXECUTABLE_NAME} PUBLIC SDL2::SDL2 SDL2::Image SDL2::TTF)
 
 # CPack
-install(DIRECTORY ${CMAKE_BINARY_DIR}/bin DESTINATION ${CMAKE_BINARY_DIR}/pkg)
-install(DIRECTORY ../res DESTINATION ${CMAKE_BINARY_DIR}/pkg
-                  PATTERN "../res/install/" EXCLUDE)
+install(DIRECTORY res DESTINATION ${CMAKE_BINARY_DIR}/install
+                  PATTERN "res/install/" EXCLUDE)
 
-set(CPACK_PACKAGE_NAME ${PACKAGE_NAME})
+set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 set(CPACK_PACKAGE_VENDOR "Cool People")
 set(CPACK_PACKAGE_DESCRIPTION ${PROJECT_DESCRIPTION})
 set(CPACK_PACKAGE_VERSION_MAJOR "${VERSION_MAJOR}")
@@ -85,19 +82,32 @@ set(CPACK_PACKAGE_ICON "../res/logo.png")
 set(CPACK_PACKAGE_CONTACT "")
 set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 set(CPACK_PACKAGE_CHECKSUM SHA256)
-#set(CPACK_RESOURCE_FILE_LICENSE "../LICENSE.txt")
+#set(CPACK_RESOURCE_FILE_LICENSE "LICENSE.txt")
 #set(CPACK_RESOURCE_FILE_WELCOME "../res/install/welcome.txt"
 
 set(CPACK_PACKAGE_DIRECTORY ${CMAKE_BINARY_DIR}/pkg)
 
 if (${CMAKE_SYSTEM_NAME} STREQUAL "Windows") # Windows
   set(CPACK_GENERATOR NSIS)
-elif ($(CMAKE_SYSTEM_NAME) STREQUAL "Linux") # Linux
+elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux") # Linux
   set(CPACK_GENERATOR ZIP)
   set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
-elif ($(CMAKE_SYSTEM_NAME) STREQUAL "Darwin") # macOS
-  set(CPACK_GENERATOR BUNDLE)
+elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin") # macOS
+  set(CPACK_GENERATOR Bundle)
+  set(CPACK_BUNDLE_NAME ${CPACK_PACKAGE_NAME})
+  set(CPACK_BUNDLE_ICON ${CPACK_PACKAGE_ICON})
   set(CPACK_BUNDLE_PLIST "../res/install/macos_bundle.plist")
+
+  get_filename_component(SDL2_LIBFILE "${SDL2_LIBRARIES}" REALPATH)
+  get_filename_component(SDL2_IMAGE_LIBFILE "${SDL2_IMAGE_LIBRARIES}" REALPATH)
+  get_filename_component(SDL2_TTF_LIBFILE "${SDL2_TTF_LIBRARIES}" REALPATH)
+
+  install(FILES ${SDL2_LIBFILE} DESTINATION "../Library" COMPONENT libraries)
+  install(FILES ${SDL2_IMAGE_LIBFILE} DESTINATION "../Library" COMPONENT libraries)
+  install(FILES ${SDL2_TTF_LIBFILE} DESTINATION "../Library" COMPONENT libraries)
+  install(TARGETS ${EXECUTABLE_NAME} RUNTIME DESTINATION "../MacOS" COMPONENT applications)
+else ()
+  message(FATAL_ERROR "Unsupported OS!")
 endif ()
 
 include(CPack)
