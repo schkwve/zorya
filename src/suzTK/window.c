@@ -97,7 +97,8 @@ void suzwin_set_title(const char *title)
  */
 void suzwin_set_icon(const char *iconpath)
 {
-    SDL_SetWindowIcon(window.window, NULL);
+    SDL_Surface *icon = IMG_Load(iconpath);
+    SDL_SetWindowIcon(window.window, icon);
 }
 
 void suzwin_render_current_window(void)

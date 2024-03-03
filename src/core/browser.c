@@ -21,10 +21,7 @@ void loadPage(const char* url);
 
 bool browserInit()
 {
-    // No icon setting for now :(
-    //#ifndef __APPLE__
-    //    setIcon(mainWindow, "../res/logo.png", "../res/logo.png");
-    //#endif
+    suzwin_set_icon("../res/logo.png");
 
     loadPage("http://info.cern.ch/hypertext/WWW/TheProject.html");
     return true;

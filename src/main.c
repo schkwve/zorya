@@ -7,6 +7,7 @@
  */
 
 #include <SDL.h>
+#include <SDL_image.h>
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -38,6 +39,13 @@ main(void)
         return -1;
     }
 
+    int sdlimg_flags = IMG_INIT_PNG;
+    if ((IMG_Init(sdlimg_flags) & sdlimg_flags) != sdlimg_flags) {
+        log_fatal("SDL_Image failed to initialize!");
+        SDL_Quit();
+        return -1;
+    }
+
     // create a window
     suzwin_create_window(1280, 720, 0, "I can't spell the name of this fucking browser");
 
@@ -61,6 +69,7 @@ main(void)
 
     browserDestroy();
 
+    IMG_Quit();
     SDL_Quit();
 
     return 0;
