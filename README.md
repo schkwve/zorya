@@ -1,34 +1,77 @@
-# Netwerk isnt a typo BLYAT
-# WTF is this?
-This is sovyetski-soyouzy, OUR Browser. A PERFECTLY Made Browser By Russians (Slavs).
+# Sovyetski Soyouzy
 
-# Why on earth?
-Because normal browsers suck! bloated! telemetry! our browser is PERFECT.</br>
-We PROMISE to be 
-* Customizable
-* Fast
-* Telemetry-free
+A small, lightweight web browser built (mainly) by Slavs.
 
-# Build guide(Linux only cuz fuck windows users)
+## Building
+
+#### Installing Dependencies
+
+<details>
+<summary>Windows</summary>
+
+TBA
+
+</details>
+<br/>
+<details>
+<summary>macOS</summary>
+
+Make sure you have [Homebrew](https://brew.sh/) installed.
 
 ```bash
-git submodule update --init
-mkdir build
-cd build
-cmake ..
-make
+brew bundle
 ```
 
-# Packaging guide
+</details>
+<br/>
+<details>
+<summary>Debian-based distributions</summary>
 
-After building, simply run:
+```bash
+sudo apt install cmake clang libsdl2{-dev,} libsdl2{-image,} libsdl2{-ttf.}
+```
 
+</details>
+<br/>
+<details>
+<summary>Arch-based distributions</summary>
+
+```bash
+sudo pacman -S cmake clang sdl2{_image,_ttf}
+```
+
+</details>
+
+#### Setting up build environment
+
+To maintain a clean repository structure, it is recommended to create a separate build directory where CMake will be invoked:
+
+```bash
+mkdir build/
+cd build/
+cmake -DCMAKE_BUILD_TYPE=Release ..
+```
+
+> [!TIP]
+> You can run CMake with the `-G`  argument to generate project files for a different build system (ie. for Visual Studio). Click [here](https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html) for a list of all available CMake generators.
+
+## Installing
+
+TBA
+
+### Generating installer packages
+
+When inside the `build` directory, simply run
 ```bash
 make package
 ```
 
-This will create:
- - A .app bundle and a DMG file on macOS
- - A .zip archive on Linux
- - An NSIS installer on Windows
+This will create an installer/archive of a fresh build of the browser. Output can bee seen in the `build/pkg` directory.
 
+## Screenshots
+
+TBA
+
+## License
+
+TBA
