@@ -8,6 +8,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -35,17 +36,28 @@ main(void)
     // initialize SDL
     status = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     if (status != 0) {
-        log_fatal("SDL failed to initialize! (return code: %d)", status);
+        log_fatal("SDL failed to initialize: %s (return code: %d)", SDL_GetError(), status);
         return EXIT_FAILURE;
     }
 
     // initialize SDL_Image
     status = IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG;
     if (status != IMG_INIT_PNG) {
-        log_fatal("SDL_Image failed to initialize!");
+        log_fatal("SDL_Image failed to initialize: %s", IMG_GetError());
         SDL_Quit();
         return EXIT_FAILURE;
     }
+
+    // initialize SDL_Ttf
+    status = TTF_Init();
+    if (status != 0) {
+           log_fatal("SDL_TTF failed to initialize: %s", TTF_GetError());
+        IMG_Quit();
+         SDL_Quit();
+         return EXIT_FAILURE;
+     }
+ 
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 
     // create a window
     suzwin_create_window(1280, 720, 0, "Sovyetski Soyuzy");
