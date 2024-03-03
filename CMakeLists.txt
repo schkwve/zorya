@@ -21,7 +21,7 @@ endif()
 
 string(TOLOWER ${CMAKE_BUILD_TYPE} build_type)
 if (build_type STREQUAL debug)
-  set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} " -D__DEBUG -g -fsanitize=address")
+  set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} " -D__DEBUG -g3 -fsanitize=address")
 elseif (build_type STREQUAL release)
   set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} " -O3")
 else ()
