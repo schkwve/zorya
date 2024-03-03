@@ -61,9 +61,6 @@ main(void)
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 
-    // create a window
-    suzwin_create_window(1280, 720, 0, "Sovyetski Soyuzy");
-
     // initialize browser
     if (!browser_init()) {
         log_fatal("Failed to initialize browser.");
