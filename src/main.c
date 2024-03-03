@@ -24,8 +24,6 @@
 #include "antiralsei/parse.h"
 #include "antiralsei/handler.h"
 
-#include "UI/homepage.h"
-
 
 int
 main(void)
@@ -47,7 +45,7 @@ main(void)
     }
 
     // create a window
-    suzwin_create_window(1280, 720, 0, "I can't spell the name of this fucking browser");
+    suzwin_create_window(1280, 720, 0, "Sovyetski Soyuzy");
 
     // initialize browser
     if (!browserInit()) {

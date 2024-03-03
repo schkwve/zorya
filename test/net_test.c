@@ -19,7 +19,7 @@ int main() {
     .ver = HTTP_1_1,
     .headers = headers,
     .header_len = 2,
-    .data_len = 0,
+    .dataLen = 0,
     .data = 0
   };
   
@@ -32,9 +32,9 @@ int main() {
   memset(res, 0, sizeof(buffer_t));
   net_recv_data(con, &res);
 
-  char* ptr = malloc(res->data_len + 1);
-  memcpy(ptr, res->data_ptr, res->data_len);
-  ptr[res->data_len] = '\0';
+  char* ptr = malloc(res->dataLen + 1);
+  memcpy(ptr, res->dataPtr, res->dataLen);
+  ptr[res->dataLen] = '\0';
 
   log_debug("%s", ptr);
   buffer_destroy(result);

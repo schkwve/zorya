@@ -8,6 +8,7 @@
 #define __HTTP_H__
 
 #include <utils/buffer.h>
+#include <netwerk/url.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -31,11 +32,17 @@ typedef struct HTTPRequest
     enum HTTP_VERSION ver;
     size_t header_len;
     http_header_t* headers;
-    size_t data_len;
+    size_t dataLen;
     uint8_t* data;
 } http_request_t;
 
-buffer_t*
-http_gen_request(http_request_t* request);
+typedef struct HTTPResponse
+{
+    int status;
+    char* data;
+} http_response_t;
 
+buffer_t* httpGenRequest(http_request_t* request);
+
+http_response_t httpGET(Url url);
 #endif // __HTTP_H__

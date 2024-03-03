@@ -49,23 +49,23 @@ Url parseUrl(const char *url) {
         result.host[moveOnTok - atTok - 1] = '\0';
     } else { 
         // no authority, path is between schemeTok and moveOn
-        result.host = malloc (moveOnTok - schemeTok + 4);
-        memcpy(result.host, schemeTok + 3,moveOnTok - schemeTok + 3);
-        result.host[moveOnTok - schemeTok + 3] = '\0';
+        result.host = malloc (moveOnTok - schemeTok - 2);
+        memcpy(result.host, schemeTok + 3,moveOnTok - schemeTok - 3);
+        result.host[moveOnTok - schemeTok - 3] = '\0';
     }
 
     char* fragmentStart = strchr(moveOnTok, '#');
     char* queryStart = strchr(moveOnTok, '?');
     if (fragmentStart == NULL && queryStart == NULL) {
         // no query or fragment, path is everything after moveOn
-        result.path = malloc(strlen(moveOnTok+1) + 1);
-        memcpy(result.path, moveOnTok+1, strlen(moveOnTok+1));
-        result.path[strlen(moveOnTok+1)] = '\0';
+        result.path = malloc(strlen(moveOnTok) + 1);
+        memcpy(result.path, moveOnTok, strlen(moveOnTok));
+        result.path[strlen(moveOnTok)] = '\0';
     }else if (fragmentStart != NULL && queryStart == NULL) {
         // path is between moveOn and fragment
-        result.path = malloc(fragmentStart - moveOnTok);
-        memcpy(result.path, moveOnTok+1, fragmentStart - moveOnTok - 1);
-        result.path[fragmentStart - moveOnTok - 1] = '\0';
+        result.path = malloc(fragmentStart - moveOnTok + 1);
+        memcpy(result.path, moveOnTok, fragmentStart - moveOnTok);
+        result.path[fragmentStart - moveOnTok] = '\0';
 
         // fragment is everything after fragmentStart
         result.fragment = malloc(strlen(fragmentStart + 1) + 1);
@@ -83,9 +83,9 @@ Url parseUrl(const char *url) {
         result.query[strlen(queryStart + 1)] = '\0';
     }else {
         // path is between moveOn and fragment
-        result.path = malloc(fragmentStart - moveOnTok);
-        memcpy(result.path, moveOnTok + 1, fragmentStart - moveOnTok - 1);
-        result.path[fragmentStart - moveOnTok - 1] = '\0';
+        result.path = malloc(fragmentStart - moveOnTok + 1);
+        memcpy(result.path, moveOnTok, fragmentStart - moveOnTok);
+        result.path[fragmentStart - moveOnTok] = '\0';
 
         // fragment is between fragmentStart and queryStart
         result.fragment = malloc(queryStart - fragmentStart);

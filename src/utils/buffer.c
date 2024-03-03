@@ -4,24 +4,24 @@
 #include <unistd.h>
 
 void
-buffer_append_data(buffer_t* buf, void* ptr, size_t data_len)
+buffer_append_data(buffer_t* buf, void* ptr, size_t dataLen)
 {
-    if (buf->data_len == 0 || buf->data_ptr == NULL) {
-        buf->data_ptr = malloc(data_len);
-        buf->data_len = data_len;
+    if (buf->dataLen == 0 || buf->dataPtr == NULL) {
+        buf->dataPtr = malloc(dataLen);
+        buf->dataLen = dataLen;
     }
-    if (buf->data_len < data_len + buf->buf_cursor) {
-        buf->data_ptr = realloc(buf->data_ptr, data_len + buf->buf_cursor);
-        buf->data_len = data_len + buf->buf_cursor;
+    if (buf->dataLen < dataLen + buf->buf_cursor) {
+        buf->dataPtr = realloc(buf->dataPtr, dataLen + buf->buf_cursor);
+        buf->dataLen = dataLen + buf->buf_cursor;
     }
-    memcpy(buf->data_ptr + buf->buf_cursor, ptr, data_len);
-    buf->buf_cursor += data_len;
+    memcpy(buf->dataPtr + buf->buf_cursor, ptr, dataLen);
+    buf->buf_cursor += dataLen;
 }
 
 void
 buffer_destroy(buffer_t *buf) {
-    if (buf->data_ptr && buf->data_len) {
-        free(buf->data_ptr);
+    if (buf->dataPtr && buf->dataLen) {
+        free(buf->dataPtr);
     }
     free(buf);
 }
