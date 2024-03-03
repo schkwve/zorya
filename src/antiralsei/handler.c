@@ -30,7 +30,9 @@ void handle_html(node_t* tree, char* fall_back_title) {
 
     log_debug("Setting title to '%s'", t);
 
-    suzwin_set_title(t);
+    char full_title[1024] = {0};
+    sprintf(full_title, "%s - Sovyetski Soyouzy", t);
+    suzwin_set_title(full_title);
 }
 
 element_t* _find_in_html_tree(node_t* node, char* name) {
