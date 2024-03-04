@@ -16,16 +16,12 @@ struct page
     void (*destroy)(void *PP);
 };
 
-void
-ui_statemachine_init();
+void ui_statemachine_init();
 
-void
-ui_statemachine_render_current_page();
+void ui_statemachine_render_current_page();
 
-void
-ui_statemachine_destroy_current_page();
+void ui_statemachine_destroy_current_page();
 
-void
-ui_statemachine_goto_page(char *pagename);
+void ui_statemachine_goto_page(char *pagename);
 
 #endif /* UI_STATEMACHINE_H */

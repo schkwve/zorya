@@ -55,10 +55,8 @@ struct http_response
     char *data;
 };
 
-buffer_t *
-http_gen_request(struct http_request *request);
+buffer_t *http_gen_request(struct http_request *request);
 
-struct http_response
-http_get(struct url url);
+struct http_response http_get(struct url url);
 
 #endif /* NET_PROTOCOLS_HTTP_H */

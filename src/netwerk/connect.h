@@ -39,16 +39,12 @@ struct net_connection
     struct sockaddr_in server;
 };
 
-void
-net_send_data(struct net_connection *connection, buffer_t *buffer);
+void net_send_data(struct net_connection *connection, buffer_t *buffer);
 
-size_t
-net_recv_data(struct net_connection *connection, buffer_t **buffer);
+size_t net_recv_data(struct net_connection *connection, buffer_t **buffer);
 
-struct net_connection *
-net_create_connection(char *url, uint16_t port);
+struct net_connection *net_create_connection(char *url, uint16_t port);
 
-void
-net_destroy_connection(struct net_connection *conn);
+void net_destroy_connection(struct net_connection *conn);
 
 #endif /* NET_CONNECT_H */

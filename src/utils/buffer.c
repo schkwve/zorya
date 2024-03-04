@@ -23,8 +23,7 @@
  * @param data_len
  *        Size of data to be appended
  */
-void
-buffer_append_data(buffer_t *buf, void *ptr, size_t data_len)
+void buffer_append_data(buffer_t *buf, void *ptr, size_t data_len)
 {
     if (buf->data_len == 0 || buf->data_ptr == NULL) {
         buf->data_ptr = malloc(data_len);
@@ -44,8 +43,7 @@ buffer_append_data(buffer_t *buf, void *ptr, size_t data_len)
  * @param buf
  *        Buffer to be destroyed
  */
-void
-buffer_destroy(buffer_t *buf)
+void buffer_destroy(buffer_t *buf)
 {
     if (buf->data_ptr && buf->data_len) {
         free(buf->data_ptr);

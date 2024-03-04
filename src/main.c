@@ -28,8 +28,7 @@
 /**
  * @brief Browser entry point.
  */
-int
-main(void)
+int main(void)
 {
     int status = 0;
     // initialize SDL

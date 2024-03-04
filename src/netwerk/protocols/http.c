@@ -31,8 +31,7 @@ static const char *http_ver_str[] = { "0.9", "1.0", "1.1" };
  * @return Buffer containing request data if no error has occured;
  *         NULL otherwise.
  */
-buffer_t *
-http_gen_request(struct http_request *request)
+buffer_t *http_gen_request(struct http_request *request)
 {
     if (request == NULL) { // safety first.
         log_error("request == NULL");
@@ -96,8 +95,7 @@ http_gen_request(struct http_request *request)
  * @return A valid HTTP response structure if status == 1;
  *         if status == 0, the response is invalid or an error has occured.
  */
-struct http_response
-http_get(struct url url)
+struct http_response http_get(struct url url)
 {
     struct http_response ret;
     char *base_url = strdup(url.host);

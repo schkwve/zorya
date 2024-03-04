@@ -17,10 +17,8 @@ typedef struct buffer
     size_t buf_cursor;
 } buffer_t;
 
-void
-buffer_append_data(buffer_t *buf, void *ptr, size_t dataLen);
+void buffer_append_data(buffer_t *buf, void *ptr, size_t dataLen);
 
-void
-buffer_destroy(buffer_t *buf);
+void buffer_destroy(buffer_t *buf);
 
 #endif // UTIL_BUFFER_H

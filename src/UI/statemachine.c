@@ -33,8 +33,7 @@ void *currentPagePrivatePointer = NULL;
 /**
  * @brief Initializes the UI state machine.
  */
-void
-ui_statemachine_init()
+void ui_statemachine_init()
 {
     ui_statemachine_goto_page("home");
 }
@@ -42,8 +41,7 @@ ui_statemachine_init()
 /**
  * @brief Calls renderer for the current page.
  */
-void
-ui_statemachine_render_current_page()
+void ui_statemachine_render_current_page()
 {
     pages[currentPageID].render(currentPagePrivatePointer);
 }
@@ -51,8 +49,7 @@ ui_statemachine_render_current_page()
 /**
  * @brief Destroys current page.
  */
-void
-ui_statemachine_destroy_current_page()
+void ui_statemachine_destroy_current_page()
 {
     pages[currentPageID].destroy(currentPagePrivatePointer);
 }
@@ -63,8 +60,7 @@ ui_statemachine_destroy_current_page()
  * @param pagename
  *        Name of the page
  */
-void
-ui_statemachine_goto_page(char *pagename)
+void ui_statemachine_goto_page(char *pagename)
 {
     for (int i = 0; i < sizeof(pages) / sizeof(pages[0]); i++) {
         if (strcmp(pages[i].name, pagename) == 0) {

@@ -34,11 +34,10 @@
  * @return Window pointer if it was created successfully;
  *         NULL otherwise.
  */
-struct suztk_window *
-suzwin_create_window(int width,
-                     int height,
-                     uint8_t fullscreen,
-                     const char *title)
+struct suztk_window *suzwin_create_window(int width,
+                                          int height,
+                                          uint8_t fullscreen,
+                                          const char *title)
 {
     uint32_t flags = SDL_WINDOW_RESIZABLE;
     if (!!fullscreen) {
@@ -93,8 +92,7 @@ suzwin_create_window(int width,
  * @param win
  *        Window structure to be destroyed
  */
-void
-suzwin_destroy_window(struct suztk_window *win)
+void suzwin_destroy_window(struct suztk_window *win)
 {
     assert(win != NULL);
     SDL_DestroyRenderer(win->renderer);
@@ -112,8 +110,7 @@ suzwin_destroy_window(struct suztk_window *win)
  * @param title
  *        New window title
  */
-void
-suzwin_set_title(struct suztk_window *win, const char *title)
+void suzwin_set_title(struct suztk_window *win, const char *title)
 {
     assert(win != NULL);
 
@@ -135,16 +132,14 @@ suzwin_set_title(struct suztk_window *win, const char *title)
  * @param iconpath
  *        Path to an icon file
  */
-void
-suzwin_set_icon(struct suztk_window *win, const char *iconpath)
+void suzwin_set_icon(struct suztk_window *win, const char *iconpath)
 {
     assert(win != NULL);
     SDL_Surface *icon = IMG_Load(iconpath);
     SDL_SetWindowIcon(win->window, icon);
 }
 
-void
-suzwin_render_window(struct suztk_window *win)
+void suzwin_render_window(struct suztk_window *win)
 {
     assert(win != NULL);
     SDL_RenderPresent(win->renderer);

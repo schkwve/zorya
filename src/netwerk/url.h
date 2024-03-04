@@ -18,10 +18,8 @@ struct url
     char *query;
 };
 
-struct url
-parse_url(const char *url);
+struct url parse_url(const char *url);
 
-void
-free_url(struct url *url);
+void free_url(struct url *url);
 
 #endif /* NETWERK_URL_H */

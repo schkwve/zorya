@@ -31,7 +31,6 @@ struct net_response
     // TODO: Media types
 };
 
-struct net_response
-resolve_url(struct url url);
+struct net_response resolve_url(struct url url);
 
 #endif /* NETWERK_RESOLVER_H */

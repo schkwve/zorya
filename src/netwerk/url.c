@@ -19,8 +19,7 @@
  *
  * @return Parsed URL structure
  */
-struct url
-parse_url(const char *url)
+struct url parse_url(const char *url)
 {
     char *urlCopy = malloc(strlen(url) + 1);
     strcpy(urlCopy, url);
@@ -129,8 +128,7 @@ parse_url(const char *url)
  * @param url
  *        URL structure to be free'd
  */
-void
-free_url(struct url *url)
+void free_url(struct url *url)
 {
     free(url->scheme);
     if (url->authority != NULL)

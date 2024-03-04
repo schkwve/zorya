@@ -8,13 +8,10 @@
 #ifndef UI_HOME_H
 #define UI_HOME_H
 
-void *
-ui_homepage_init();
+void *ui_homepage_init();
 
-void
-ui_homepage_render(void *pp);
+void ui_homepage_render(void *pp);
 
-void
-ui_homepage_destroy(void *pp);
+void ui_homepage_destroy(void *pp);
 
 #endif

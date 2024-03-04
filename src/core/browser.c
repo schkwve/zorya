@@ -236,8 +236,7 @@ render_url(const char *url)
  * @param url
  *        URL of page to load
  */
-static void
-load_page(const char *url)
+static void load_page(const char *url)
 {
     struct url url_info = parse_url(url);
 
@@ -274,8 +273,7 @@ load_page(const char *url)
  * @return True if the browser was initialized successfully;
  *         False otherwise.
  */
-bool
-browser_init()
+bool browser_init()
 {
     current_font_monospace = TTF_OpenFont(DEFAULT_MONOSPACE_FONT, 32);
     current_font_sansserif = TTF_OpenFont(DEFAULT_SANSSERIF_FONT, 32);
@@ -296,8 +294,7 @@ browser_init()
  * @return True if the browser was updated successfully;
  *         False otherwise.
  */
-bool
-browser_update()
+bool browser_update()
 {
     // ui_homepage_render(NULL);
 
@@ -337,8 +334,7 @@ browser_update()
     return true;
 }
 
-void
-browser_destroy()
+void browser_destroy()
 {
     suzwin_destroy_window(window);
 }

@@ -18,8 +18,7 @@
  * @param fall_back_title
  *        ???
  */
-void
-handle_html(struct parse_node *tree, char *fall_back_title)
+void handle_html(struct parse_node *tree, char *fall_back_title)
 {
     char *t = "Untitled Page";
 

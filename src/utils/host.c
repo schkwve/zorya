@@ -19,8 +19,7 @@
 
 // To lolguy91: ????????
 // - schkwve.
-struct host_info
-get_host_info()
+struct host_info get_host_info()
 {
     char *name;
     char *version;
@@ -64,8 +63,7 @@ get_host_info()
  * @param info
  *        Structure to be free'd
  */
-void
-free_host_info(struct host_info *info)
+void free_host_info(struct host_info *info)
 {
     free(info->name);
     free(info->version);
