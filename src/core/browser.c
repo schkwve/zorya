@@ -165,7 +165,7 @@ render_url(const char *url)
 {
     SDL_Color foreground_color = { 255, 255, 255 };
 
-    int url_length = strlen(url);
+    int url_length = strlen(url) + 1;
 
     render_array[0].text = malloc(sizeof(char) * (url_length + 1));
     snprintf(render_array[0].text, url_length, url);
