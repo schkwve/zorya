@@ -1,5 +1,5 @@
 /**
- * @file html/parse.h
+ * @file html/htmltree.h
  * @author Kevin Alavik <kevin@alavik.se>
  * @date 01/03/2024
  * @brief A parser for standard HTML 2.0
@@ -46,5 +46,8 @@ free_html_tree(struct parse_node *root);
 
 void
 print_html_tree(struct parse_node *root, int depth);
+
+struct parse_element
+*find_in_html_tree(struct parse_node *node, char *name);
 
 #endif /* PARSE_H */

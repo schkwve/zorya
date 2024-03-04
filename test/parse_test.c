@@ -1,5 +1,5 @@
-#include "../src/html/handler.h"
-#include "../src/html/parse.h"
+#include "../src/antiralsei/handler.h"
+#include "../src/antiralsei/htmltree.h"
 #include "../src/utils/logging.h"
 #include <stdio.h>
 #include <stdlib.h>
