@@ -20,8 +20,7 @@
  *
  * @return ???
  */
-struct parse_node *
-parse_html(const char *data, size_t size)
+struct parse_node *parse_html(const char *data, size_t size)
 {
     struct parse_node *root = malloc(sizeof(struct parse_node));
     root->num_children = 0;
@@ -174,8 +173,7 @@ parse_html(const char *data, size_t size)
  * @param node
  *        ???
  */
-void
-free_html_tree(struct parse_node *node)
+void free_html_tree(struct parse_node *node)
 {
     for (int i = 0; i < node->num_children && node->children != NULL; i++) {
         free_html_tree(node->children[i]);
@@ -205,8 +203,7 @@ free_html_tree(struct parse_node *node)
  * @param lvl
  *        ???
  */
-void
-print_html_tree(struct parse_node *node, int lvl)
+void print_html_tree(struct parse_node *node, int lvl)
 {
     if (node->element != NULL) {
         if (node->element->name != NULL) {

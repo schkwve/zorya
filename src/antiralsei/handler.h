@@ -11,7 +11,6 @@
 #include "parse.h"
 #include <utils/logging.h>
 
-void
-handle_html(struct parse_node *tree, char *fall_back_title);
+void handle_html(struct parse_node *tree, char *fall_back_title);
 
 #endif /* HANDLER_H */

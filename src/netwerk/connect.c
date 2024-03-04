@@ -31,8 +31,7 @@ struct net_connection connections[MAX_CONNECTIONS];
  * @param buffer
  *        Data which will be sent to the server
  */
-void
-net_send_data(struct net_connection *connection, buffer_t *buffer)
+void net_send_data(struct net_connection *connection, buffer_t *buffer)
 {
     int bytes_sent = 0;
     int total_bytes_sent = 0;
@@ -65,8 +64,7 @@ net_send_data(struct net_connection *connection, buffer_t *buffer)
  *
  * @return Length of received message
  */
-size_t
-net_recv_data(struct net_connection *connection, buffer_t **buffer)
+size_t net_recv_data(struct net_connection *connection, buffer_t **buffer)
 {
     size_t bytes_received = -1;
     size_t total_bytes_received = 0;
@@ -105,8 +103,7 @@ net_recv_data(struct net_connection *connection, buffer_t **buffer)
  * @return New connection structure if it was created successfully;
  *         NULL otherwise.
  */
-struct net_connection *
-net_create_connection(char *host, uint16_t port)
+struct net_connection *net_create_connection(char *host, uint16_t port)
 {
     int status = 0;
     struct net_connection *new;
@@ -208,8 +205,7 @@ net_create_connection(char *host, uint16_t port)
  * @param conn
  *        Connection to be destroyed
  */
-void
-net_destroy_connection(struct net_connection *conn)
+void net_destroy_connection(struct net_connection *conn)
 {
     if (connections[conn->id].alive) {
         connections[conn->id].alive = false; // Not really needed :^)

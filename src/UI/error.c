@@ -14,8 +14,7 @@
  *
  * @return ???
  */
-void *
-ui_errorpage_init()
+void *ui_errorpage_init()
 {
     return NULL;
 }
@@ -26,10 +25,7 @@ ui_errorpage_init()
  * @param pp
  *        ???
  */
-void
-ui_errorpage_render(void *pp)
-{
-}
+void ui_errorpage_render(void *pp) {}
 
 /**
  * @brief Destroys Error Page
@@ -37,7 +33,4 @@ ui_errorpage_render(void *pp)
  * @param pp
  *        ???
  */
-void
-ui_errorpage_destroy(void *pp)
-{
-}
+void ui_errorpage_destroy(void *pp) {}

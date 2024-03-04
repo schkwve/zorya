@@ -42,8 +42,7 @@ static const char *log_level_col[] = { "\x1b[94m", "\x1b[36m", "\x1b[32m",
  * @param ...
  *        Optional arguments
  */
-void
-log_impl(int level, const char *file, int line, const char *fmt, ...)
+void log_impl(int level, const char *file, int line, const char *fmt, ...)
 {
     if (level < LOG_MIN_LEVEL)
         return;

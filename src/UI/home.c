@@ -14,8 +14,7 @@
  *
  * @return ???
  */
-void *
-ui_homepage_init()
+void *ui_homepage_init()
 {
     return NULL;
 }
@@ -26,10 +25,7 @@ ui_homepage_init()
  * @param pp
  *        ???
  */
-void
-ui_homepage_render(void *pp)
-{
-}
+void ui_homepage_render(void *pp) {}
 
 /**
  * @brief Destroys Home Page
@@ -37,7 +33,4 @@ ui_homepage_render(void *pp)
  * @param pp
  *        ???
  */
-void
-ui_homepage_destroy(void *pp)
-{
-}
+void ui_homepage_destroy(void *pp) {}

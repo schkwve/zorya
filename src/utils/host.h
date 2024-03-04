@@ -18,10 +18,8 @@ struct host_info
     char *version;
 };
 
-struct host_info
-get_host_info();
+struct host_info get_host_info();
 
-void
-free_host_info(struct host_info *info);
+void free_host_info(struct host_info *info);
 
 #endif /* CORE_UTILS_H */

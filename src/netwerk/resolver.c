@@ -20,8 +20,7 @@
  *
  * @return Response structure
  */
-struct net_response
-resolve_url(struct url url)
+struct net_response resolve_url(struct url url)
 {
     if (strcmp(url.scheme, "http") == 0) {
 

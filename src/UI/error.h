@@ -8,13 +8,10 @@
 #ifndef UI_ERROR_H
 #define UI_ERROR_H
 
-void *
-ui_errorpage_init();
+void *ui_errorpage_init();
 
-void
-ui_errorpage_render(void *pp);
+void ui_errorpage_render(void *pp);
 
-void
-ui_errorpage_destroy(void *pp);
+void ui_errorpage_destroy(void *pp);
 
 #endif

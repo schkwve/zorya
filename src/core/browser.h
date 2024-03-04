@@ -10,13 +10,10 @@
 
 #include <stdbool.h>
 
-bool
-browser_init();
+bool browser_init();
 
-bool
-browser_update();
+bool browser_update();
 
-void
-browser_destroy();
+void browser_destroy();
 
 #endif /* BROWSER_H */

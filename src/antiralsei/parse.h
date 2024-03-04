@@ -38,13 +38,10 @@ struct parse_node
     struct parse_node **children;
 };
 
-struct parse_node *
-parse_html(const char *data, size_t size);
+struct parse_node *parse_html(const char *data, size_t size);
 
-void
-free_html_tree(struct parse_node *root);
+void free_html_tree(struct parse_node *root);
 
-void
-print_html_tree(struct parse_node *root, int depth);
+void print_html_tree(struct parse_node *root, int depth);
 
 #endif /* PARSE_H */
