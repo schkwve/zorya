@@ -36,11 +36,17 @@
 #define DEFAULT_SANSSERIF_BOLD_FONT "../res/freefont/FreeSansBold.ttf"
 #define DEFAULT_SERIF_BOLD_FONT "../res/freefont/FreeSerifBold.ttf"
 
-TTF_Font *current_font_monospace    = TTF_OpenFont(DEFAULT_MONOSPACE_FONT, 32);
-TTF_Font *current_font_sansserif    = TTF_OpenFont(DEFAULT_SANSSERIF_FONT, 32);
-TTF_Font *current_font_serif        = TTF_OpenFont(DEFAULT_SERIF_FONT, 32);
+TTF_Font *current_font_monospace;
+TTF_Font *current_font_sansserif;
+TTF_Font *current_font_serif;
 
 struct suztk_window *window;
+
+//TODOS:
+// move HTML renderer into Antiralsei
+// move text component into SuzTK/Componyents
+// Hook up the statemachine
+// add some anti-aliasing
 
 void
 render_text(const char *text,
@@ -49,7 +55,7 @@ render_text(const char *text,
             int width,
             int height,
             SDL_Color color,
-            TTF_Font font)
+            TTF_Font *font)
 {
     TTF_SetFontSize(font, height);
 
@@ -106,7 +112,7 @@ typedef struct {
     int width;
     int height;
     SDL_Color color;
-    TTF_Font font;
+    TTF_Font *font;
 } render_node;
 
 render_node render_array[64];
@@ -149,13 +155,14 @@ render_url(const char *url) {
 
     int url_length = strlen(url);
 
-    render_array[0].text = malloc(sizeof(char) * url_length);
+    render_array[0].text = malloc(sizeof(char) * (url_length + 1));
     snprintf(render_array[0].text, url_length, url);
     render_array[0].x = 8;
-    render_array[0].y = 8;
+    render_array[0].y = window->height / 13 - 8;
     render_array[0].width = -1;
     render_array[0].height = 16;
     render_array[0].color = foreground_color;
+    render_array[0].font = current_font_monospace;
 } 
 
 /**
@@ -205,6 +212,12 @@ load_page(const char *url)
 bool
 browser_init()
 {
+    current_font_monospace      = TTF_OpenFont(DEFAULT_MONOSPACE_FONT, 32);
+    current_font_sansserif      = TTF_OpenFont(DEFAULT_SANSSERIF_FONT, 32);
+    current_font_serif          = TTF_OpenFont(DEFAULT_SERIF_FONT, 32);
+
+
+
     window = suzwin_create_window(1280, 720, 0, "");
     suzwin_set_icon(window, "../res/logo.png");
 
@@ -221,23 +234,21 @@ browser_init()
 bool
 browser_update()
 {
-    ui_homepage_render(NULL);
+    //ui_homepage_render(NULL);
 
     // make the whole screen grey
     SDL_SetRenderDrawColor(window->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(window->renderer);
 
-    // add a dark grey bar at the top of the window
     SDL_Rect rect = (SDL_Rect){ 0, 0, window->width, window->height / 10 };
     SDL_SetRenderDrawColor(window->renderer, 0x44, 0x44, 0x44, 0xFF);
     SDL_RenderFillRect(window->renderer, &rect);
 
-    // add a darker grey bare half the height of the last one at the top
     rect = (SDL_Rect){ 0, 0, window->width, window->height / 20 };
     SDL_SetRenderDrawColor(window->renderer, 0x22, 0x22, 0x22, 0xFF);
     SDL_RenderFillRect(window->renderer, &rect);
 
-    SDL_Color color = { 200, 0, 0 };
+    //SDL_Color color = { 200, 0, 0 };
     // render_text("The Sovyetski Soyouzy Project", 0, 64, -1, 64, color);
     // render_text("GNU FreeMono 32px", 0, 128, -1, 32, color);
     // render_text("GNU FreeMono 24px", 0, 160, -1, 24, color);
@@ -247,7 +258,6 @@ browser_update()
     for (int i = 0; i < 64; i++) {
         if (render_array[i].text == NULL)
             continue;
-        
         render_text(render_array[i].text,
                     render_array[i].x,
                     render_array[i].y,
