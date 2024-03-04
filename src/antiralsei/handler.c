@@ -20,7 +20,7 @@
  * @return Parsed element if it was found;
  *         NULL otherwise.
  */
-static struct parse_element *
+struct parse_element *
 find_in_html_tree(struct parse_node *node, char *name)
 {
     if (node->element != NULL) {
