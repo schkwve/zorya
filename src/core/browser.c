@@ -60,7 +60,7 @@ render_text(const char *text,
 {
     TTF_SetFontSize(font, height);
 
-    SDL_Surface *header_text = TTF_RenderText_Solid(font, text, color);
+    SDL_Surface *header_text = TTF_RenderText_Blended(font, text, color);
     if (header_text == NULL) {
         log_error("Failed to render text: %s\nGiven parameters: %s, %d, %d, "
                   "%d, %d, ?color?",
@@ -94,9 +94,11 @@ render_text(const char *text,
     SDL_RenderCopy(
         window->renderer, header_texture, NULL, &header_texture_rect);
 
+#ifdef __DEBUG
     // debug outline
     SDL_SetRenderDrawColor(window->renderer, 0x00, 0xFF, 0x00, 0xFF);
     SDL_RenderDrawRect(window->renderer, &header_texture_rect);
+#endif
 
     // maalos: Do we do that now?
     SDL_FreeSurface(header_text);
