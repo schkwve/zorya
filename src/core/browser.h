@@ -10,7 +10,10 @@
 
 #include <stdbool.h>
 
-bool browser_init();
+extern struct suztk_window *window;
+
+bool
+browser_init();
 
 bool browser_update();
 

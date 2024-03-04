@@ -95,6 +95,8 @@ struct suztk_window *suzwin_create_window(int width,
 void suzwin_destroy_window(struct suztk_window *win)
 {
     assert(win != NULL);
+    SDL_DestroyRenderer(win->renderer);
+    SDL_DestroyWindow(win->window);
     free(win);
     win = NULL;
 }

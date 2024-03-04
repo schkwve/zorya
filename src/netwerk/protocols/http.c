@@ -6,17 +6,14 @@
  * @brief HTTP implementation
  */
 
-#include <netdb.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/socket.h>
-#include <unistd.h>
 
 #include "http.h"
+#include <core/user_agent.h>
 #include <netwerk/connect.h>
 #include <utils/buffer.h>
-#include <utils/host.h>
 #include <utils/logging.h>
 
 /**
@@ -85,7 +82,7 @@ buffer_t *http_gen_request(struct http_request *request)
     // Request is generated, put it into buffer struct.
     buffer_t *buf = malloc(sizeof(buffer_t));
     buf->data_len = buf_len;
-    buf->dataPtr = out;
+    buf->data_ptr = out;
     return buf;
 }
 
@@ -111,31 +108,24 @@ struct http_response http_get(struct url url)
 
     log_debug("Connecting to %s:%d...", base_url, port);
 
-    struct host_info host = get_host_info(url);
-
-    char user_agent[100];
-    snprintf(
-        user_agent,
-        sizeof(user_agent),
-        "SovyetskiSoyouzy/1.0 (OS: %s, Version: %s) AntiRalsei/1.0 (HTML 2.0)",
-        host.name,
-        host.version);
-
-    struct http_header *headers = malloc(sizeof(struct http_header) * 2);
-    if (headers == NULL) {
-        log_fatal("Memory allocation failed for HTTP headers");
-        return (struct http_response){ .status = 0 };
-    }
+    struct http_header headers[2];
 
     headers[0].name = "User-Agent";
-    headers[0].data = strdup(user_agent);
+    headers[0].data = g_user_agent;
 
     headers[1].name = "Host";
-    headers[1].data = malloc(strlen(url.host) + 4);
-    snprintf(headers[1].data, strlen(url.host) + 4, "%s:%d", url.host, port);
+    headers[1].data = url.host;
+
+    //get the right path
+    char* path;
+    if(url.path == NULL)
+        path = "/";
+    else
+        path = url.path;
+
 
     struct http_request req = { .method = "GET",
-                                .path = strdup(url.path),
+                                .path = path,
                                 .ver = HTTP_1_1,
                                 .headers = headers,
                                 .header_len = 2,
@@ -160,9 +150,6 @@ struct http_response http_get(struct url url)
         ret.status = 0;
         ret.data = NULL;
 
-        buffer_destroy(req_raw);
-        buffer_destroy(res_raw);
-
         goto cleanup;
     }
     memset(res_raw, 0, sizeof(buffer_t));
@@ -174,14 +161,10 @@ struct http_response http_get(struct url url)
 
         ret.status = 0;
         ret.data = NULL;
-
-        buffer_destroy(req_raw);
-        buffer_destroy(res_raw);
-
         goto cleanup;
     }
     memset(ptr, 0, res_raw->data_len + 1);
-    memcpy(ptr, res_raw->dataPtr, res_raw->data_len);
+    memcpy(ptr, res_raw->data_ptr, res_raw->data_len);
     ptr[res_raw->data_len] = '\0';
 
     ptr = strchr(ptr, '<');
@@ -190,12 +173,9 @@ struct http_response http_get(struct url url)
     ret.data = ptr;
 
 cleanup:
+    buffer_destroy(req_raw);
+    buffer_destroy(res_raw);
     free((void *)base_url);
-    free((void *)req.path);
-    free((void *)headers[0].data);
-    free((void *)headers[1].data);
-    free((void *)headers);
-    free_host_info(&host);
     net_destroy_connection(con);
 
     return ret;

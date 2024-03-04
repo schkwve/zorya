@@ -38,9 +38,9 @@ struct url parse_url(const char *url)
     res.scheme[schemeTok - urlCopy] = '\0';
 
     if (*(schemeTok + 1) != '/' || *(schemeTok + 2) != '/') {
-        free(urlCopy);
-        free(res.scheme);
         log_error("Invalid URL(missing \"//\"): %s", url);
+        free(res.scheme);
+        free(urlCopy);
         return res;
     }
 
@@ -57,11 +57,21 @@ struct url parse_url(const char *url)
         memcpy(res.host, atTok + 1, moveOnTok - atTok - 1);
         res.host[moveOnTok - atTok - 1] = '\0';
     } else {
-        // no authority, path is between schemeTok and moveOn
+        if (moveOnTok == NULL) {
+            res.path = NULL;
+
+            res.host = malloc(strlen(schemeTok + 3) + 1);
+            memcpy(res.host, schemeTok + 3, strlen(schemeTok + 3));
+            res.host[strlen(schemeTok + 3)] = '\0';
+
+            goto cleanup;
+        }
+        // no authority, host is between schemeTok and moveOn
         res.host = malloc(moveOnTok - schemeTok - 2);
         memcpy(res.host, schemeTok + 3, moveOnTok - schemeTok - 3);
         res.host[moveOnTok - schemeTok - 3] = '\0';
     }
+
 
     char *fragmentStart = strchr(moveOnTok, '#');
     char *queryStart = strchr(moveOnTok, '?');
@@ -106,9 +116,10 @@ struct url parse_url(const char *url)
         memcpy(res.query, queryStart + 1, strlen(queryStart + 1));
         res.query[strlen(queryStart + 1)] = '\0';
     }
-    free(urlCopy);
 
-    return res;
+    cleanup:
+        free(urlCopy);
+        return res;
 }
 
 /**
@@ -120,10 +131,14 @@ struct url parse_url(const char *url)
 void free_url(struct url *url)
 {
     free(url->scheme);
-    free(url->authority);
+    if (url->authority != NULL)
+        free(url->authority);
     free(url->host);
-    free(url->path);
-    free(url->query);
-    free(url->fragment);
+    if(url->path != NULL)
+        free(url->path);
+    if(url->query != NULL)
+        free(url->query);
+    if(url->fragment != NULL)
+        free(url->fragment);
     url = NULL;
 }

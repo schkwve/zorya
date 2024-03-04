@@ -36,7 +36,7 @@ void net_send_data(struct net_connection *connection, buffer_t *buffer)
     int bytes_sent = 0;
     int total_bytes_sent = 0;
     const int buffer_len = buffer->data_len;
-    char *data_cast = (char *)buffer->dataPtr;
+    char *data_cast = (char *)buffer->data_ptr;
 
     // if not everything is sent in one go,
     // just try to send the rest once again
