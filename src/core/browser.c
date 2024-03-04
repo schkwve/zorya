@@ -17,6 +17,7 @@
 #include "browser.h"
 #include <antiralsei/handler.h>
 #include <antiralsei/htmltree.h>
+#include <components/text.h>
 #include <core/user_agent.h>
 #include <netwerk/connect.h>
 #include <netwerk/protocols/http.h>
@@ -36,11 +37,11 @@
 #define DEFAULT_MONOSPACE_BOLD_FONT "../res/freefont/FreeMonoBold.ttf"
 #define DEFAULT_SANSSERIF_BOLD_FONT "../res/freefont/FreeSansBold.ttf"
 #define DEFAULT_SERIF_BOLD_FONT "../res/freefont/FreeSerifBold.ttf"
-
+/*
 TTF_Font *current_font_monospace;
 TTF_Font *current_font_sansserif;
 TTF_Font *current_font_serif;
-
+*/
 struct suztk_window *window;
 
 // TODOS:
@@ -48,7 +49,7 @@ struct suztk_window *window;
 //  move text component into SuzTK/Componyents
 //  Hook up the statemachine
 //  add some anti-aliasing
-
+/*
 void
 render_text(const char *text,
             int x,
@@ -104,6 +105,7 @@ render_text(const char *text,
     SDL_FreeSurface(header_text);
     SDL_DestroyTexture(header_texture);
 }
+*/
 
 static const char *
 get_element_content(struct parse_element *element)
@@ -167,14 +169,17 @@ render_element(struct parse_element *element)
         SDL_Color foreground_color = { 0, 0, 0 };
 
         render_array[curY].text = malloc(sizeof(char) * element_content_length);
-        snprintf(
-            render_array[curY].text, element_content_length, element_content);
+        snprintf(render_array[curY].text,
+                 element_content_length,
+                 "%s",
+                 element_content);
         render_array[curY].x = 0;
         render_array[curY].y = 72 * curY;
         render_array[curY].width = -1;
         render_array[curY].height = 37;
         render_array[curY].color = foreground_color;
-        render_array[curY].font = current_font_sansserif;
+        // render_array[curY].font = current_font_sansserif;
+        render_array[curY].font = NULL;
 
         log_debug("Rendered an \"%s\". Content: \"%s\"",
                   element->name,
@@ -221,13 +226,14 @@ render_url(const char *url)
     int url_length = strlen(url) + 1;
 
     render_array[0].text = malloc(sizeof(char) * url_length + 1);
-    snprintf(render_array[0].text, url_length + 1, url);
+    snprintf(render_array[0].text, url_length + 1, "%s", url);
     render_array[0].x = 8;
     render_array[0].y = window->height / 13 - 8;
     render_array[0].width = -1;
     render_array[0].height = 16;
     render_array[0].color = foreground_color;
-    render_array[0].font = current_font_monospace;
+    // render_array[0].font = current_font_monospace;
+    render_array[0].font = NULL;
 }
 
 /**
@@ -277,14 +283,16 @@ load_page(const char *url)
 bool
 browser_init()
 {
-    current_font_monospace = TTF_OpenFont(DEFAULT_MONOSPACE_FONT, 32);
-    current_font_sansserif = TTF_OpenFont(DEFAULT_SANSSERIF_FONT, 32);
-    current_font_serif = TTF_OpenFont(DEFAULT_SERIF_FONT, 32);
+    // current_font_monospace = TTF_OpenFont(DEFAULT_MONOSPACE_FONT, 32);
+    // current_font_sansserif = TTF_OpenFont(DEFAULT_SANSSERIF_FONT, 32);
+    // current_font_serif = TTF_OpenFont(DEFAULT_SERIF_FONT, 32);
 
     user_agent_infer();
 
     window = suzwin_create_window(1280, 720, 0, "");
     suzwin_set_icon(window, "../res/logo.png");
+
+    component_text_init("Noto Sans", 24);
 
     load_page("http://info.cern.ch");
     return true;
@@ -313,26 +321,10 @@ browser_update()
     SDL_SetRenderDrawColor(window->renderer, 0x22, 0x22, 0x22, 0xFF);
     SDL_RenderFillRect(window->renderer, &rect);
 
-    // SDL_Color color = { 200, 0, 0 };
-    //  render_text("The Sovyetski Soyouzy Project", 0, 64, -1, 64, color);
-    //  render_text("GNU FreeMono 32px", 0, 128, -1, 32, color);
-    //  render_text("GNU FreeMono 24px", 0, 160, -1, 24, color);
-    //  render_text("GNU FreeMono 16px", 0, 192, -1, 16, color);
-    //  render_text("GNU FreeMono 12px", 0, 216, -1, 12, color);
+    component_text_render(
+        window, 0, 64, 0xC80000FF, "The Sovyetski Soyouzy Project", 0, 0);
 
-    for (int i = 0; i < 64; i++) {
-        if (render_array[i].text == NULL)
-            continue;
-        render_text(render_array[i].text,
-                    render_array[i].x,
-                    render_array[i].y,
-                    render_array[i].width,
-                    render_array[i].height,
-                    render_array[i].color,
-                    render_array[i].font);
-    }
-
-    suzwin_render_window(window);
+    suzwin_render(window);
     //  TODO: Update
     return true;
 }

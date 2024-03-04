@@ -118,13 +118,12 @@ http_get(struct url url)
     headers[1].name = "Host";
     headers[1].data = url.host;
 
-    //get the right path
-    char* path;
-    if(url.path == NULL)
+    // get the right path
+    char *path;
+    if (url.path == NULL)
         path = "/";
     else
         path = url.path;
-
 
     struct http_request req = { .method = "GET",
                                 .path = path,

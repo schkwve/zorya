@@ -33,11 +33,15 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 # Make sure every prerequisite is installed
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
-find_package(SDL2_ttf REQUIRED)
+find_package(Freetype REQUIRED)
+find_package(Fontconfig REQUIRED)
+find_package(HarfBuzz REQUIRED)
+find_package(Cairo REQUIRED)
+find_package(GLIB REQUIRED)
 
 # Includesssss
 include_directories(src)
-include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${GLIB_INCLUDE_DIRS} ${Fontconfig_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS} ${HarfBuzz_INCLUDE_DIRS} ${Cairo_INCLUDE_DIRS})
 
 # Sources... Sources everywhere!
 file(GLOB_RECURSE SRC src/*.c)
@@ -69,12 +73,13 @@ if(CMAKE_GENERATOR STREQUAL Xcode)
     set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/lib/Debug)
     set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/lib/Release)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/bin/Debug)
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin/Release)
+   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin/Release)
 endif()
 
 # Compile
 add_executable(${EXECUTABLE_NAME} ${SRC})
-target_link_libraries(${EXECUTABLE_NAME} PUBLIC SDL2::SDL2 SDL2::Image SDL2::TTF)
+target_compile_options(${EXECUTABLE_NAME} PUBLIC ${Fontconfig_COMPILE_OPTIONS} ${HarfBuzz_COMPILE_OPTIONS} ${Cairo_COMPILE_OPTIONS})
+target_link_libraries(${EXECUTABLE_NAME} PUBLIC SDL2::SDL2 SDL2::Image ${Fontconfig_LIBRARIES} Freetype::Freetype ${HarfBuzz_LIBRARIES} ${Cairo_LIBRARIES})
 
 # CPack
 install(DIRECTORY res DESTINATION ${CMAKE_BINARY_DIR}/install
@@ -110,10 +115,16 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin") # macOS
   get_filename_component(SDL2_LIBFILE "${SDL2_LIBRARIES}" REALPATH)
   get_filename_component(SDL2_IMAGE_LIBFILE "${SDL2_IMAGE_LIBRARIES}" REALPATH)
   get_filename_component(SDL2_TTF_LIBFILE "${SDL2_TTF_LIBRARIES}" REALPATH)
+  get_filename_component(FREETYPE_LIBFILE "${FREETYPE_LIBRARIES}" REALPATH)
+  get_filename_component(HARFBUZZ_LIBFILE "${HarfBuzz_LIBRARIES}" REALPATH)
+  get_filename_component(CAIRO_LIBFILE "${Cairo_LIBRARIES}" REALPATH)
 
   install(FILES ${SDL2_LIBFILE} DESTINATION "../Library" COMPONENT libraries)
   install(FILES ${SDL2_IMAGE_LIBFILE} DESTINATION "../Library" COMPONENT libraries)
-  install(FILES ${SDL2_TTF_LIBFILE} DESTINATION "../Library" COMPONENT libraries)
+  install(FILES ${FREETYPE_LIBFILE} DESTINATION "../Library" COMPONENT libraries)
+  install(FILES ${HARFBUZZ_LIBFILE} DESTINATION "../Library" COMPONENT libraries)
+  install(FILES ${CAIRO_LIBFILE} DESTINATION "../Library" COMPONENT libraries)
+
   install(TARGETS ${EXECUTABLE_NAME} RUNTIME DESTINATION "../MacOS" COMPONENT applications)
 else ()
   message(FATAL_ERROR "Unsupported OS!")

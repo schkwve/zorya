@@ -8,12 +8,12 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
-#include <SDL_ttf.h>
 
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <components/text.h>
 #include <core/browser.h>
 #include <netwerk/connect.h>
 #include <netwerk/protocols/http.h>
@@ -47,15 +47,6 @@ main(void)
         SDL_Quit();
         return EXIT_FAILURE;
     }
-    // initialize SDL_Ttf
-    status = TTF_Init();
-    if (status != 0) {
-        log_fatal("SDL_TTF failed to initialize: %s", TTF_GetError());
-        IMG_Quit();
-        SDL_Quit();
-        return EXIT_FAILURE;
-    }
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 
     // initialize browser
     if (!browser_init()) {
@@ -70,14 +61,35 @@ main(void)
     // browser loop
     while (should_quit != true) {
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                should_quit = true;
+            switch (event.type) {
+                case SDL_QUIT: {
+                    should_quit = true;
+                    break;
+                }
+                case SDL_WINDOWEVENT: {
+                    switch (event.window.event) {
+                        case SDL_WINDOWEVENT_SIZE_CHANGED: {
+                            // width x height
+                            // suzwin_handle_resize(event.window.data1,
+                            // event.window.data2);
+                            break;
+                        }
+                        case SDL_WINDOWEVENT_CLOSE: {
+                            event.type = SDL_QUIT;
+                            SDL_PushEvent(&event);
+                            break;
+                        }
+                    }
+                }
             }
         }
         if (!browser_update()) {
             log_fatal("Failed to update browser.");
             should_quit = true;
         }
+
+        // just block a bit so we don't spin
+        SDL_Delay(150);
     }
 
     browser_destroy();

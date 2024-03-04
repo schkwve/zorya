@@ -47,7 +47,7 @@ free_html_tree(struct parse_node *root);
 void
 print_html_tree(struct parse_node *root, int depth);
 
-struct parse_element
-*find_in_html_tree(struct parse_node *node, char *name);
+struct parse_element *
+find_in_html_tree(struct parse_node *node, char *name);
 
 #endif /* PARSE_H */

@@ -16,7 +16,8 @@
 
 char g_user_agent[100];
 
-void user_agent_infer()
+void
+user_agent_infer()
 {
     struct host_info host = get_host_info();
     snprintf(

@@ -17,10 +17,11 @@
  */
 struct suztk_window
 {
-    SDL_Renderer *renderer;
-
     SDL_Window *window;
     uint32_t flags;
+
+    SDL_Renderer *renderer;
+    SDL_Surface *surface;
 
     int width;
     int height;
@@ -41,6 +42,6 @@ void
 suzwin_set_icon(struct suztk_window *win, const char *iconpath);
 
 void
-suzwin_render_window(struct suztk_window *win);
+suzwin_render(struct suztk_window *win);
 
 #endif /* SUZTK_WINDOW_H  */

@@ -73,9 +73,25 @@ suzwin_create_window(int width,
         return NULL;
     }
 
+    SDL_Surface *surface = SDL_CreateRGBSurface(flags,
+                                                width,
+                                                height,
+                                                32,
+                                                0x00ff0000,
+                                                0x0000ff00,
+                                                0x000000ff,
+                                                0x00000000);
+    if (surface == NULL) {
+        log_error("SDL_CreateRGBSurface() returned NULL! %s", SDL_GetError());
+        SDL_DestroyRenderer(ren);
+        SDL_DestroyWindow(win);
+        free(new);
+    }
+
     new->window = win;
-    new->renderer = ren;
     new->flags = flags;
+    new->renderer = ren;
+    new->surface = surface;
     new->width = width;
     new->height = height;
     new->is_fullscreen = !!fullscreen;
@@ -97,6 +113,7 @@ void
 suzwin_destroy_window(struct suztk_window *win)
 {
     assert(win != NULL);
+    SDL_FreeSurface(win->surface);
     SDL_DestroyRenderer(win->renderer);
     SDL_DestroyWindow(win->window);
     free(win);
@@ -144,8 +161,13 @@ suzwin_set_icon(struct suztk_window *win, const char *iconpath)
 }
 
 void
-suzwin_render_window(struct suztk_window *win)
+suzwin_render(struct suztk_window *win)
 {
     assert(win != NULL);
+    SDL_RenderClear(win->renderer);
+    SDL_Texture *tex =
+        SDL_CreateTextureFromSurface(win->renderer, win->surface);
+    SDL_RenderCopy(win->renderer, tex, NULL, NULL);
     SDL_RenderPresent(win->renderer);
+    SDL_DestroyTexture(tex);
 }
