@@ -17,6 +17,7 @@
 #include "browser.h"
 #include <antiralsei/handler.h>
 #include <antiralsei/htmltree.h>
+#include <core/user_agent.h>
 #include <netwerk/connect.h>
 #include <netwerk/protocols/http.h>
 #include <netwerk/resolver.h>
@@ -25,7 +26,6 @@
 #include <utils/buffer.h>
 #include <utils/host.h>
 #include <utils/logging.h>
-#include <core/user_agent.h>
 
 #include <UI/home.h>
 
@@ -126,38 +126,89 @@ typedef struct
 
 render_node render_array[64];
 
+// Move this somewhere later on (This is a function to strcmp without any
+// restrctions on the case)
+int
+priv_stricmp(const char *s1, const char *s2)
+{
+    while (*s1 && *s2) {
+        char c1 = tolower(*s1);
+        char c2 = tolower(*s2);
+        if (c1 != c2) {
+            return c1 - c2;
+        }
+        s1++;
+        s2++;
+    }
+    return tolower(*s1) - tolower(*s2);
+}
+
+int curY = 1;
 static void
 render_element(struct parse_element *element)
 {
-    const char *element_content = get_element_content(element);
-    int element_content_length = strlen(element_content) + 1;
+    if (element != NULL && ((priv_stricmp(element->name, "h1") == 0) ||
+                            (priv_stricmp(element->name, "h2") == 0) ||
+                            (priv_stricmp(element->name, "h3") == 0) ||
+                            (priv_stricmp(element->name, "h4") == 0) ||
+                            (priv_stricmp(element->name, "h5") == 0) ||
+                            (priv_stricmp(element->name, "h6") == 0) ||
+                            (priv_stricmp(element->name, "p") == 0))) {
 
-    SDL_Color foreground_color = { 0, 0, 0 };
-    // TODO: implement parse_attribute based color setting
+        const char *element_content = get_element_content(element);
+        if (element_content == NULL) {
+            return;
+        }
 
-    render_array[1].text = malloc(sizeof(char) * element_content_length);
-    snprintf(render_array[1].text, element_content_length, element_content);
-    render_array[1].x = 0;
-    render_array[1].y = 72;
-    render_array[1].width = -1;
-    render_array[1].height = 37;
-    render_array[1].color = foreground_color;
-    render_array[1].font = current_font_sansserif;
+        int element_content_length = strlen(element_content) + 1;
+
+        SDL_Color foreground_color = { 0, 0, 0 };
+
+        render_array[curY].text = malloc(sizeof(char) * element_content_length);
+        snprintf(
+            render_array[curY].text, element_content_length, element_content);
+        render_array[curY].x = 0;
+        render_array[curY].y = 72 * curY;
+        render_array[curY].width = -1;
+        render_array[curY].height = 37;
+        render_array[curY].color = foreground_color;
+        render_array[curY].font = current_font_sansserif;
+
+        log_debug("Rendered an \"%s\". Content: \"%s\"",
+                  element->name,
+                  element->content);
+        curY++;
+    } else {
+        if (element == NULL) {
+            log_fatal("Element seems to be NULL");
+        } else {
+            log_error("Unknown element %s", element->name);
+        }
+    }
+}
+
+static void
+render_all_elements_from_tree(struct parse_node *tree)
+{
+    if (tree == NULL) {
+        log_error("Tried rendering empty HTML tree!");
+        return;
+    }
+
+    if (tree->element != NULL) {
+        render_element(tree->element);
+    }
+
+    for (int i = 0; i < tree->num_children && tree->children != NULL; i++) {
+        render_all_elements_from_tree(tree->children[i]);
+    }
 }
 
 static void
 render_html(struct parse_node *tree)
 {
     log_debug("Rendering HTML content");
-
-    if (tree == NULL) {
-        log_error("Tried rendering empty HTML tree!");
-        return;
-    }
-
-    struct parse_element *element = find_in_html_tree(tree, "h1");
-
-    render_element(element);
+    render_all_elements_from_tree(tree);
 }
 
 static void
