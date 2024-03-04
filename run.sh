@@ -1,5 +1,5 @@
 #!/bin/bash
 make -C build
-cd $(pwd)/build
+cd build
 ./bin/SusieBrowser 
 cd ..

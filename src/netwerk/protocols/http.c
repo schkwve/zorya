@@ -83,7 +83,7 @@ http_gen_request(struct http_request *request)
     // Request is generated, put it into buffer struct.
     buffer_t *buf = malloc(sizeof(buffer_t));
     buf->data_len = buf_len;
-    buf->dataPtr = out;
+    buf->data_ptr = out;
     return buf;
 }
 
@@ -118,8 +118,16 @@ http_get(struct url url)
     headers[1].name = "Host";
     headers[1].data = url.host;
 
+    //get the right path
+    char* path;
+    if(url.path == NULL)
+        path = "/";
+    else
+        path = url.path;
+
+
     struct http_request req = { .method = "GET",
-                                .path = url.path,
+                                .path = path,
                                 .ver = HTTP_1_1,
                                 .headers = headers,
                                 .header_len = 2,
@@ -158,7 +166,7 @@ http_get(struct url url)
         goto cleanup;
     }
     memset(ptr, 0, res_raw->data_len + 1);
-    memcpy(ptr, res_raw->dataPtr, res_raw->data_len);
+    memcpy(ptr, res_raw->data_ptr, res_raw->data_len);
     ptr[res_raw->data_len] = '\0';
 
     ptr = strchr(ptr, '<');

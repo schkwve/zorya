@@ -30,7 +30,7 @@ resolve_url(struct url url)
             return (struct net_response){ .status = RESPONSE_OK,
                                           .code = 0,
                                           .pageData = (buffer_t){
-                                              .dataPtr = res.data,
+                                              .data_ptr = res.data,
                                               .data_len = strlen(res.data) } };
         } else {
             return (struct net_response){ .status = RESPONSE_HTTP_ERROR,
@@ -47,19 +47,13 @@ resolve_url(struct url url)
         return (struct net_response){ .status = RESPONSE_BUILTIN,
                                       .code = 0,
                                       .pageData = (buffer_t){
-                                          .dataPtr = url.path,
+                                          .data_ptr = url.path,
                                           .data_len = strlen(url.path) + 1 } };
     } else {
         return (struct net_response){ .status = RESPONSE_ERROR,
                                       .code = ERR_BAD_SCHEME };
     }
 
-    char *retdata = "<!DOCTYPE html><html><head><title>Page "
-                    "Title</title></head><body><h1>This is a "
-                    "Heading</h1><p>This is a paragraph.</p></body></html>";
-
-    return (struct net_response){ .status = RESPONSE_OK,
-                                  .code = 0,
-                                  .pageData.dataPtr = retdata,
-                                  .pageData.data_len = strlen(retdata) };
+    return (struct net_response){ .status = RESPONSE_ERROR,
+                                  .code = ERR_UNIMPLEMENTED };
 }

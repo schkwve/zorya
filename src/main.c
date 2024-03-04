@@ -32,7 +32,6 @@ int
 main(void)
 {
     int status = 0;
-
     // initialize SDL
     status = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     if (status != 0) {
@@ -41,7 +40,6 @@ main(void)
                   status);
         return EXIT_FAILURE;
     }
-
     // initialize SDL_Image
     status = IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG;
     if (status != IMG_INIT_PNG) {
@@ -49,7 +47,6 @@ main(void)
         SDL_Quit();
         return EXIT_FAILURE;
     }
-
     // initialize SDL_Ttf
     status = TTF_Init();
     if (status != 0) {
@@ -58,7 +55,6 @@ main(void)
         SDL_Quit();
         return EXIT_FAILURE;
     }
-
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 
     // initialize browser
@@ -68,7 +64,6 @@ main(void)
         SDL_Quit();
         return EXIT_FAILURE;
     }
-
     bool should_quit = false;
     SDL_Event event;
 

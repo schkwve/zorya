@@ -12,7 +12,7 @@
 
 typedef struct buffer
 {
-    void *dataPtr;
+    void *data_ptr;
     size_t data_len;
     size_t buf_cursor;
 } buffer_t;
