@@ -42,11 +42,11 @@ TTF_Font *current_font_serif;
 
 struct suztk_window *window;
 
-//TODOS:
-// move HTML renderer into Antiralsei
-// move text component into SuzTK/Componyents
-// Hook up the statemachine
-// add some anti-aliasing
+// TODOS:
+//  move HTML renderer into Antiralsei
+//  move text component into SuzTK/Componyents
+//  Hook up the statemachine
+//  add some anti-aliasing
 
 void
 render_text(const char *text,
@@ -61,7 +61,14 @@ render_text(const char *text,
 
     SDL_Surface *header_text = TTF_RenderText_Solid(font, text, color);
     if (header_text == NULL) {
-        log_error("Failed to render text: %s\nGiven parameters: %s, %d, %d, %d, %d, ?color?", TTF_GetError(), text, x, y, width, height);
+        log_error("Failed to render text: %s\nGiven parameters: %s, %d, %d, "
+                  "%d, %d, ?color?",
+                  TTF_GetError(),
+                  text,
+                  x,
+                  y,
+                  width,
+                  height);
     }
 
     SDL_Texture *header_texture =
@@ -73,10 +80,9 @@ render_text(const char *text,
     header_texture_rect.y = y;
 
     if (width < 0 || height < 0) { // automatic text size
-        if (TTF_SizeText(font,
-                         text,
-                         &header_texture_rect.w,
-                         &header_texture_rect.h) < 0) {
+        if (TTF_SizeText(
+                font, text, &header_texture_rect.w, &header_texture_rect.h) <
+            0) {
             log_error("Error setting automatic text size: %s", TTF_GetError());
         }
     } else {
@@ -96,8 +102,9 @@ render_text(const char *text,
     SDL_DestroyTexture(header_texture);
 }
 
-static const char
-*get_element_content(struct parse_element *element) {
+static const char *
+get_element_content(struct parse_element *element)
+{
     if (element != NULL && element->content != NULL) {
         return element->content;
     }
@@ -105,7 +112,8 @@ static const char
     return NULL;
 }
 
-typedef struct {
+typedef struct
+{
     char *text;
     int x;
     int y;
@@ -118,7 +126,8 @@ typedef struct {
 render_node render_array[64];
 
 static void
-render_element(struct parse_element *element) {
+render_element(struct parse_element *element)
+{
     const char *element_content = get_element_content(element);
     int element_content_length = strlen(element_content) + 1;
 
@@ -136,12 +145,13 @@ render_element(struct parse_element *element) {
 }
 
 static void
-render_html(struct parse_node *tree) {
+render_html(struct parse_node *tree)
+{
     log_debug("Rendering HTML content");
 
     if (tree == NULL) {
         log_error("Tried rendering empty HTML tree!");
-	    return;
+        return;
     }
 
     struct parse_element *element = find_in_html_tree(tree, "h1");
@@ -150,7 +160,8 @@ render_html(struct parse_node *tree) {
 }
 
 static void
-render_url(const char *url) {
+render_url(const char *url)
+{
     SDL_Color foreground_color = { 255, 255, 255 };
 
     int url_length = strlen(url);
@@ -163,7 +174,7 @@ render_url(const char *url) {
     render_array[0].height = 16;
     render_array[0].color = foreground_color;
     render_array[0].font = current_font_monospace;
-} 
+}
 
 /**
  * @brief Loads a page
@@ -183,7 +194,7 @@ load_page(const char *url)
 
         // TODO: transition to browser view with tree
         handle_html(tree, url_info.host);
-	    render_html(tree);
+        render_html(tree);
         free_html_tree(tree);
     } else if (res.status == RESPONSE_ERROR) {
         // TODO: transition to error screen
@@ -212,11 +223,9 @@ load_page(const char *url)
 bool
 browser_init()
 {
-    current_font_monospace      = TTF_OpenFont(DEFAULT_MONOSPACE_FONT, 32);
-    current_font_sansserif      = TTF_OpenFont(DEFAULT_SANSSERIF_FONT, 32);
-    current_font_serif          = TTF_OpenFont(DEFAULT_SERIF_FONT, 32);
-
-
+    current_font_monospace = TTF_OpenFont(DEFAULT_MONOSPACE_FONT, 32);
+    current_font_sansserif = TTF_OpenFont(DEFAULT_SANSSERIF_FONT, 32);
+    current_font_serif = TTF_OpenFont(DEFAULT_SERIF_FONT, 32);
 
     window = suzwin_create_window(1280, 720, 0, "");
     suzwin_set_icon(window, "../res/logo.png");
@@ -234,7 +243,7 @@ browser_init()
 bool
 browser_update()
 {
-    //ui_homepage_render(NULL);
+    // ui_homepage_render(NULL);
 
     // make the whole screen grey
     SDL_SetRenderDrawColor(window->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
@@ -248,12 +257,12 @@ browser_update()
     SDL_SetRenderDrawColor(window->renderer, 0x22, 0x22, 0x22, 0xFF);
     SDL_RenderFillRect(window->renderer, &rect);
 
-    //SDL_Color color = { 200, 0, 0 };
-    // render_text("The Sovyetski Soyouzy Project", 0, 64, -1, 64, color);
-    // render_text("GNU FreeMono 32px", 0, 128, -1, 32, color);
-    // render_text("GNU FreeMono 24px", 0, 160, -1, 24, color);
-    // render_text("GNU FreeMono 16px", 0, 192, -1, 16, color);
-    // render_text("GNU FreeMono 12px", 0, 216, -1, 12, color);
+    // SDL_Color color = { 200, 0, 0 };
+    //  render_text("The Sovyetski Soyouzy Project", 0, 64, -1, 64, color);
+    //  render_text("GNU FreeMono 32px", 0, 128, -1, 32, color);
+    //  render_text("GNU FreeMono 24px", 0, 160, -1, 24, color);
+    //  render_text("GNU FreeMono 16px", 0, 192, -1, 16, color);
+    //  render_text("GNU FreeMono 12px", 0, 216, -1, 12, color);
 
     for (int i = 0; i < 64; i++) {
         if (render_array[i].text == NULL)

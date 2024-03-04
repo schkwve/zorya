@@ -6,6 +6,7 @@
  */
 
 #include "handler.h"
+#include <core/browser.h>
 #include <suzTK/window.h>
 
 /**
@@ -69,5 +70,5 @@ handle_html(struct parse_node *tree, char *fall_back_title)
 
     log_debug("Setting title to '%s'", t);
 
-    // suzwin_set_title(full_title);
+    suzwin_set_title(window, t);
 }
