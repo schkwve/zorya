@@ -167,8 +167,8 @@ render_url(const char *url)
 
     int url_length = strlen(url);
 
-    render_array[0].text = malloc(sizeof(char) * (url_length + 1));
-    snprintf(render_array[0].text, url_length, url);
+    render_array[0].text = malloc(sizeof(char) * url_length + 1);
+    snprintf(render_array[0].text, url_length + 1, url);
     render_array[0].x = 8;
     render_array[0].y = window->height / 13 - 8;
     render_array[0].width = -1;
@@ -191,7 +191,7 @@ load_page(const char *url)
     struct net_response res = resolve_url(url_info);
     if (res.status == RESPONSE_OK) {
         struct parse_node *tree =
-            parse_html(res.pageData.dataPtr, res.pageData.data_len);
+            parse_html(res.pageData.data_ptr, res.pageData.data_len);
 
         // TODO: transition to browser view with tree
         handle_html(tree, url_info.host);
@@ -233,7 +233,7 @@ browser_init()
     window = suzwin_create_window(1280, 720, 0, "");
     suzwin_set_icon(window, "../res/logo.png");
 
-    load_page("http://info.cern.ch/hypertext/WWW/TheProject.html");
+    load_page("http://info.cern.ch");
     return true;
 }
 

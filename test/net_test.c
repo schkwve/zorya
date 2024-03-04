@@ -33,7 +33,7 @@ int main() {
   net_recv_data(con, &res);
 
   char* ptr = malloc(res->dataLen + 1);
-  memcpy(ptr, res->dataPtr, res->dataLen);
+  memcpy(ptr, res->data_ptr, res->dataLen);
   ptr[res->dataLen] = '\0';
 
   log_debug("%s", ptr);
