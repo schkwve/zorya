@@ -162,9 +162,6 @@ http_get(struct url url)
         ret.status = 0;
         ret.data = NULL;
 
-        buffer_destroy(req_raw);
-        buffer_destroy(res_raw);
-
         goto cleanup;
     }
     memset(res_raw, 0, sizeof(buffer_t));
@@ -176,10 +173,6 @@ http_get(struct url url)
 
         ret.status = 0;
         ret.data = NULL;
-
-        buffer_destroy(req_raw);
-        buffer_destroy(res_raw);
-
         goto cleanup;
     }
     memset(ptr, 0, res_raw->data_len + 1);
@@ -192,6 +185,8 @@ http_get(struct url url)
     ret.data = ptr;
 
 cleanup:
+    buffer_destroy(req_raw);
+    buffer_destroy(res_raw);
     free((void *)base_url);
     free((void *)req.path);
     free((void *)headers[0].data);
