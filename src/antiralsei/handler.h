@@ -8,11 +8,9 @@
 #ifndef HANDLER_H
 #define HANDLER_H
 
-#include "parse.h"
+#include "htmltree.h"
 #include <utils/logging.h>
 
-struct parse_element
-*find_in_html_tree(struct parse_node *node, char *name);
 void
 handle_html(struct parse_node *tree, char *fall_back_title);
 

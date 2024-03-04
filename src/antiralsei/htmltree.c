@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 
-#include "parse.h"
+#include "htmltree.h"
 
 /**
  * @brief Parses an HTML file.
@@ -228,4 +228,35 @@ print_html_tree(struct parse_node *node, int lvl)
     for (int i = 0; i < node->num_children && node->children != NULL; i++) {
         print_html_tree(node->children[i], lvl + 1);
     }
+}
+
+/**
+ * @brief Finds a tag in an HTML tree.
+ *
+ * @param node
+ *        ???
+ *
+ * @param name
+ *        Tag to be searched for
+ *
+ * @return Parsed element if it was found;
+ *         NULL otherwise.
+ */
+struct parse_element *
+find_in_html_tree(struct parse_node *node, char *name)
+{
+    if (node->element != NULL) {
+        if (strcasecmp(node->element->name, name) == 0) {
+            return node->element;
+        }
+    }
+
+    for (int i = 0; i < node->num_children && node->children != NULL; i++) {
+        struct parse_element *e = find_in_html_tree(node->children[i], name);
+        if (e != NULL) {
+            return e;
+        }
+    }
+
+    return NULL;
 }

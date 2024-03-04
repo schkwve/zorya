@@ -6,17 +6,14 @@
  * @brief HTTP implementation
  */
 
-#include <netdb.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/socket.h>
-#include <unistd.h>
 
 #include "http.h"
+#include <core/user_agent.h>
 #include <netwerk/connect.h>
 #include <utils/buffer.h>
-#include <utils/host.h>
 #include <utils/logging.h>
 
 /**
@@ -113,31 +110,16 @@ http_get(struct url url)
 
     log_debug("Connecting to %s:%d...", base_url, port);
 
-    struct host_info host = get_host_info(url);
-
-    char user_agent[100];
-    snprintf(
-        user_agent,
-        sizeof(user_agent),
-        "SovyetskiSoyouzy/1.0 (OS: %s, Version: %s) AntiRalsei/1.0 (HTML 2.0)",
-        host.name,
-        host.version);
-
-    struct http_header *headers = malloc(sizeof(struct http_header) * 2);
-    if (headers == NULL) {
-        log_fatal("Memory allocation failed for HTTP headers");
-        return (struct http_response){ .status = 0 };
-    }
+    struct http_header headers[2];
 
     headers[0].name = "User-Agent";
-    headers[0].data = strdup(user_agent);
+    headers[0].data = g_user_agent;
 
     headers[1].name = "Host";
-    headers[1].data = malloc(strlen(url.host) + 4);
-    snprintf(headers[1].data, strlen(url.host) + 4, "%s:%d", url.host, port);
+    headers[1].data = url.host;
 
     struct http_request req = { .method = "GET",
-                                .path = strdup(url.path),
+                                .path = url.path,
                                 .ver = HTTP_1_1,
                                 .headers = headers,
                                 .header_len = 2,
@@ -188,11 +170,6 @@ cleanup:
     buffer_destroy(req_raw);
     buffer_destroy(res_raw);
     free((void *)base_url);
-    free((void *)req.path);
-    free((void *)headers[0].data);
-    free((void *)headers[1].data);
-    free((void *)headers);
-    free_host_info(&host);
     net_destroy_connection(con);
 
     return ret;

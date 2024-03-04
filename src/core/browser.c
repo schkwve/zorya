@@ -16,7 +16,7 @@
 
 #include "browser.h"
 #include <antiralsei/handler.h>
-#include <antiralsei/parse.h>
+#include <antiralsei/htmltree.h>
 #include <netwerk/connect.h>
 #include <netwerk/protocols/http.h>
 #include <netwerk/resolver.h>
@@ -25,6 +25,7 @@
 #include <utils/buffer.h>
 #include <utils/host.h>
 #include <utils/logging.h>
+#include <core/user_agent.h>
 
 #include <UI/home.h>
 
@@ -226,6 +227,8 @@ browser_init()
     current_font_monospace = TTF_OpenFont(DEFAULT_MONOSPACE_FONT, 32);
     current_font_sansserif = TTF_OpenFont(DEFAULT_SANSSERIF_FONT, 32);
     current_font_serif = TTF_OpenFont(DEFAULT_SERIF_FONT, 32);
+
+    user_agent_infer();
 
     window = suzwin_create_window(1280, 720, 0, "");
     suzwin_set_icon(window, "../res/logo.png");

@@ -22,7 +22,7 @@
 #include <utils/buffer.h>
 
 #include "antiralsei/handler.h"
-#include "antiralsei/parse.h"
+#include "antiralsei/htmltree.h"
 #include "utils/logging.h"
 
 /**
