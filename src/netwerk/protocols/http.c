@@ -140,15 +140,20 @@ struct http_response http_get(struct url url)
         ret.status = 0;
         ret.data = NULL;
 
+        buffer_destroy(req_raw);
+
         goto cleanup;
     }
     net_send_data(con, req_raw);
+
     buffer_t *res_raw = malloc(sizeof(buffer_t));
     if (res_raw == NULL) {
         log_fatal("Memory allocation failed for HTTP response buffer");
 
         ret.status = 0;
         ret.data = NULL;
+
+        buffer_destroy(res_raw);
 
         goto cleanup;
     }
@@ -173,8 +178,6 @@ struct http_response http_get(struct url url)
     ret.data = ptr;
 
 cleanup:
-    buffer_destroy(req_raw);
-    buffer_destroy(res_raw);
     free((void *)base_url);
     net_destroy_connection(con);
 

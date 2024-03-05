@@ -117,6 +117,19 @@ struct net_connection *net_create_connection(char *host, uint16_t port)
 
     memset(new, 0, sizeof(struct net_connection));
 
+    int last_index = 0;
+    
+    for (int i = 0; i < MAX_CONNECTIONS; i++) {
+        if (connections[i].alive != true) {
+            last_index = i;
+            break;
+        }
+    }
+
+    new->id = last_index;
+    connections[new->id] = *new;
+    log_debug("Assigned ID %d to %s:%d", new->id, host, port);
+
     // set up some nice defaults
     // @note: SSL is disabled by default before it is implemented.
     size_t hostlen = strlen(host);
@@ -181,21 +194,6 @@ struct net_connection *net_create_connection(char *host, uint16_t port)
     new->alive = true;
     log_debug("Connected to %s:%d", host, port);
 
-    if (new != NULL) {
-        int last_index = 0;
-
-        for (int i = 0; i < MAX_CONNECTIONS; i++) {
-            if (connections[i].alive != true) {
-                last_index = i;
-                break;
-            }
-        };
-
-        new->id = last_index;
-        connections[new->id] = *new;
-
-        log_debug("Assign id %d to %s:%d", new->id, host, port);
-    }
     return new;
 }
 
@@ -207,6 +205,11 @@ struct net_connection *net_create_connection(char *host, uint16_t port)
  */
 void net_destroy_connection(struct net_connection *conn)
 {
+    if (conn == NULL) { // - has the connection's memory already been freed by net_create_connection? 
+        return;         // - yeah
+    }
+
+    log_debug("Destroying connection ID %d", conn->id);
     if (connections[conn->id].alive) {
         connections[conn->id].alive = false; // Not really needed :^)
         struct net_connection blank_conn = { 0 };
