@@ -23,6 +23,7 @@
 #include <netwerk/resolver.h>
 #include <netwerk/url.h>
 #include <suzTK/window.h>
+#include <suzTK/base-componyents/button.h>
 #include <utils/buffer.h>
 #include <utils/host.h>
 #include <utils/logging.h>
@@ -42,6 +43,7 @@ TTF_Font *current_font_sansserif;
 TTF_Font *current_font_serif;
 
 struct suztk_window *window;
+struct suztk_button *button;
 
 // TODOS:
 //  move HTML renderer into Antiralsei
@@ -284,6 +286,8 @@ bool browser_init()
     window = suzwin_create_window(1280, 720, 0, "");
     suzwin_set_icon(window, "../res/logo.png");
 
+    button = suzbutton_create_button(window, 5, 5, 50, 50, "test", NULL);
+
     load_page("http://info.cern.ch");
     return true;
 }
@@ -330,6 +334,8 @@ bool browser_update()
     }
 
     suzwin_render_window(window);
+    suzbutton_render_button(button);
+
     //  TODO: Update
     return true;
 }

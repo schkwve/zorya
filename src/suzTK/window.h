@@ -7,7 +7,7 @@
 #ifndef SUZTK_WINDOW_H
 #define SUZTK_WINDOW_H
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <stdint.h>
 
 /**
