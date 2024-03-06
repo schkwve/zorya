@@ -60,7 +60,8 @@ struct suztk_button *suzbutton_create_button(struct suztk_window* window, int x,
  */
 void suzbutton_destroy_button(struct suztk_button *button)
 {
-    button = NULL;
+    free(button->title);
+    free(button);
 }
 
 /**
@@ -73,8 +74,8 @@ void suzbutton_render_button(struct suztk_button *button)
 {
     if (button != NULL)
     {
-        SDL_Rect rect = (SDL_Rect){button->x, button->y, button->width, button->height};
+        button->rectangle = (SDL_Rect){button->x, button->y, button->width, button->height};
         SDL_SetRenderDrawColor(button->window->renderer, 0x22, 0x22, 0x22, 0xFF);
-        SDL_RenderFillRect(button->window->renderer, &rect);
+        SDL_RenderFillRect(button->window->renderer, &button->rectangle);
     }
 }

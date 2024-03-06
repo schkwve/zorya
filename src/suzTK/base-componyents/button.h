@@ -8,13 +8,14 @@
 #ifndef SUZTK_BUTTON_H
 #define SUZTK_BUTTON_H
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <stdint.h>
 
 #include "../window.h"
 
 struct suztk_button {
     struct suztk_window* window;
+    SDL_Rect rectangle;
 
     int x;
     int y;
