@@ -25,7 +25,7 @@ struct net_response resolve_url(struct url url)
     if (strcmp(url.scheme, "http") == 0) {
 
         struct http_response res = http_get(url);
-        if (res.status == 1) {
+        if (!http_is_status_error(res.status)) {
             return (struct net_response){ .status = RESPONSE_OK,
                                           .code = 0,
                                           .pageData = (buffer_t){
@@ -35,7 +35,15 @@ struct net_response resolve_url(struct url url)
             return (struct net_response){ .status = RESPONSE_HTTP_ERROR,
                                           .code = res.status };
         }
-
+    } else if (strcmp(url.scheme, "https") == 0) {
+        return (struct net_response){ .status = RESPONSE_ERROR,
+                                      .code = ERR_UNIMPLEMENTED };
+    } else if (strcmp(url.scheme, "gopher") == 0) {
+        return (struct net_response){ .status = RESPONSE_ERROR,
+                                      .code = ERR_UNIMPLEMENTED };
+    } else if (strcmp(url.scheme, "javascript") == 0) {
+        return (struct net_response){ .status = RESPONSE_ERROR,
+                                      .code = ERR_UNIMPLEMENTED };
     } else if (strcmp(url.scheme, "ftp") == 0) {
         return (struct net_response){ .status = RESPONSE_ERROR,
                                       .code = ERR_UNIMPLEMENTED };

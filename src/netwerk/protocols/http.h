@@ -52,11 +52,18 @@ struct http_request
 struct http_response
 {
     int status;
+    char* status_desc;
+    enum http_version ver;
+    size_t header_len;
+    struct http_header *headers;
+    size_t data_len;
     char *data;
 };
 
 buffer_t *http_gen_request(struct http_request *request);
 
 struct http_response http_get(struct url url);
+
+void free_http_response(struct http_response response);
 
 #endif /* NET_PROTOCOLS_HTTP_H */
