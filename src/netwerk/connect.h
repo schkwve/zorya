@@ -26,6 +26,14 @@
 #define NET_BUFFER_SIZE 1024
 
 /**
+ * @brief Connection type(secure, insecure, etc...)
+*/
+enum CONNECTION_TYPE {
+    NET_INSECURE,
+    NET_SECURE
+};
+
+/**
  * @brief This contains all information required to open, keep and close
  *        a connection.
  */
