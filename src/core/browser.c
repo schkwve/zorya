@@ -280,11 +280,12 @@ bool browser_init()
     current_font_serif = TTF_OpenFont(DEFAULT_SERIF_FONT, 32);
 
     user_agent_infer();
+    log_debug("User agent: %s", g_user_agent);
 
     window = suzwin_create_window(1280, 720, 0, "");
     suzwin_set_icon(window, "../res/logo.png");
 
-    load_page("http://info.cern.ch");
+    load_page("http://nodesite.eu");
     return true;
 }
 
