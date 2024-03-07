@@ -40,10 +40,7 @@ struct suztk_button *suzbutton_create_button(struct suztk_window* window, int x,
         (struct suztk_button*)malloc(sizeof(struct suztk_button));
 
     new->window = window;
-    new->x = x;
-    new-> y = y;
-    new->width = width;
-    new->height = height;
+    new->rectangle = (SDL_Rect){x, y, width, height};
 
     new->title = malloc(sizeof(char) * strlen(title) + 1); /* strlen() doesn't count \0*/
     strcpy(new->title, title);
@@ -74,8 +71,7 @@ void suzbutton_render_button(struct suztk_button *button)
 {
     if (button != NULL)
     {
-        button->rectangle = (SDL_Rect){button->x, button->y, button->width, button->height};
-        SDL_SetRenderDrawColor(button->window->renderer, 0x22, 0x22, 0x22, 0xFF);
+        SDL_SetRenderDrawColor(button->window->renderer, 0, 255, 0, 0xFF);
         SDL_RenderFillRect(button->window->renderer, &button->rectangle);
     }
 }

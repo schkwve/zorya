@@ -286,7 +286,7 @@ bool browser_init()
     window = suzwin_create_window(1280, 720, 0, "");
     suzwin_set_icon(window, "../res/logo.png");
 
-    button = suzbutton_create_button(window, 5, 5, 50, 50, "test", NULL);
+    button = suzbutton_create_button(window, 500, 500, 50, 50, "test", NULL);
 
     load_page("http://info.cern.ch");
     return true;

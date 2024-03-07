@@ -17,11 +17,6 @@ struct suztk_button {
     struct suztk_window* window;
     SDL_Rect rectangle;
 
-    int x;
-    int y;
-    int width;
-    int height;
-
     const char* title;
     void (*action)();
 };
