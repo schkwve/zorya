@@ -12,6 +12,7 @@
 #include <fontconfig/fontconfig.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include FT_LCD_FILTER_H
 #include <freetype/ftadvanc.h>
 #include <freetype/ftsnames.h>
 #include <freetype/tttables.h>
@@ -60,6 +61,8 @@ component_text_init(char *name, int size)
 
     // initialize freetype
     assert(!FT_Init_FreeType(&comp.ft_library));
+
+    FT_Library_SetLcdFilter(comp.ft_library, FT_LCD_FILTER_DEFAULT);
 
     assert(!FT_New_Face(comp.ft_library, (char *)file, 0, &comp.ft_face));
     assert(!FT_Set_Char_Size(comp.ft_face, 0, size * 64, 0, 0));
