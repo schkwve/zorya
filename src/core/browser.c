@@ -168,7 +168,7 @@ render_element(struct parse_element *element)
 
         render_array[curY].text = malloc(sizeof(char) * element_content_length);
         snprintf(
-            render_array[curY].text, element_content_length, element_content);
+            render_array[curY].text, element_content_length, "%s", element_content);
         render_array[curY].x = 0;
         render_array[curY].y = 72 * curY;
         render_array[curY].width = -1;
@@ -221,7 +221,7 @@ render_url(const char *url)
     int url_length = strlen(url) + 1;
 
     render_array[0].text = malloc(sizeof(char) * url_length + 1);
-    snprintf(render_array[0].text, url_length + 1, url);
+    snprintf(render_array[0].text, url_length + 1, "%s", url);
     render_array[0].x = 8;
     render_array[0].y = window->height / 13 - 8;
     render_array[0].width = -1;
