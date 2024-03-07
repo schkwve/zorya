@@ -38,7 +38,7 @@ find_package(OpenSSL REQUIRED)
 
 # Includesssss
 include_directories(src)
-include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIRS})
 
 # Sources... Sources everywhere!
 file(GLOB_RECURSE SRC src/*.c)
@@ -75,7 +75,7 @@ endif()
 
 # Compile
 add_executable(${EXECUTABLE_NAME} ${SRC})
-target_link_libraries(${EXECUTABLE_NAME} PUBLIC SDL2::SDL2 SDL2::Image SDL2::TTF)
+target_link_libraries(${EXECUTABLE_NAME} PUBLIC SDL2::SDL2 SDL2::Image SDL2::TTF OpenSSL::SSL)
 
 # CPack
 install(DIRECTORY res DESTINATION ${CMAKE_BINARY_DIR}/install
@@ -111,10 +111,12 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin") # macOS
   get_filename_component(SDL2_LIBFILE "${SDL2_LIBRARIES}" REALPATH)
   get_filename_component(SDL2_IMAGE_LIBFILE "${SDL2_IMAGE_LIBRARIES}" REALPATH)
   get_filename_component(SDL2_TTF_LIBFILE "${SDL2_TTF_LIBRARIES}" REALPATH)
+  get_filename_component(OPENSSL_LIBFILE "${OPENSSL_LIBRARIES}" REALPATH)
 
   install(FILES ${SDL2_LIBFILE} DESTINATION "../Library" COMPONENT libraries)
   install(FILES ${SDL2_IMAGE_LIBFILE} DESTINATION "../Library" COMPONENT libraries)
   install(FILES ${SDL2_TTF_LIBFILE} DESTINATION "../Library" COMPONENT libraries)
+  install(FILES ${OPENSSL_LIBFILE} DESTINATION "../Library" COMPONENT libraries)
   install(TARGETS ${EXECUTABLE_NAME} RUNTIME DESTINATION "../MacOS" COMPONENT applications)
 else ()
   message(FATAL_ERROR "Unsupported OS!")
