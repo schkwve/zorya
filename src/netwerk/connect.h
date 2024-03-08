@@ -40,7 +40,8 @@ enum CONNECTION_TYPE
 /**
  * @brief SSL connection structure
  */
-struct ssl_connection {
+struct ssl_connection
+{
     int sock;
     SSL_CTX *ctx;
     SSL *ssl;
@@ -62,7 +63,7 @@ struct net_connection
     char *port;
 
     struct sockaddr_in server;
-    struct ssl_connection ssl;
+    struct ssl_connection *ssl;
 
     bool alive;
     bool is_ssl;
@@ -71,7 +72,9 @@ struct net_connection
 void net_send_data(struct net_connection *connection, buffer_t *buffer);
 size_t net_recv_data(struct net_connection *connection, buffer_t **buffer);
 
-struct net_connection *net_create_connection(const char *host, const char *port, bool is_ssl);
+struct net_connection *net_create_connection(const char *host,
+                                             const char *port,
+                                             bool is_ssl);
 void net_destroy_connection(struct net_connection *conn);
 
 #endif /* NET_CONNECT_H */

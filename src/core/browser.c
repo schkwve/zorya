@@ -10,6 +10,7 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -270,6 +271,9 @@ static void load_page(const char *url)
  */
 bool browser_init()
 {
+    // OpenSSL can shit itself if SIGPIPE isn't ignored
+    signal(SIGPIPE, SIG_IGN);
+
     current_font_monospace = TTF_OpenFont(DEFAULT_MONOSPACE_FONT, 32);
     current_font_sansserif = TTF_OpenFont(DEFAULT_SANSSERIF_FONT, 32);
     current_font_serif = TTF_OpenFont(DEFAULT_SERIF_FONT, 32);
@@ -280,7 +284,7 @@ bool browser_init()
     window = suzwin_create_window(1280, 720, 0, "");
     suzwin_set_icon(window, "../res/logo.png");
 
-    load_page("http://example.com");
+    load_page("https://example.com");
     return true;
 }
 

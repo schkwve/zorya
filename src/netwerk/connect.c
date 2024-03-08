@@ -17,10 +17,13 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include <utils/buffer.h>
-#include <utils/logging.h>
+#include <openssl/err.h>
+#include <openssl/ssl.h>
+
 #include "connect.h"
 #include "ssl.h"
+#include <utils/buffer.h>
+#include <utils/logging.h>
 
 /**
  * @brief Sends a request to a server.
@@ -31,32 +34,43 @@
  * @param buffer
  *        Data which will be sent to the server
  */
-void net_send_data(struct net_connection *connection, buffer_t *buffer)
+void net_send_data(struct net_connection *conn, buffer_t *buffer)
 {
-    assert(connection != NULL);
+    assert(conn != NULL);
     assert(buffer != NULL);
 
-    if (connection->is_ssl) {
-        ssl_priv_send_data(&connection->ssl, buffer);
-    } else {
-        int bytes_sent = 0;
-        int total_bytes_sent = 0;
-        const int buffer_len = buffer->data_len;
-        char *data_cast = (char *)buffer->data_ptr;
+    int bytes_sent = 0;
+    int total_bytes_sent = 0;
+    const int buffer_len = buffer->data_len;
+    char *data_cast = (char *)buffer->data_ptr;
 
-        // if not everything is sent in one go,
-        // just try to send the rest once again
-        while (total_bytes_sent < buffer_len) {
-            bytes_sent = send(connection->socket,
+    // if not everything is sent in one go,
+    // just try to send the rest once again
+    while (total_bytes_sent < buffer_len) {
+        if (conn->is_ssl) {
+            bytes_sent = SSL_write(conn->ssl->ssl,
+                                   &data_cast[total_bytes_sent],
+                                   buffer_len - total_bytes_sent);
+            if (bytes_sent < 1) {
+                int ret = SSL_get_error(conn->ssl->ssl, bytes_sent);
+                if (ret == SSL_ERROR_NONE) {
+                    return;
+                }
+                log_error("SSL_write returned <1: %d!", ret);
+                return;
+            }
+        } else {
+            bytes_sent = send(conn->socket,
                               &data_cast[total_bytes_sent],
                               buffer_len - total_bytes_sent,
                               0);
+
             if (bytes_sent == -1) {
-                log_error("Failed to send data to %s!", data_cast);
+                log_error("Failed to send data to server!");
                 return;
             }
-            total_bytes_sent += bytes_sent;
         }
+        total_bytes_sent += bytes_sent;
     }
 }
 
@@ -71,28 +85,36 @@ void net_send_data(struct net_connection *connection, buffer_t *buffer)
  *
  * @return Length of received message
  */
-size_t net_recv_data(struct net_connection *connection, buffer_t **buffer)
+size_t net_recv_data(struct net_connection *conn, buffer_t **buffer)
 {
-    assert(connection != NULL);
+    assert(conn != NULL);
     assert(buffer != NULL);
-
-    if (connection->is_ssl) {
-        return ssl_priv_recv_data(&connection->ssl, buffer);
-    }
 
     size_t bytes_received = -1;
     size_t total_bytes_received = 0;
     char received_data[NET_BUFFER_SIZE];
 
     while (bytes_received != 0) {
-        bytes_received =
-            recv(connection->socket, received_data, NET_BUFFER_SIZE, 0);
-
-        if (bytes_received == -1) {
-            log_error("recv() returned -1: %s!", strerror(errno));
-            return -1;
-        } else if (bytes_received == 0) {
-            return total_bytes_received;
+        if (conn->is_ssl) {
+            bytes_received =
+                SSL_read(conn->ssl->ssl, received_data, NET_BUFFER_SIZE);
+            if (bytes_received < 1) {
+                int res = SSL_get_error(conn->ssl->ssl, bytes_received);
+                if (res == SSL_ERROR_NONE) {
+                    return total_bytes_received;
+                }
+                log_error("SSL_read() returned <1: %d!", res);
+                return -1;
+            }
+        } else {
+            bytes_received =
+                recv(conn->socket, received_data, NET_BUFFER_SIZE, 0);
+            if (bytes_received == -1) {
+                log_error("recv() returned -1: %s!", strerror(errno));
+                return -1;
+            } else if (bytes_received == 0) {
+                return total_bytes_received;
+            }
         }
 
         total_bytes_received += bytes_received;
@@ -114,7 +136,9 @@ size_t net_recv_data(struct net_connection *connection, buffer_t **buffer)
  * @return New connection structure if it was created successfully;
  *         NULL otherwise.
  */
-struct net_connection *net_create_connection(const char *host, const char *port, bool is_ssl)
+struct net_connection *net_create_connection(const char *host,
+                                             const char *port,
+                                             bool is_ssl)
 {
     int status = 0;
     struct net_connection *new;
@@ -137,25 +161,12 @@ struct net_connection *net_create_connection(const char *host, const char *port,
     }
     strncpy(new->host, host, hostlen);
 
-    if (is_ssl) {
-        log_debug("SSL is not available yet! Fallback to unsecured connection...");
-        is_ssl = false;
-    }
-    new->is_ssl = is_ssl;
-    if (is_ssl) {
-        if (ssl_priv_create_connection(host, port, &new->ssl) == EXIT_FAILURE) {
-            log_error("ssl_priv_create_connection returned EXIT_FAILURE!");
-            free(new);
-            return NULL;
-        }
-    } else {
-
     // convert hostname to IP address
     struct addrinfo hints = { 0 };
     struct addrinfo *server_info;
 
     // prefer TCP, get IPv4 and/or IPv6
-    hints.ai_family = AF_UNSPEC;
+    hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
 
     status = getaddrinfo(host, port, &hints, &server_info);
@@ -196,6 +207,15 @@ struct net_connection *net_create_connection(const char *host, const char *port,
         free(new);
         return NULL;
     }
+
+    new->is_ssl = is_ssl;
+    if (is_ssl) {
+        new->ssl = ssl_priv_create_connection(host, port, new->socket);
+        if (new->ssl == NULL) {
+            log_error("ssl_priv_create_connection() returned NULL!");
+            free(new);
+            return NULL;
+        }
     }
 
     new->alive = true;
@@ -217,7 +237,7 @@ void net_destroy_connection(struct net_connection *conn)
     conn->alive = false;
 
     if (conn->is_ssl) {
-        ssl_destroy_connection(&conn->ssl);
+        ssl_destroy_connection(conn->ssl);
     }
     if (conn->socket) {
         close(conn->socket);

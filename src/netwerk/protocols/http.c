@@ -259,16 +259,16 @@ struct http_response http_get(struct url url, bool ssl)
 
 cleanup:
     if (req_raw) {
-    buffer_destroy(req_raw);
+        buffer_destroy(req_raw);
     }
     if (res_raw) {
-    buffer_destroy(res_raw);
+        buffer_destroy(res_raw);
     }
     if (base_url) {
-    free(base_url);
+        free(base_url);
     }
     if (con) {
-    net_destroy_connection(con);
+        net_destroy_connection(con);
     }
 
     return ret;
