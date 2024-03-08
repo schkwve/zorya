@@ -1,7 +1,7 @@
 #ifndef HTTP_STATUS_CODES_H
 #define HTTP_STATUS_CODES_H
 
-//source: http.cat
+// source: http.cat
 
 #define HTTP_STATUS_CONTINUE 100
 #define HTTP_STATUS_SWITCHING_PROTOCOLS 101
@@ -77,5 +77,4 @@
 #define HTTP_STATUS_SSL_HANDSHAKE_FAILED 525
 #define HTTP_STATUS_SITE_FROZEN 530
 
-
-#endif //HTTP_STATUS_CODES_H
+#endif // HTTP_STATUS_CODES_H

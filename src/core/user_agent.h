@@ -12,4 +12,4 @@ extern char g_user_agent[100];
 
 void user_agent_infer();
 
-#endif 
+#endif

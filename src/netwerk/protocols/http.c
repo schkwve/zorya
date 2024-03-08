@@ -23,7 +23,8 @@ static const char *http_ver_str[] = { "0.9", "1.0", "1.1" };
 
 bool http_is_status_error(int status)
 {
-    return (status >= 400 && status < 600) || status < 100; // 0-99 are custom errors
+    return (status >= 400 && status < 600) ||
+           status < 100; // 0-99 are custom errors
 }
 
 /**
@@ -121,13 +122,12 @@ struct http_response http_get(struct url url)
     headers[1].name = "Host";
     headers[1].data = url.host;
 
-    //get the right path
-    char* path;
-    if(url.path == NULL)
+    // get the right path
+    char *path;
+    if (url.path == NULL)
         path = "/";
     else
         path = url.path;
-
 
     struct http_request req = { .method = "GET",
                                 .path = path,
@@ -144,7 +144,6 @@ struct http_response http_get(struct url url)
 
         ret.status = 0;
         ret.data = NULL;
-        
 
         goto cleanup;
     }
@@ -173,15 +172,15 @@ struct http_response http_get(struct url url)
     memset(ptr, 0, res_raw->data_len + 1);
     memcpy(ptr, res_raw->data_ptr, res_raw->data_len);
     ptr[res_raw->data_len] = '\0';
-    if(ptr[0] != 'H' || ptr[1] != 'T' || ptr[2] != 'T' || ptr[3] != 'P'){
+    if (ptr[0] != 'H' || ptr[1] != 'T' || ptr[2] != 'T' || ptr[3] != 'P') {
         log_error("Invalid HTTP response");
         ret.status = 0;
         ret.data = NULL;
         goto cleanup;
     }
-    ptr+=7;
-    
-    switch(ptr[0]){
+    ptr += 7;
+
+    switch (ptr[0]) {
         case '9':
             log_debug("HTTP version: 0.9");
             ret.ver = HTTP_0_9;
@@ -200,7 +199,7 @@ struct http_response http_get(struct url url)
             ret.data = NULL;
             goto cleanup;
     }
-    ptr+=2;
+    ptr += 2;
     char statuschars[4];
     statuschars[0] = ptr[0];
     statuschars[1] = ptr[1];
@@ -208,39 +207,41 @@ struct http_response http_get(struct url url)
     statuschars[3] = '\0';
     ret.status = atoi(statuschars);
     log_debug("Status: %d", ret.status);
-    ptr+=4;
+    ptr += 4;
 
-    char* nextline = strchr(ptr, '\n');
-    if(nextline == NULL){
+    char *nextline = strchr(ptr, '\n');
+    if (nextline == NULL) {
         log_error("HTTP response is invalid");
         ret.status = 0;
         ret.data = NULL;
         goto cleanup;
     }
     *nextline = '\0';
-    *(nextline-1) = '\0';
+    *(nextline - 1) = '\0';
 
     ret.status_desc = malloc(strlen(ptr) + 1);
     strcpy(ret.status_desc, ptr);
     log_debug("Status description: \"%s\"", ret.status_desc);
-    
-    ptr = nextline+1;
 
-    // parse the headers: each one is on an new line and its key and valuse are separated by a colon
-    char* colon = strchr(ptr, ':');
-    char* newline = strchr(ptr, '\n');
-    while(colon < newline){
+    ptr = nextline + 1;
+
+    // parse the headers: each one is on an new line and its key and valuse are
+    // separated by a colon
+    char *colon = strchr(ptr, ':');
+    char *newline = strchr(ptr, '\n');
+    ret.headers = malloc(sizeof(struct http_header) + 1);
+    while (colon < newline) {
         if (*(newline + 1) == '\r' && colon > newline) {
             break;
         }
         *colon = '\0';
         *newline = '\0';
 
-        struct http_header header = { .name = ptr,
-                                      .data = colon + 1 };
+        struct http_header header = { .name = ptr, .data = colon + 1 };
 
         log_debug("Header: %s: %s", header.name, header.data);
-        ret.headers = realloc(ret.headers, sizeof(struct http_header) * (ret.header_len + 1));
+        ret.headers = realloc(
+            ret.headers, sizeof(struct http_header) * (ret.header_len + 1));
         ret.headers[ret.header_len] = header;
         ret.header_len++;
         ptr = newline + 1;
