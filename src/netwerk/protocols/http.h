@@ -64,7 +64,7 @@ struct http_response
 
 buffer_t *http_gen_request(struct http_request *request);
 
-struct http_response http_get(struct url url);
+struct http_response http_get(struct url url, bool ssl);
 
 void free_http_response(struct http_response response);
 

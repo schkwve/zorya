@@ -12,7 +12,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "ssl.h"
+#include <openssl/bio.h>
+#include <openssl/ssl.h>
+
 #include <utils/buffer.h>
 
 /**
@@ -36,6 +38,18 @@ enum CONNECTION_TYPE
 };
 
 /**
+ * @brief SSL connection structure
+ */
+struct ssl_connection {
+    int sock;
+    SSL_CTX *ctx;
+    SSL *ssl;
+    BIO *bio;
+
+    bool is_initialized;
+};
+
+/**
  * @brief This contains all information required to open, keep and close
  *        a connection.
  */
@@ -43,17 +57,21 @@ struct net_connection
 {
     int id;
     int socket;
-    bool alive;
+
     char *host;
+    char *port;
+
     struct sockaddr_in server;
+    struct ssl_connection ssl;
+
+    bool alive;
+    bool is_ssl;
 };
 
 void net_send_data(struct net_connection *connection, buffer_t *buffer);
-
 size_t net_recv_data(struct net_connection *connection, buffer_t **buffer);
 
-struct net_connection *net_create_connection(char *url, uint16_t port);
-
+struct net_connection *net_create_connection(const char *host, const char *port, bool is_ssl);
 void net_destroy_connection(struct net_connection *conn);
 
 #endif /* NET_CONNECT_H */

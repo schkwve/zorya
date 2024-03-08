@@ -279,7 +279,7 @@ bool browser_init()
     window = suzwin_create_window(1280, 720, 0, "");
     suzwin_set_icon(window, "../res/logo.png");
 
-    load_page("http://info.cern.ch");
+    load_page("http://example.com");
     return true;
 }
 

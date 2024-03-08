@@ -20,15 +20,78 @@
 #include "ssl.h"
 #include <utils/logging.h>
 
-struct ssl_connection *ssl_create_connection(const char *host, const char *port)
+/**
+ * @brief Sends a request to a server via SSL.
+ *
+ * @param connection
+ *        Which server to send to
+ *
+ * @param buffer
+ *        Data which will be sent to the server
+ */
+void ssl_priv_send_data(struct ssl_connection *conn, buffer_t *buffer)
+{
+    assert(conn != NULL);
+    assert(buffer != NULL);
+
+    size_t bytes_sent = 0;
+    size_t total_bytes_sent = 0;
+    const int buffer_len = buffer->data_len;
+    char *data_cast = (char *)buffer->data_ptr;
+
+    // if not everything is sent in one go,
+    // just try to send the rest once again
+    while (total_bytes_sent < buffer_len) {
+        if (!SSL_write_ex(conn->ssl,
+                          &data_cast[total_bytes_sent],
+                          buffer_len - total_bytes_sent,
+                          &bytes_sent)) {
+            log_error("Failed to send data to %s!", data_cast);
+            return;
+        }
+        total_bytes_sent += bytes_sent;
+    }
+}
+
+/**
+ * @brief Receives data from a server via SSL.
+ *
+ * @param connection
+ *        Which server to receive from
+ *
+ * @param buffer [out]
+ *        Received data buffer
+ *
+ * @return Length of received message;
+ *         -1 if an error happened.
+ */
+size_t ssl_priv_recv_data(struct ssl_connection *conn, buffer_t **buffer)
+{
+    assert(conn != NULL);
+    assert(buffer != NULL);
+
+    size_t bytes_received = -1;
+    size_t total_bytes_received = 0;
+    char received_data[NET_BUFFER_SIZE];
+
+    while (SSL_read_ex(conn->ssl, received_data, NET_BUFFER_SIZE, &bytes_received)) {
+        total_bytes_received += bytes_received;
+        buffer_append_data(*buffer, received_data, bytes_received);
+    }
+
+    if (SSL_get_error(conn->ssl, 0) != SSL_ERROR_ZERO_RETURN) {
+        log_error("SSL_read_ex() error!");
+        return -1;
+    }
+
+    return total_bytes_received;
+}
+
+int ssl_priv_create_connection(const char *host, const char *port, struct ssl_connection *new)
 {
     int result = EXIT_FAILURE;
-    struct ssl_connection *new =
-        (struct ssl_connection *)malloc(sizeof(struct ssl_connection));
-    if (new == NULL) {
-        log_error("Failed to allocate memory for new SSL connection!");
-        return NULL;
-    }
+
+    memset(new, 0, sizeof(struct ssl_connection));
 
     new->ctx = SSL_CTX_new(TLS_client_method());
     if (new->ctx == NULL) {
@@ -58,12 +121,6 @@ struct ssl_connection *ssl_create_connection(const char *host, const char *port)
         goto cleanup;
     }
 
-    new->sock = socket(AF_INET, SOCK_STREAM, 0);
-    if (new->sock == -1) {
-        log_error("socket() returned -1!");
-        goto cleanup;
-    }
-
     // find the server
     BIO_ADDRINFO *res;
     const BIO_ADDRINFO *ai = NULL;
@@ -75,18 +132,18 @@ struct ssl_connection *ssl_create_connection(const char *host, const char *port)
     }
 
     // loop through all possible addresses
-    new->sock = -1;
+    int sock = -1;
     for (ai = res; ai != NULL; ai = BIO_ADDRINFO_next(ai)) {
-        new->sock = BIO_socket(BIO_ADDRINFO_family(ai), SOCK_STREAM, 0, 0);
-        if (new->sock == -1) {
+        sock = BIO_socket(BIO_ADDRINFO_family(ai), SOCK_STREAM, 0, 0);
+        if (sock == -1) {
             continue;
         }
 
         // try connecting
         if (!BIO_connect(
-                new->sock, BIO_ADDRINFO_address(ai), BIO_SOCK_NODELAY)) {
-            BIO_closesocket(new->sock);
-            new->sock = -1;
+                sock, BIO_ADDRINFO_address(ai), BIO_SOCK_NODELAY)) {
+            BIO_closesocket(sock);
+            sock = -1;
             continue;
         }
 
@@ -94,12 +151,12 @@ struct ssl_connection *ssl_create_connection(const char *host, const char *port)
         break;
     }
 
-    if (new->sock == -1) {
+    BIO_ADDRINFO_free(res);
+
+    if (sock == -1) {
         log_error("Failed to connect to %s:%s!", host, port);
         goto cleanup;
     }
-
-    BIO_ADDRINFO_free(res);
 
     new->bio = BIO_new(BIO_s_socket());
     if (new->bio == NULL) {
@@ -108,7 +165,7 @@ struct ssl_connection *ssl_create_connection(const char *host, const char *port)
     }
 
     // associate stuff with other stuff :p
-    BIO_set_fd(new->bio, new->sock, BIO_NOCLOSE);
+    BIO_set_fd(new->bio, new->sock, BIO_CLOSE);
     SSL_set_bio(new->ssl, new->bio, new->bio);
 
     if (!SSL_set_tlsext_host_name(new->ssl, host)) {
@@ -149,11 +206,9 @@ cleanup:
         if (new->ctx) {
             SSL_CTX_free(new->ctx);
         }
-        free(new);
-        new = NULL;
     }
 
-    return new;
+    return result;
 }
 
 void ssl_destroy_connection(struct ssl_connection *conn)
@@ -166,5 +221,4 @@ void ssl_destroy_connection(struct ssl_connection *conn)
 
     SSL_free(conn->ssl);
     SSL_CTX_free(conn->ctx);
-    free(conn);
 }

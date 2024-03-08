@@ -98,17 +98,22 @@ buffer_t *http_gen_request(struct http_request *request)
  * @param url
  *        Complete URL to access
  *
+ * @param ssl
+ *        Specifies whether the request should be sent over HTTPS.
+ *
  * @return A valid HTTP response structure if status == 1;
  *         if status == 0, the response is invalid or an error has occured.
  */
-struct http_response http_get(struct url url)
+struct http_response http_get(struct url url, bool ssl)
 {
     struct http_response ret;
     char *base_url = strdup(url.host);
-    unsigned short port = 80;
+    const char *portstr = ssl ? "443" : "80";
+    uint16_t port = atoi(portstr);
     char *sep = strchr(base_url, ':');
     if (sep) {
         *sep = '\0';
+        portstr = (sep + 1);
         port = atoi(sep + 1);
     }
 
@@ -138,7 +143,7 @@ struct http_response http_get(struct url url)
                                 .data = NULL };
 
     buffer_t *req_raw = http_gen_request(&req);
-    struct net_connection *con = net_create_connection((char *)base_url, port);
+    struct net_connection *con = net_create_connection(base_url, portstr, ssl);
     if (con == NULL) {
         log_fatal("Failed to create connection");
 
@@ -149,7 +154,7 @@ struct http_response http_get(struct url url)
     }
     net_send_data(con, req_raw);
 
-    buffer_t *res_raw = malloc(sizeof(buffer_t));
+    buffer_t *res_raw = (buffer_t *)malloc(sizeof(buffer_t));
     if (res_raw == NULL) {
         log_fatal("Memory allocation failed for HTTP response buffer");
 
@@ -253,10 +258,18 @@ struct http_response http_get(struct url url)
     ret.data_len = strlen(ptr);
 
 cleanup:
+    if (req_raw) {
     buffer_destroy(req_raw);
+    }
+    if (res_raw) {
     buffer_destroy(res_raw);
-    free((void *)base_url);
+    }
+    if (base_url) {
+    free(base_url);
+    }
+    if (con) {
     net_destroy_connection(con);
+    }
 
     return ret;
 }

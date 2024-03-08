@@ -5,6 +5,7 @@
  * @brief A simple buffer
  */
 
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -45,6 +46,8 @@ void buffer_append_data(buffer_t *buf, void *ptr, size_t data_len)
  */
 void buffer_destroy(buffer_t *buf)
 {
+    assert(buf != NULL);
+
     if (buf->data_ptr && buf->data_len) {
         free(buf->data_ptr);
     }

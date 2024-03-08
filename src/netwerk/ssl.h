@@ -3,21 +3,12 @@
 
 #include <stdbool.h>
 
-#include <openssl/bio.h>
-#include <openssl/ssl.h>
+#include "connect.h"
 
-struct ssl_connection
-{
-    int sock;
-    SSL_CTX *ctx;
-    SSL *ssl;
-    BIO *bio;
+void ssl_priv_send_data(struct ssl_connection *conn, buffer_t *buffer);
+size_t ssl_priv_recv_data(struct ssl_connection *conn, buffer_t **buffer);
 
-    bool is_initialized;
-};
-
-struct ssl_connection *ssl_create_connection(const char *host,
-                                             const char *port);
+int ssl_priv_create_connection(const char *host, const char *port, struct ssl_connection *new);
 void ssl_destroy_connection(struct ssl_connection *conn);
 
 #endif /* SSL_H */
