@@ -20,7 +20,7 @@
  */
 void handle_html(struct parse_node *tree, char *fall_back_title)
 {
-    char *t = "Untitled Page";
+    char *t = fall_back_title;
 
     if (tree == NULL) {
         log_error("HTML tree is NULL");
@@ -31,9 +31,6 @@ void handle_html(struct parse_node *tree, char *fall_back_title)
 
     if (title != NULL && title->content != NULL) {
         t = title->content;
-    } else {
-        log_error("Title element not found, using url as title.");
-        t = fall_back_title;
     }
 
     log_debug("Setting title to '%s'", t);

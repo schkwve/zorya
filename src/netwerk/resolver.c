@@ -60,6 +60,12 @@ struct net_response resolve_url(struct url url)
     } else if (strcmp(url.scheme, "file") == 0) {
         return (struct net_response){ .status = RESPONSE_ERROR,
                                       .code = ERR_UNIMPLEMENTED };
+    } else if (strcmp(url.scheme, "gopher") == 0) {
+        return (struct net_response){ .status = RESPONSE_ERROR,
+                                      .code = ERR_UNIMPLEMENTED };
+    } else if (strcmp(url.scheme, "javascript") == 0) {
+        return (struct net_response){ .status = RESPONSE_ERROR,
+                                      .code = ERR_UNIMPLEMENTED };
     } else if (strcmp(url.scheme, "suz") == 0) {
         return (struct net_response){ .status = RESPONSE_BUILTIN,
                                       .code = 0,
