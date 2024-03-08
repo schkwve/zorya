@@ -6,6 +6,7 @@
  */
 
 #include <arpa/inet.h>
+#include <assert.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <stdbool.h>
@@ -33,6 +34,8 @@ struct net_connection connections[MAX_CONNECTIONS];
  */
 void net_send_data(struct net_connection *connection, buffer_t *buffer)
 {
+    assert(connection != NULL);
+
     int bytes_sent = 0;
     int total_bytes_sent = 0;
     const int buffer_len = buffer->data_len;
@@ -66,6 +69,8 @@ void net_send_data(struct net_connection *connection, buffer_t *buffer)
  */
 size_t net_recv_data(struct net_connection *connection, buffer_t **buffer)
 {
+    assert(connection != NULL);
+
     size_t bytes_received = -1;
     size_t total_bytes_received = 0;
     char received_data[NET_BUFFER_SIZE];
@@ -118,7 +123,7 @@ struct net_connection *net_create_connection(char *host, uint16_t port)
     memset(new, 0, sizeof(struct net_connection));
 
     int last_index = 0;
-    
+
     for (int i = 0; i < MAX_CONNECTIONS; i++) {
         if (connections[i].alive != true) {
             last_index = i;
@@ -131,7 +136,6 @@ struct net_connection *net_create_connection(char *host, uint16_t port)
     log_debug("Assigned ID %d to %s:%d", new->id, host, port);
 
     // set up some nice defaults
-    // @note: SSL is disabled by default before it is implemented.
     size_t hostlen = strlen(host);
     new->host = (char *)malloc(hostlen);
     if (new == NULL) {
@@ -139,7 +143,6 @@ struct net_connection *net_create_connection(char *host, uint16_t port)
         return NULL;
     }
     strncpy(new->host, host, hostlen);
-    new->ssl = false;
 
     // convert hostname to IP address
     char portstr[5] = { 0 };
@@ -205,7 +208,8 @@ struct net_connection *net_create_connection(char *host, uint16_t port)
  */
 void net_destroy_connection(struct net_connection *conn)
 {
-    if (conn == NULL) { // - has the connection's memory already been freed by net_create_connection? 
+    if (conn == NULL) { // - has the connection's memory already been freed by
+                        // net_create_connection?
         return;         // - yeah
     }
 

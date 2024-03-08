@@ -49,14 +49,13 @@ struct suztk_window *window;
 //  Hook up the statemachine
 //  add some anti-aliasing
 
-void
-render_text(const char *text,
-            int x,
-            int y,
-            int width,
-            int height,
-            SDL_Color color,
-            TTF_Font *font)
+void render_text(const char *text,
+                 int x,
+                 int y,
+                 int width,
+                 int height,
+                 SDL_Color color,
+                 TTF_Font *font)
 {
     TTF_SetFontSize(font, height);
 
@@ -105,8 +104,7 @@ render_text(const char *text,
     SDL_DestroyTexture(header_texture);
 }
 
-static const char *
-get_element_content(struct parse_element *element)
+static const char *get_element_content(struct parse_element *element)
 {
     if (element != NULL && element->content != NULL) {
         return element->content;
@@ -130,8 +128,7 @@ render_node render_array[64];
 
 // Move this somewhere later on (This is a function to strcmp without any
 // restrctions on the case)
-int
-priv_stricmp(const char *s1, const char *s2)
+int priv_stricmp(const char *s1, const char *s2)
 {
     while (*s1 && *s2) {
         char c1 = tolower(*s1);
@@ -146,8 +143,7 @@ priv_stricmp(const char *s1, const char *s2)
 }
 
 int curY = 1;
-static void
-render_element(struct parse_element *element)
+static void render_element(struct parse_element *element)
 {
     if (element != NULL && ((priv_stricmp(element->name, "h1") == 0) ||
                             (priv_stricmp(element->name, "h2") == 0) ||
@@ -167,8 +163,10 @@ render_element(struct parse_element *element)
         SDL_Color foreground_color = { 0, 0, 0 };
 
         render_array[curY].text = malloc(sizeof(char) * element_content_length);
-        snprintf(
-            render_array[curY].text, element_content_length, element_content);
+        snprintf(render_array[curY].text,
+                 element_content_length,
+                 "%s",
+                 element_content);
         render_array[curY].x = 0;
         render_array[curY].y = 72 * curY;
         render_array[curY].width = -1;
@@ -189,8 +187,7 @@ render_element(struct parse_element *element)
     }
 }
 
-static void
-render_all_elements_from_tree(struct parse_node *tree)
+static void render_all_elements_from_tree(struct parse_node *tree)
 {
     if (tree == NULL) {
         log_error("Tried rendering empty HTML tree!");
@@ -206,22 +203,20 @@ render_all_elements_from_tree(struct parse_node *tree)
     }
 }
 
-static void
-render_html(struct parse_node *tree)
+static void render_html(struct parse_node *tree)
 {
     log_debug("Rendering HTML content");
     render_all_elements_from_tree(tree);
 }
 
-static void
-render_url(const char *url)
+static void render_url(const char *url)
 {
     SDL_Color foreground_color = { 255, 255, 255 };
 
     int url_length = strlen(url) + 1;
 
     render_array[0].text = malloc(sizeof(char) * url_length + 1);
-    snprintf(render_array[0].text, url_length + 1, url);
+    snprintf(render_array[0].text, url_length + 1, "%s", url);
     render_array[0].x = 8;
     render_array[0].y = window->height / 13 - 8;
     render_array[0].width = -1;

@@ -239,8 +239,7 @@ void print_html_tree(struct parse_node *node, int lvl)
  * @return Parsed element if it was found;
  *         NULL otherwise.
  */
-struct parse_element *
-find_in_html_tree(struct parse_node *node, char *name)
+struct parse_element *find_in_html_tree(struct parse_node *node, char *name)
 {
     if (node->element != NULL) {
         if (strcasecmp(node->element->name, name) == 0) {

@@ -12,7 +12,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "../utils/buffer.h"
+#include "ssl.h"
+#include <utils/buffer.h>
 
 /**
  * @brief The max ammount of allowed connections
@@ -27,8 +28,9 @@
 
 /**
  * @brief Connection type(secure, insecure, etc...)
-*/
-enum CONNECTION_TYPE {
+ */
+enum CONNECTION_TYPE
+{
     NET_INSECURE,
     NET_SECURE
 };
@@ -42,7 +44,6 @@ struct net_connection
     int id;
     int socket;
     bool alive;
-    bool ssl;
     char *host;
     struct sockaddr_in server;
 };
