@@ -280,7 +280,7 @@ bool browser_init()
     window = suzwin_create_window(1280, 720, 0, "");
     suzwin_set_icon(window, "../res/logo.png");
 
-    load_page("http://nodesite.eu");
+    load_page("http://www.test.com");
     return true;
 }
 
