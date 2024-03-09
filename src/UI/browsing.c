@@ -31,6 +31,9 @@ extern struct suztk_window *window;
 #define DEFAULT_SANSSERIF_BOLD_FONT "../res/freefont/FreeSansBold.ttf"
 #define DEFAULT_SERIF_BOLD_FONT "../res/freefont/FreeSerifBold.ttf"
 
+// TODO: make this size dynamic
+#define RENDER_ARRAY_SIZE 690
+
 TTF_Font *current_font_monospace;
 TTF_Font *current_font_sansserif;
 TTF_Font *current_font_serif;
@@ -106,7 +109,7 @@ typedef struct
     TTF_Font *font;
 } render_node;
 
-render_node render_array[64];
+render_node render_array[RENDER_ARRAY_SIZE];
 
 //TODO: good colors
 SDL_Color text_color = { 0, 0, 0 };
@@ -146,6 +149,10 @@ static void render_element(struct parse_element *element)
 
     const char *element_content = get_element_content(element);
     if (element_content == NULL) {
+        goto cleanup;
+    }
+    if (curI >= RENDER_ARRAY_SIZE) {
+        log_error("Too many elements to render!");
         goto cleanup;
     }
     int element_content_length = strlen(element_content) + 1;
@@ -246,7 +253,7 @@ void ui_browsing_render() {
     SDL_SetRenderDrawColor(window->renderer, 0x22, 0x22, 0x22, 0xFF);
     SDL_RenderFillRect(window->renderer, &rect);
 
-    for (int i = 0; i < 64; i++) {
+    for (int i = 0; i < RENDER_ARRAY_SIZE; i++) {
         if (render_array[i].text == NULL)
             continue;
         render_text(render_array[i].text,
@@ -267,7 +274,7 @@ void ui_browsing_destroy() {
     free_url(args->url);
     free(args->url);
     free_html_tree(args->tree);
-    for (int i = 0; i < 64; i++) {
+    for (int i = 0; i < RENDER_ARRAY_SIZE; i++) {
         if (render_array[i].text == NULL)
             continue;
         free(render_array[i].text);

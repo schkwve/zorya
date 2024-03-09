@@ -90,7 +90,7 @@ bool browser_init()
     window = suzwin_create_window(1280, 720, 0, "");
     suzwin_set_icon(window, "../res/logo.png");
 
-    load_page("https://example.com");
+    load_page("https://cbracco.github.io/html5-test-page/");
     return true;
 }
 
