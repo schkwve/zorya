@@ -8,7 +8,7 @@
 #include <string.h>
 
 #include "error.h"
-#include "home.h"
+#include "browsing.h"
 #include "statemachine.h"
 
 /**
@@ -16,7 +16,7 @@
  */
 struct page pages[] = {
     { "blank", NULL, NULL, NULL },
-    { "home", ui_homepage_init, ui_homepage_render, ui_homepage_destroy },
+    { "browsing", ui_browsing_init, ui_browsing_render, ui_browsing_destroy },
     { "error", ui_errorpage_init, ui_errorpage_render, ui_errorpage_destroy },
 };
 
@@ -25,25 +25,13 @@ struct page pages[] = {
  */
 size_t currentPageID = 0;
 
-/**
- * @brief ???
- */
-void *currentPagePrivatePointer = NULL;
-
-/**
- * @brief Initializes the UI state machine.
- */
-void ui_statemachine_init()
-{
-    ui_statemachine_goto_page("home");
-}
 
 /**
  * @brief Calls renderer for the current page.
  */
 void ui_statemachine_render_current_page()
 {
-    pages[currentPageID].render(currentPagePrivatePointer);
+    pages[currentPageID].render();
 }
 
 /**
@@ -51,7 +39,7 @@ void ui_statemachine_render_current_page()
  */
 void ui_statemachine_destroy_current_page()
 {
-    pages[currentPageID].destroy(currentPagePrivatePointer);
+    pages[currentPageID].destroy();
 }
 
 /**
@@ -60,7 +48,7 @@ void ui_statemachine_destroy_current_page()
  * @param pagename
  *        Name of the page
  */
-void ui_statemachine_goto_page(char *pagename)
+void ui_statemachine_goto_page(char *pagename,void* import_data)
 {
     for (int i = 0; i < sizeof(pages) / sizeof(pages[0]); i++) {
         if (strcmp(pages[i].name, pagename) == 0) {
@@ -68,5 +56,5 @@ void ui_statemachine_goto_page(char *pagename)
             break;
         }
     }
-    currentPagePrivatePointer = pages[currentPageID].init();
+    pages[currentPageID].init(import_data);
 }

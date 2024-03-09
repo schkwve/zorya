@@ -20,6 +20,8 @@
 #define ERR_BAD_SCHEME 0
 #define ERR_UNIMPLEMENTED 1
 
+#define RAW_RESPONSE_TYPE_HTTP 0
+
 /**
  * @brief Network response structure
  */
@@ -27,7 +29,10 @@ struct net_response
 {
     char status;
     int code;
-    buffer_t pageData;
+    buffer_t page_data;
+    int raw_response_type;
+    char* raw_response;
+
     // TODO: Media types
 };
 

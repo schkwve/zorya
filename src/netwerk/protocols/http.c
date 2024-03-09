@@ -109,15 +109,13 @@ struct http_response http_get(struct url url, bool ssl)
     struct http_response ret;
     char *base_url = strdup(url.host);
     const char *portstr = ssl ? "443" : "80";
-    uint16_t port = atoi(portstr);
     char *sep = strchr(base_url, ':');
     if (sep) {
         *sep = '\0';
         portstr = (sep + 1);
-        port = atoi(sep + 1);
     }
 
-    log_debug("Connecting to %s:%d...", base_url, port);
+    log_debug("Connecting to %s:%s...", base_url, portstr);
 
     struct http_header headers[2];
 
@@ -167,6 +165,7 @@ struct http_response http_get(struct url url, bool ssl)
     net_recv_data(con, &res_raw);
 
     char *ptr = malloc(res_raw->data_len + 1);
+    ret.payload_start_for_malloc = ptr;
     if (ptr == NULL) {
         log_fatal("Memory allocation failed for HTML response buffer");
 
@@ -274,6 +273,12 @@ cleanup:
 void free_http_response(struct http_response res)
 {
     if (res.data) {
-        free((void *)res.data);
+        free((void *)res.payload_start_for_malloc);
+    }
+    if(res.status_desc){
+        free(res.status_desc);
+    }
+    if (res.headers) {
+        free(res.headers);
     }
 }

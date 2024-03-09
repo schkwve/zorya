@@ -14,7 +14,7 @@
  *
  * @return ???
  */
-void *ui_errorpage_init()
+void ui_errorpage_init(void* import_data)
 {
     return NULL;
 }
@@ -25,7 +25,7 @@ void *ui_errorpage_init()
  * @param pp
  *        ???
  */
-void ui_errorpage_render(void *pp) {}
+void ui_errorpage_render() {}
 
 /**
  * @brief Destroys Error Page
@@ -33,4 +33,4 @@ void ui_errorpage_render(void *pp) {}
  * @param pp
  *        ???
  */
-void ui_errorpage_destroy(void *pp) {}
+void ui_errorpage_destroy() {}
