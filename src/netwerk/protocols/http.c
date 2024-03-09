@@ -231,6 +231,7 @@ struct http_response http_get(struct url url, bool ssl)
     char *colon = strchr(ptr, ':');
     char *newline = strchr(ptr, '\n');
     ret.headers = malloc(sizeof(struct http_header) + 1);
+    ret.header_len = 0;
     while (colon < newline) {
         if (*(newline + 1) == '\r' && colon > newline) {
             break;
