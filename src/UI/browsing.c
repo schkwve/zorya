@@ -108,6 +108,10 @@ typedef struct
 
 render_node render_array[64];
 
+//TODO: good colors
+SDL_Color text_color = { 0, 0, 0 };
+SDL_Color link_color = { 0, 0, 255 };
+
 int curI = 1;
 int curY = 72;
 static void render_element(struct parse_element *element)
@@ -117,6 +121,7 @@ static void render_element(struct parse_element *element)
     //TODO: represent these as css args or smth
     int text_size = 20;
     int text_margin = 8;
+    SDL_Color color = text_color;
 
     if(strcmp(lowername, "h1") == 0) {
         text_size = 32;
@@ -132,6 +137,11 @@ static void render_element(struct parse_element *element)
         text_size = 14;
     }else if (strcmp(lowername, "p") == 0) {
         text_margin = 16;
+    }else if (strcmp(lowername, "a") == 0) {
+        color = link_color;
+    }else if (strcmp(lowername, "br") == 0) {
+        curY += text_size + 4;
+        goto cleanup;
     }
 
     const char *element_content = get_element_content(element);
@@ -139,7 +149,6 @@ static void render_element(struct parse_element *element)
         goto cleanup;
     }
     int element_content_length = strlen(element_content) + 1;
-    SDL_Color foreground_color = { 0, 0, 0 };
     render_array[curI].text = malloc(sizeof(char) * element_content_length);
     snprintf(render_array[curI].text,
              element_content_length,
@@ -149,7 +158,7 @@ static void render_element(struct parse_element *element)
     render_array[curI].y = curY;
     render_array[curI].width = -1;
     render_array[curI].height = text_size;
-    render_array[curI].color = foreground_color;
+    render_array[curI].color = color;
     render_array[curI].font = current_font_sansserif;
     log_debug("Rendered an \"%s\". Content: \"%s\"",
               element->name,
