@@ -10,6 +10,7 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
+#include <assert.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,6 +28,7 @@
 #include <utils/buffer.h>
 #include <utils/host.h>
 #include <utils/logging.h>
+#include <utils/string.h>
 
 #include <UI/home.h>
 
@@ -127,32 +129,20 @@ typedef struct
 
 render_node render_array[64];
 
-// Move this somewhere later on (This is a function to strcmp without any
-// restrctions on the case)
-int priv_stricmp(const char *s1, const char *s2)
-{
-    while (*s1 && *s2) {
-        char c1 = tolower(*s1);
-        char c2 = tolower(*s2);
-        if (c1 != c2) {
-            return c1 - c2;
-        }
-        s1++;
-        s2++;
-    }
-    return tolower(*s1) - tolower(*s2);
-}
-
 int curY = 1;
 static void render_element(struct parse_element *element)
 {
-    if (element != NULL && ((priv_stricmp(element->name, "h1") == 0) ||
-                            (priv_stricmp(element->name, "h2") == 0) ||
-                            (priv_stricmp(element->name, "h3") == 0) ||
-                            (priv_stricmp(element->name, "h4") == 0) ||
-                            (priv_stricmp(element->name, "h5") == 0) ||
-                            (priv_stricmp(element->name, "h6") == 0) ||
-                            (priv_stricmp(element->name, "p") == 0))) {
+    assert(element != NULL);
+
+    element->name = str_tolower(element->name);
+
+    if ((strcmp(element->name, "h1") == 0) ||
+        (strcmp(element->name, "h2") == 0) ||
+        (strcmp(element->name, "h3") == 0) ||
+        (strcmp(element->name, "h4") == 0) ||
+        (strcmp(element->name, "h5") == 0) ||
+        (strcmp(element->name, "h6") == 0) ||
+        (strcmp(element->name, "p") == 0)) {
 
         const char *element_content = get_element_content(element);
         if (element_content == NULL) {
@@ -180,11 +170,7 @@ static void render_element(struct parse_element *element)
                   element->content);
         curY++;
     } else {
-        if (element == NULL) {
-            log_fatal("Element seems to be NULL");
-        } else {
-            log_error("Unknown element %s", element->name);
-        }
+        log_error("Unknown element %s", element->name);
     }
 }
 

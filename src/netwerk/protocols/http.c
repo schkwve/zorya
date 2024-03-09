@@ -187,19 +187,16 @@ struct http_response http_get(struct url url, bool ssl)
 
     switch (ptr[0]) {
         case '9':
-            log_debug("HTTP version: 0.9");
             ret.ver = HTTP_0_9;
             break;
         case '0':
-            log_debug("HTTP version: 1.0");
             ret.ver = HTTP_1_0;
             break;
         case '1':
-            log_debug("HTTP version: 1.1");
             ret.ver = HTTP_1_1;
             break;
         default:
-            log_error("Unsupported HTTP version");
+            log_error("Unsupported HTTP version!");
             ret.status = 0;
             ret.data = NULL;
             goto cleanup;

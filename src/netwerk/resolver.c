@@ -24,30 +24,27 @@ struct net_response resolve_url(struct url url)
 {
     // which idiot wrote this? - schkwve
     if (strcmp(url.scheme, "http") == 0) {
-
-        struct http_response res = http_get(url, false);
-        if (!http_is_status_error(res.status)) {
-            return (struct net_response){ .status = RESPONSE_OK,
-                                          .code = 0,
-                                          .pageData = (buffer_t){
-                                              .data_ptr = res.data,
-                                              .data_len = strlen(res.data) } };
-        } else {
-            return (struct net_response){ .status = RESPONSE_HTTP_ERROR,
-                                          .code = res.status };
-        }
+                struct http_response res = http_get(url, false);
+                if (!http_is_status_error(res.status)) {
+                    return (struct net_response){ .status = RESPONSE_OK,
+                                                  .code = 0,
+                                                  .pageData = (buffer_t){
+                                                      .data_ptr = res.data,
+                                                      .data_len =
+           strlen(res.data) } }; } else { return (struct net_response){ .status
+           = RESPONSE_HTTP_ERROR, .code = res.status };
+                }
     } else if (strcmp(url.scheme, "https") == 0) {
-        struct http_response res = http_get(url, true);
-        if (!http_is_status_error(res.status)) {
-            return (struct net_response){ .status = RESPONSE_OK,
-                                          .code = 0,
-                                          .pageData = (buffer_t){
-                                              .data_ptr = res.data,
-                                              .data_len = strlen(res.data) } };
-        } else {
-            return (struct net_response){ .status = RESPONSE_HTTP_ERROR,
-                                          .code = res.status };
-        }
+                struct http_response res = http_get(url, true);
+                if (!http_is_status_error(res.status)) {
+                    return (struct net_response){ .status = RESPONSE_OK,
+                                                  .code = 0,
+                                                  .pageData = (buffer_t){
+                                                      .data_ptr = res.data,
+                                                      .data_len =
+           strlen(res.data) } }; } else { return (struct net_response){ .status
+           = RESPONSE_HTTP_ERROR, .code = res.status };
+                }
     } else if (strcmp(url.scheme, "gopher") == 0) {
         return (struct net_response){ .status = RESPONSE_ERROR,
                                       .code = ERR_UNIMPLEMENTED };
