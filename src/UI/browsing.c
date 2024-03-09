@@ -81,12 +81,6 @@ void render_text(const char *text,
     SDL_RenderCopy(
         window->renderer, header_texture, NULL, &header_texture_rect);
 
-#ifdef __DEBUG
-    // debug outline
-    SDL_SetRenderDrawColor(window->renderer, 0x00, 0xFF, 0x00, 0xFF);
-    SDL_RenderDrawRect(window->renderer, &header_texture_rect);
-#endif
-
     // maalos: Do we do that now?
     SDL_FreeSurface(header_text);
     SDL_DestroyTexture(header_texture);
