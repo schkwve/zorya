@@ -22,7 +22,7 @@ void user_agent_infer()
     snprintf(
         g_user_agent,
         sizeof(g_user_agent),
-        "SovyetskiSoyouzy/1.0 (OS: %s, Version: %s) AntiRalsei/1.0 (HTML 2.0)",
+        "SovyetskiSoyouzy/1.0 (%s %s) AntiRalsei/1.0 (HTML 2.0)",
         host.name,
         host.version);
     free_host_info(&host);
