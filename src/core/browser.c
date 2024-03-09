@@ -133,20 +133,19 @@ int curY = 1;
 static void render_element(struct parse_element *element)
 {
     assert(element != NULL);
+    char* lowername = str_tolower(element->name);
 
-    element->name = str_tolower(element->name);
-
-    if ((strcmp(element->name, "h1") == 0) ||
-        (strcmp(element->name, "h2") == 0) ||
-        (strcmp(element->name, "h3") == 0) ||
-        (strcmp(element->name, "h4") == 0) ||
-        (strcmp(element->name, "h5") == 0) ||
-        (strcmp(element->name, "h6") == 0) ||
-        (strcmp(element->name, "p") == 0)) {
+    if ((strcmp(lowername, "h1") == 0) ||
+        (strcmp(lowername, "h2") == 0) ||
+        (strcmp(lowername, "h3") == 0) ||
+        (strcmp(lowername, "h4") == 0) ||
+        (strcmp(lowername, "h5") == 0) ||
+        (strcmp(lowername, "h6") == 0) ||
+        (strcmp(lowername, "p") == 0)) {
 
         const char *element_content = get_element_content(element);
         if (element_content == NULL) {
-            return;
+            goto cleanup;
         }
 
         int element_content_length = strlen(element_content) + 1;
@@ -170,8 +169,11 @@ static void render_element(struct parse_element *element)
                   element->content);
         curY++;
     } else {
-        log_error("Unknown element %s", element->name);
+        log_error("Unknown element \"%s\"", element->name);
     }
+
+    cleanup:
+        free(lowername);
 }
 
 static void render_all_elements_from_tree(struct parse_node *tree)
