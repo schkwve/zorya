@@ -114,48 +114,54 @@ typedef struct
 
 render_node render_array[64];
 
-int curY = 1;
+int curI = 1;
+int curY = 72;
 static void render_element(struct parse_element *element)
 {
     assert(element != NULL);
     char* lowername = str_tolower(element->name);
+    //TODO: represent these as css args or smth
+    int text_size = 20;
+    int text_margin = 8;
 
-    if ((strcmp(lowername, "h1") == 0) ||
-        (strcmp(lowername, "h2") == 0) ||
-        (strcmp(lowername, "h3") == 0) ||
-        (strcmp(lowername, "h4") == 0) ||
-        (strcmp(lowername, "h5") == 0) ||
-        (strcmp(lowername, "h6") == 0) ||
-        (strcmp(lowername, "p") == 0)) {
-
-        const char *element_content = get_element_content(element);
-        if (element_content == NULL) {
-            goto cleanup;
-        }
-
-        int element_content_length = strlen(element_content) + 1;
-
-        SDL_Color foreground_color = { 0, 0, 0 };
-
-        render_array[curY].text = malloc(sizeof(char) * element_content_length);
-        snprintf(render_array[curY].text,
-                 element_content_length,
-                 "%s",
-                 element_content);
-        render_array[curY].x = 0;
-        render_array[curY].y = 72 * curY;
-        render_array[curY].width = -1;
-        render_array[curY].height = 37;
-        render_array[curY].color = foreground_color;
-        render_array[curY].font = current_font_sansserif;
-
-        log_debug("Rendered an \"%s\". Content: \"%s\"",
-                  element->name,
-                  element->content);
-        curY++;
-    } else {
-        log_error("Unknown element \"%s\"", element->name);
+    if(strcmp(lowername, "h1") == 0) {
+        text_size = 32;
+    }else if (strcmp(lowername, "h2") == 0) {
+        text_size = 24;
+    }else if (strcmp(lowername, "h3") == 0) {
+        text_size = 20;
+    }else if (strcmp(lowername, "h4") == 0) {
+        text_size = 18;
+    }else if (strcmp(lowername, "h5") == 0) {
+        text_size = 16;
+    }else if (strcmp(lowername, "h6") == 0) {
+        text_size = 14;
+    }else if (strcmp(lowername, "p") == 0) {
+        text_margin = 16;
     }
+
+    const char *element_content = get_element_content(element);
+    if (element_content == NULL) {
+        goto cleanup;
+    }
+    int element_content_length = strlen(element_content) + 1;
+    SDL_Color foreground_color = { 0, 0, 0 };
+    render_array[curI].text = malloc(sizeof(char) * element_content_length);
+    snprintf(render_array[curI].text,
+             element_content_length,
+             "%s",
+             element_content);
+    render_array[curI].x = 0;
+    render_array[curI].y = curY;
+    render_array[curI].width = -1;
+    render_array[curI].height = text_size;
+    render_array[curI].color = foreground_color;
+    render_array[curI].font = current_font_sansserif;
+    log_debug("Rendered an \"%s\". Content: \"%s\"",
+              element->name,
+              element->content);
+    curI++;
+    curY += text_size + 4;
 
     cleanup:
         free(lowername);
@@ -180,7 +186,8 @@ static void render_all_elements_from_tree(struct parse_node *tree)
 static void render_html(struct parse_node *tree)
 {
     log_debug("Rendering HTML content");
-    render_all_elements_from_tree(tree);
+    struct parse_node *body = find_in_html_tree(tree, "body");
+    render_all_elements_from_tree(body);
 }
 
 static void render_url(const char *url)

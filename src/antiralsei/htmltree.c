@@ -239,18 +239,18 @@ void print_html_tree(struct parse_node *node, int lvl)
  * @return Parsed element if it was found;
  *         NULL otherwise.
  */
-struct parse_element *find_in_html_tree(struct parse_node *node, char *name)
+struct parse_node *find_in_html_tree(struct parse_node *node, char *name)
 {
     if (node->element != NULL) {
         if (strcasecmp(node->element->name, name) == 0) {
-            return node->element;
+            return node;
         }
     }
 
     for (int i = 0; i < node->num_children && node->children != NULL; i++) {
-        struct parse_element *e = find_in_html_tree(node->children[i], name);
-        if (e != NULL) {
-            return e;
+        struct parse_node *n = find_in_html_tree(node->children[i], name);
+        if (n != NULL) {
+            return n;
         }
     }
 

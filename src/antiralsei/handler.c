@@ -27,7 +27,7 @@ void handle_html(struct parse_node *tree, char *fall_back_title)
         return;
     }
 
-    struct parse_element *title = find_in_html_tree(tree, "title");
+    struct parse_element *title = find_in_html_tree(tree, "title")->element;
 
     if (title != NULL && title->content != NULL) {
         t = title->content;
