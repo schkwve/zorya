@@ -313,6 +313,8 @@ bool browser_update()
     rect = (SDL_Rect){ 0, 0, window->width, window->height / 20 };
     SDL_SetRenderDrawColor(window->renderer, 0x22, 0x22, 0x22, 0xFF);
     SDL_RenderFillRect(window->renderer, &rect);
+    
+    suzbutton_render_button(button);
 
     // SDL_Color color = { 200, 0, 0 };
     //  render_text("The Sovyetski Soyouzy Project", 0, 64, -1, 64, color);
@@ -334,7 +336,6 @@ bool browser_update()
     }
 
     suzwin_render_window(window);
-    suzbutton_render_button(button);
 
     //  TODO: Update
     return true;
