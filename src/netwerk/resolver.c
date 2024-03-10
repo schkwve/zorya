@@ -22,30 +22,26 @@
  */
 struct net_response resolve_url(struct url url)
 {
-    if (strcmp(url.scheme, "http") == 0) {
-
-        struct http_response res = http_get(url);
-        if (res.status == 1) {
-            return (struct net_response){ .status = RESPONSE_OK,
-                                          .code = 0,
-                                          .pageData = (buffer_t){
-                                              .data_ptr = res.data,
-                                              .data_len = strlen(res.data) } };
-        } else {
-            return (struct net_response){ .status = RESPONSE_HTTP_ERROR,
-                                          .code = res.status };
-        }
-
-    } else if (strcmp(url.scheme, "ftp") == 0) {
-        return (struct net_response){ .status = RESPONSE_ERROR,
-                                      .code = ERR_UNIMPLEMENTED };
-    } else if (strcmp(url.scheme, "file") == 0) {
-        return (struct net_response){ .status = RESPONSE_ERROR,
-                                      .code = ERR_UNIMPLEMENTED };
+    if (strncmp(url.scheme, "http",4) == 0) { // http and https
+                struct http_response *res = malloc(sizeof(struct http_response));
+                *res = http_get(url, strlen(url.scheme) == 5);// I feel so fucking smart now
+                if (!http_is_status_error(res->status)) {
+                    return (struct net_response){ .status = RESPONSE_OK,
+                                                  .code = 0,
+                                                  .page_data = (buffer_t){
+                                                      .data_ptr = res->data,
+                                                      .data_len = strlen(res->data) },  
+                                                  .raw_response = (char*)res,
+                                                  .raw_response_type = RAW_RESPONSE_TYPE_HTTP
+                                                };
+                } else { 
+                    return (struct net_response){ .status= RESPONSE_HTTP_ERROR, 
+                                                  .code = res->status };
+                }
     } else if (strcmp(url.scheme, "suz") == 0) {
         return (struct net_response){ .status = RESPONSE_BUILTIN,
                                       .code = 0,
-                                      .pageData = (buffer_t){
+                                      .page_data = (buffer_t){
                                           .data_ptr = url.path,
                                           .data_len = strlen(url.path) + 1 } };
     } else {

@@ -72,7 +72,6 @@ struct url parse_url(const char *url)
         res.host[moveOnTok - schemeTok - 3] = '\0';
     }
 
-
     char *fragmentStart = strchr(moveOnTok, '#');
     char *queryStart = strchr(moveOnTok, '?');
     if (fragmentStart == NULL && queryStart == NULL) {
@@ -117,9 +116,9 @@ struct url parse_url(const char *url)
         res.query[strlen(queryStart + 1)] = '\0';
     }
 
-    cleanup:
-        free(urlCopy);
-        return res;
+cleanup:
+    free(urlCopy);
+    return res;
 }
 
 /**
@@ -134,11 +133,11 @@ void free_url(struct url *url)
     if (url->authority != NULL)
         free(url->authority);
     free(url->host);
-    if(url->path != NULL)
+    if (url->path != NULL)
         free(url->path);
-    if(url->query != NULL)
+    if (url->query != NULL)
         free(url->query);
-    if(url->fragment != NULL)
+    if (url->fragment != NULL)
         free(url->fragment);
     url = NULL;
 }

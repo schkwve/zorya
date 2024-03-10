@@ -12,8 +12,7 @@
 
 extern struct suztk_window *window;
 
-bool
-browser_init();
+bool browser_init();
 
 bool browser_update();
 

@@ -8,6 +8,8 @@
 #ifndef NET_PROTOCOLS_HTTP_H
 #define NET_PROTOCOLS_HTTP_H
 
+#include <stdbool.h>
+
 #include <netwerk/url.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -52,11 +54,21 @@ struct http_request
 struct http_response
 {
     int status;
+    char *status_desc;
+    enum http_version ver;
+    size_t header_len;
+    struct http_header *headers;
+    size_t data_len;
+    char* payload_start_for_malloc;
     char *data;
 };
 
 buffer_t *http_gen_request(struct http_request *request);
 
-struct http_response http_get(struct url url);
+struct http_response http_get(struct url url, bool ssl);
+
+void free_http_response(struct http_response response);
+
+bool http_is_status_error(int status);
 
 #endif /* NET_PROTOCOLS_HTTP_H */

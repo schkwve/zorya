@@ -34,10 +34,11 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
+find_package(OpenSSL REQUIRED)
 
 # Includesssss
 include_directories(src)
-include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIRS})
 
 # Sources... Sources everywhere!
 file(GLOB_RECURSE SRC src/*.c)
@@ -51,12 +52,15 @@ endif()
 # Set up build type flags
 string(TOLOWER ${CMAKE_BUILD_TYPE} build_type)
 if (build_type STREQUAL debug)
-  set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} " -D__DEBUG -g3 -fsanitize=address")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D__DEBUG -g3 -fsanitize=address")
 elseif (build_type STREQUAL release)
-  set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} " -O3")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
 else ()
   message(FATAL_ERROR "Unknown build type specified in CMAKE_BUILD_TYPE!")
 endif()
+
+# .. And normal flags
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fsanitize=undefined -fno-sanitize-recover=all -fsanitize=float-divide-by-zero -fsanitize=float-cast-overflow -fno-sanitize=null -fno-sanitize=alignment")
 
 # Set output directories
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -74,7 +78,7 @@ endif()
 
 # Compile
 add_executable(${EXECUTABLE_NAME} ${SRC})
-target_link_libraries(${EXECUTABLE_NAME} PUBLIC SDL2::SDL2 SDL2::Image SDL2::TTF)
+target_link_libraries(${EXECUTABLE_NAME} PUBLIC SDL2::SDL2 SDL2::Image SDL2::TTF OpenSSL::SSL)
 
 # CPack
 install(DIRECTORY res DESTINATION ${CMAKE_BINARY_DIR}/install
@@ -110,10 +114,12 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin") # macOS
   get_filename_component(SDL2_LIBFILE "${SDL2_LIBRARIES}" REALPATH)
   get_filename_component(SDL2_IMAGE_LIBFILE "${SDL2_IMAGE_LIBRARIES}" REALPATH)
   get_filename_component(SDL2_TTF_LIBFILE "${SDL2_TTF_LIBRARIES}" REALPATH)
+  get_filename_component(OPENSSL_LIBFILE "${OPENSSL_LIBRARIES}" REALPATH)
 
   install(FILES ${SDL2_LIBFILE} DESTINATION "../Library" COMPONENT libraries)
   install(FILES ${SDL2_IMAGE_LIBFILE} DESTINATION "../Library" COMPONENT libraries)
   install(FILES ${SDL2_TTF_LIBFILE} DESTINATION "../Library" COMPONENT libraries)
+  install(FILES ${OPENSSL_LIBFILE} DESTINATION "../Library" COMPONENT libraries)
   install(TARGETS ${EXECUTABLE_NAME} RUNTIME DESTINATION "../MacOS" COMPONENT applications)
 else ()
   message(FATAL_ERROR "Unsupported OS!")
