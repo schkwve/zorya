@@ -1,6 +1,6 @@
 /**
  * @file utils/logging.h
- * @author andrej123456789 <andrej.bartulinvr@gmail.com>, lolguy91 <retek1544@gmail.com>
+ * @author andrej123456789 <andrej.bartulinvr@gmail.com>
  * @date 29/02/2024
  * @brief Utility for button management
  */

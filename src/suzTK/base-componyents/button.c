@@ -1,6 +1,6 @@
 /**
  * @file suzTK/base-componyents/button.h
- * @author andrej123456789 <andrej.bartulinvr@gmail.com>, lolguy91 <retek1544@gmail.com>
+ * @author andrej123456789 <andrej.bartulinvr@gmail.com>
  * @date 05/03/2024
  * @brief button management implementation
  */
