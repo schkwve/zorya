@@ -25,4 +25,6 @@ struct suztk_button *suzbutton_create_button(struct suztk_window* window, int x,
 void suzbutton_destroy_button(struct suztk_button *button);
 void suzbutton_render_button(struct suztk_button *button);
 
+void suzbutton_set_title(struct suztk_button *button, const char *title);
+
 #endif

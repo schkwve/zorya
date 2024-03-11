@@ -75,3 +75,21 @@ void suzbutton_render_button(struct suztk_button *button)
         SDL_RenderFillRect(button->window->renderer, &button->rectangle);
     }
 }
+
+/**
+ * @brief Updates the window's title with a new one
+ *
+ * @param button
+ *        Button structure pointer
+ *
+ * @param title
+ *        New button title
+ */
+void suzbutton_set_title(struct suztk_button *button, const char *title)
+{
+    if (button != NULL)
+    {
+        button->title = realloc(button->title, sizeof(char) * strlen(title) + 1);
+        strcpy(button->title, title);
+    }
+}

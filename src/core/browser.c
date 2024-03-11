@@ -107,6 +107,7 @@ bool browser_init()
 bool browser_update()
 {
     ui_statemachine_render_current_page();
+    suzbutton_set_title(button, "apple");
     suzbutton_render_button(button);
 
     suzwin_render_window(window);
