@@ -26,20 +26,6 @@
 #include "utils/logging.h"
 
 /**
- * @brief Checks if user clicked on button
- * @param x
- *          mouse x
- * @param y
- *          mouse y
- * @param rect
- *          button
-*/
-bool pointInsideRect(int x, int y, SDL_Rect rect) 
-{
-    return (x >= rect.x && x < (rect.x + rect.w) && y >= rect.y && y < (rect.y + rect.h));
-}
-
-/**
  * @brief Browser entry point.
  */
 int main(void)
@@ -85,17 +71,6 @@ int main(void)
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 should_quit = true;
-            }
-
-            else if (event.type == SDL_MOUSEBUTTONDOWN)
-            {
-                int mouseX, mouseY;
-                SDL_GetMouseState(&mouseX, &mouseY);
-
-                // Check if mouse click is inside the button
-                /*if (pointInsideRect(mouseX, mouseY, {SCREEN_WIDTH / 2 - BUTTON_WIDTH / 2, SCREEN_HEIGHT / 2 - BUTTON_HEIGHT / 2, BUTTON_WIDTH, BUTTON_HEIGHT})) {
-                    printf("test\n");
-                }*/
             }
         }
         if (!browser_update()) {

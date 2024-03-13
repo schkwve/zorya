@@ -11,6 +11,7 @@
 #include <stdbool.h>
 
 extern struct suztk_window *window;
+extern struct suztk_button *button;
 
 bool browser_init();
 

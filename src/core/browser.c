@@ -33,7 +33,6 @@
 struct suztk_window *window;
 struct suztk_button *button;
 
-
 /**
  * @brief Loads a page
  *
@@ -108,7 +107,7 @@ bool browser_update()
 {
     ui_statemachine_render_current_page();
     suzbutton_set_title(button, "apple");
-    suzbutton_render_button(button);
+    suzbutton_render_button(window, button);
 
     suzwin_render_window(window);
 

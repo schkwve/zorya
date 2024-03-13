@@ -7,6 +7,21 @@
 
 #include "button.h"
 
+#include <utils/logging.h>
+
+/**
+ * @brief Checks if mouse position is inside a button
+ * @param x
+ *          mouse x
+ * @param y
+ *          mouse y
+ * @param rect
+ *          button
+*/
+bool mouse_inside_button(int x, int y, SDL_Rect rect) {
+    return (x >= rect.x && x < (rect.x + rect.w) && y >= rect.y && y < (rect.y + rect.h));
+}
+
 /**
  * @brief Creates a new button structure.
  *
@@ -64,15 +79,31 @@ void suzbutton_destroy_button(struct suztk_button *button)
 /**
  * @brief Renders a button object
  *
+ * @param window
+ *        Window structure where button is located
+ * 
  * @param button
  *        Button structure to be rendered
  */
-void suzbutton_render_button(struct suztk_button *button)
+void suzbutton_render_button(struct suztk_window *window, struct suztk_button *button)
 {
-    if (button != NULL)
-    {
+    if (button != NULL) {
         SDL_SetRenderDrawColor(button->window->renderer, 0, 255, 0, 0xFF);
         SDL_RenderFillRect(button->window->renderer, &button->rectangle);
+
+        int mouse_x, mouse_y;
+        if (SDL_GetMouseState(&mouse_x, &mouse_y) == SDL_BUTTON_LEFT) {
+            if (mouse_inside_button(mouse_x, mouse_y, button->rectangle)) {
+
+                if (button->action != NULL) {
+                    button->action();
+                } else {
+                    log_error("Function pointer is null!\n");
+                }
+            }
+        }
+    } else {
+        log_error("[suzbutton_render_button] Button is null!\n");
     }
 }
 
@@ -87,9 +118,10 @@ void suzbutton_render_button(struct suztk_button *button)
  */
 void suzbutton_set_title(struct suztk_button *button, const char *title)
 {
-    if (button != NULL)
-    {
+    if (button != NULL) {
         button->title = realloc(button->title, sizeof(char) * strlen(title) + 1);
         strcpy(button->title, title);
+    } else {
+        log_error("[suzbutton_set_title] Button is null!\n");
     }
 }
