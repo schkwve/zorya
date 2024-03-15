@@ -105,7 +105,6 @@ bool browser_update()
     ui_statemachine_render_current_page();
 
     suzwin_render_window(window);
-    //  TODO: Update
     return true;
 }
 
