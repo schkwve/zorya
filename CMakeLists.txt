@@ -15,7 +15,7 @@ set(WEBSITE https://sovyetskisoyouzy.github.io)
 
 ######################
 
-project(SovietskiSoyouzy
+project(SovyetskiSoyouzy
 	VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
 	DESCRIPTION ${PROJECT_DESCRIPTION}
   HOMEPAGE_URL ${WEBSITE}
@@ -23,7 +23,7 @@ project(SovietskiSoyouzy
 
 # Set basic properties
 set(EXECUTABLE_NAME SusieBrowser)
-set(PROJECT_NAME "Sovietski Soyouzy")
+set(PROJECT_NAME "Sovyetski Soyouzy")
 
 # Include FindSDL2 packages
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
