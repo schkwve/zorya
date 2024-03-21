@@ -5,14 +5,14 @@
  * @brief Homepage
  */
 
-#include <assert.h>
-#include <stdlib.h>
 #include "browsing.h"
-#include <antiralsei/handler.h>
-#include <suzTK/window.h>
-#include <utils/string.h>
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <antiralsei/handler.h>
+#include <assert.h>
+#include <stdlib.h>
+#include <suzTK/window.h>
+#include <utils/string.h>
 
 // TODOS:
 //  move HTML renderer into Antiralsei
@@ -20,7 +20,8 @@
 //  add some anti-aliasing to the text
 
 // this solution is bad, but it works
-// should we pass the window around or have the current window be in the window manager?
+// should we pass the window around or have the current window be in the window
+// manager?
 extern struct suztk_window *window;
 
 #define DEFAULT_MONOSPACE_FONT "../res/freefont/FreeMono.ttf"
@@ -111,7 +112,7 @@ typedef struct
 
 render_node render_array[RENDER_ARRAY_SIZE];
 
-//TODO: good colors
+// TODO: good colors
 SDL_Color text_color = { 0, 0, 0 };
 SDL_Color link_color = { 0, 0, 255 };
 
@@ -120,29 +121,29 @@ int curY = 72;
 static void render_element(struct parse_element *element)
 {
     assert(element != NULL);
-    char* lowername = str_tolower(element->name);
-    //TODO: represent these as css args or smth
+    char *lowername = str_tolower(element->name);
+    // TODO: represent these as css args or smth
     int text_size = 20;
     int text_margin = 8;
     SDL_Color color = text_color;
 
-    if(strcmp(lowername, "h1") == 0) {
+    if (strcmp(lowername, "h1") == 0) {
         text_size = 32;
-    }else if (strcmp(lowername, "h2") == 0) {
+    } else if (strcmp(lowername, "h2") == 0) {
         text_size = 24;
-    }else if (strcmp(lowername, "h3") == 0) {
+    } else if (strcmp(lowername, "h3") == 0) {
         text_size = 20;
-    }else if (strcmp(lowername, "h4") == 0) {
+    } else if (strcmp(lowername, "h4") == 0) {
         text_size = 18;
-    }else if (strcmp(lowername, "h5") == 0) {
+    } else if (strcmp(lowername, "h5") == 0) {
         text_size = 16;
-    }else if (strcmp(lowername, "h6") == 0) {
+    } else if (strcmp(lowername, "h6") == 0) {
         text_size = 14;
-    }else if (strcmp(lowername, "p") == 0) {
+    } else if (strcmp(lowername, "p") == 0) {
         text_margin = 16;
-    }else if (strcmp(lowername, "a") == 0) {
+    } else if (strcmp(lowername, "a") == 0) {
         color = link_color;
-    }else if (strcmp(lowername, "br") == 0) {
+    } else if (strcmp(lowername, "br") == 0) {
         curY += text_size + 4;
         goto cleanup;
     }
@@ -157,24 +158,21 @@ static void render_element(struct parse_element *element)
     }
     int element_content_length = strlen(element_content) + 1;
     render_array[curI].text = malloc(sizeof(char) * element_content_length);
-    snprintf(render_array[curI].text,
-             element_content_length,
-             "%s",
-             element_content);
+    snprintf(
+        render_array[curI].text, element_content_length, "%s", element_content);
     render_array[curI].x = 0;
     render_array[curI].y = curY;
     render_array[curI].width = -1;
     render_array[curI].height = text_size;
     render_array[curI].color = color;
     render_array[curI].font = current_font_sansserif;
-    log_debug("Rendered an \"%s\". Content: \"%s\"",
-              element->name,
-              element->content);
+    log_debug(
+        "Rendered an \"%s\". Content: \"%s\"", element->name, element->content);
     curI++;
     curY += text_size + 4;
 
-    cleanup:
-        free(lowername);
+cleanup:
+    free(lowername);
 }
 
 static void render_all_elements_from_tree(struct parse_node *tree)
@@ -216,22 +214,21 @@ static void render_url(const char *url)
     render_array[0].font = current_font_monospace;
 }
 
-
 /**
  * @brief Initializes browsing Page
  *
  */
-void ui_browsing_init(void* import_data)
+void ui_browsing_init(void *import_data)
 {
     assert(import_data != NULL);
-    args = (struct parse_node*)import_data;
+    args = (struct ui_browsing_args *)import_data;
 
     // TODO: asset manager
     current_font_monospace = TTF_OpenFont(DEFAULT_MONOSPACE_FONT, 32);
     current_font_sansserif = TTF_OpenFont(DEFAULT_SANSSERIF_FONT, 32);
     current_font_serif = TTF_OpenFont(DEFAULT_SERIF_FONT, 32);
 
-    handle_html(args->tree, args->url->host);// TODO: ge the URL for fallback
+    handle_html(args->tree, args->url->host); // TODO: ge the URL for fallback
     render_html(args->tree);
     render_url(args->url->host);
 }
@@ -240,7 +237,8 @@ void ui_browsing_init(void* import_data)
  * @brief Renders browsing Page
  *
  */
-void ui_browsing_render() {
+void ui_browsing_render()
+{
     // make the whole screen grey
     SDL_SetRenderDrawColor(window->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(window->renderer);
@@ -270,7 +268,8 @@ void ui_browsing_render() {
  * @brief Destroys browsing Page
  *
  */
-void ui_browsing_destroy() {
+void ui_browsing_destroy()
+{
     free_url(args->url);
     free(args->url);
     free_html_tree(args->tree);

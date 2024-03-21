@@ -276,7 +276,7 @@ void free_http_response(struct http_response res)
     if (res.data) {
         free((void *)res.payload_start_for_malloc);
     }
-    if(res.status_desc){
+    if (res.status_desc) {
         free(res.status_desc);
     }
     if (res.headers) {

@@ -7,10 +7,10 @@
 
 #include "user_agent.h"
 
+#include <config.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <config.h>
 
 #include <utils/host.h>
 #include <utils/logging.h>

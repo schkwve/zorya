@@ -22,14 +22,14 @@
 #include <netwerk/protocols/http.h>
 #include <netwerk/resolver.h>
 #include <netwerk/url.h>
-#include <suzTK/window.h>
 #include <suzTK/base-componyents/button.h>
+#include <suzTK/window.h>
 #include <utils/buffer.h>
 #include <utils/host.h>
 #include <utils/logging.h>
 
-#include <UI/statemachine.h>
 #include <UI/browsing.h>
+#include <UI/statemachine.h>
 
 struct suztk_window *window;
 struct suztk_button *button;
@@ -55,10 +55,11 @@ static void load_page(const char *url)
         args->tree = tree;
         args->url = url_info;
 
-        ui_statemachine_goto_page("browsing",(void*)args);
+        ui_statemachine_goto_page("browsing", (void *)args);
         if (res.raw_response_type == RAW_RESPONSE_TYPE_HTTP) {
-            // clarification: derefencing the raw response as an http_response struct
-            free_http_response(*((struct http_response*)res.raw_response));
+            // clarification: derefencing the raw response as an http_response
+            // struct
+            free_http_response(*((struct http_response *)res.raw_response));
             free(res.raw_response);
         }
     } else if (res.status == RESPONSE_ERROR) {
@@ -87,14 +88,15 @@ bool browser_init()
     signal(SIGPIPE, SIG_IGN);
 
     log_debug("Browser identifies as \"%s %s(%s)\"",
-        BROWSER_NAME, 
-        BROWSER_VERSION_STRING, 
-        BROWSER_VERSION_CODENAME);
+              BROWSER_NAME,
+              BROWSER_VERSION_STRING,
+              BROWSER_VERSION_CODENAME);
 
     user_agent_infer();
     log_debug("User agent: %s", g_user_agent);
 
-    window = suzwin_create_window(1280, 720, 0, "LOL SUS BROWSER"); // easter egg ;)
+    window =
+        suzwin_create_window(1280, 720, 0, "LOL SUS BROWSER"); // easter egg ;)
     suzwin_set_icon(window, "../res/logo.png");
 
     button = suzbutton_create_button(window, 500, 500, 50, 50, "test", NULL);

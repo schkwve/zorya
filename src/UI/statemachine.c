@@ -7,8 +7,8 @@
 
 #include <string.h>
 
-#include "error.h"
 #include "browsing.h"
+#include "error.h"
 #include "statemachine.h"
 
 /**
@@ -24,7 +24,6 @@ struct page pages[] = {
  * @brief Current page index
  */
 size_t currentPageID = 0;
-
 
 /**
  * @brief Calls renderer for the current page.
@@ -48,7 +47,7 @@ void ui_statemachine_destroy_current_page()
  * @param pagename
  *        Name of the page
  */
-void ui_statemachine_goto_page(char *pagename,void* import_data)
+void ui_statemachine_goto_page(char *pagename, void *import_data)
 {
     for (int i = 0; i < sizeof(pages) / sizeof(pages[0]); i++) {
         if (strcmp(pages[i].name, pagename) == 0) {

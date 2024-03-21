@@ -59,7 +59,7 @@ struct http_response
     size_t header_len;
     struct http_header *headers;
     size_t data_len;
-    char* payload_start_for_malloc;
+    char *payload_start_for_malloc;
     char *data;
 };
 

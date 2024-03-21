@@ -8,7 +8,7 @@
 #ifndef UI_ERROR_H
 #define UI_ERROR_H
 
-void ui_errorpage_init(void* import_data);
+void ui_errorpage_init(void *import_data);
 
 void ui_errorpage_render();
 

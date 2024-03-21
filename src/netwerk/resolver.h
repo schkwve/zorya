@@ -31,7 +31,7 @@ struct net_response
     int code;
     buffer_t page_data;
     int raw_response_type;
-    char* raw_response;
+    char *raw_response;
 
     // TODO: Media types
 };
