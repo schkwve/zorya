@@ -23,6 +23,7 @@
 #include <netwerk/resolver.h>
 #include <netwerk/url.h>
 #include <suzTK/window.h>
+#include <suzTK/base-componyents/button.h>
 #include <utils/buffer.h>
 #include <utils/host.h>
 #include <utils/logging.h>
@@ -31,7 +32,7 @@
 #include <UI/browsing.h>
 
 struct suztk_window *window;
-
+struct suztk_button *button;
 
 /**
  * @brief Loads a page
@@ -96,6 +97,8 @@ bool browser_init()
     window = suzwin_create_window(1280, 720, 0, "LOL SUS BROWSER"); // easter egg ;)
     suzwin_set_icon(window, "../res/logo.png");
 
+    button = suzbutton_create_button(window, 500, 500, 50, 50, "test", NULL);
+
     load_page("https://kevinalavik.github.io/html-2.0-test/");
     return true;
 }
@@ -109,8 +112,12 @@ bool browser_init()
 bool browser_update()
 {
     ui_statemachine_render_current_page();
+    suzbutton_set_title(button, "apple");
+    suzbutton_render_button(window, button);
 
     suzwin_render_window(window);
+
+    //  TODO: Update
     return true;
 }
 
