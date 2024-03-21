@@ -7,9 +7,9 @@
 	<key>CFBundleExecutable</key>
 	<string>SusieBrowser</string>
 	<key>CFBundleIconFile</key>
-	<string>Sovietski Soyouzy.icns</string>
+	<string>Sovyetski Soyouzy.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.susie.sovietskisoyouzy</string>
+	<string>com.lolguy91.Sovyetskisoyouzy</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

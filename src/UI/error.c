@@ -16,7 +16,7 @@
  */
 void ui_errorpage_init(void* import_data)
 {
-    return NULL;
+    return;
 }
 
 /**

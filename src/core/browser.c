@@ -16,6 +16,7 @@
 #include <string.h>
 
 #include "browser.h"
+#include "config.h"
 #include <antiralsei/htmltree.h>
 #include <core/user_agent.h>
 #include <netwerk/protocols/http.h>
@@ -85,10 +86,15 @@ bool browser_init()
     // OpenSSL can shit itself if SIGPIPE isn't ignored
     signal(SIGPIPE, SIG_IGN);
 
+    log_debug("Browser identifies as \"%s %s(%s)\"",
+        BROWSER_NAME, 
+        BROWSER_VERSION_STRING, 
+        BROWSER_VERSION_CODENAME);
+
     user_agent_infer();
     log_debug("User agent: %s", g_user_agent);
 
-    window = suzwin_create_window(1280, 720, 0, "");
+    window = suzwin_create_window(1280, 720, 0, "LOL SUS BROWSER"); // easter egg ;)
     suzwin_set_icon(window, "../res/logo.png");
 
     button = suzbutton_create_button(window, 500, 500, 50, 50, "test", NULL);

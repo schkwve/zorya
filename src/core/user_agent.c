@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <config.h>
 
 #include <utils/host.h>
 #include <utils/logging.h>
@@ -22,8 +23,11 @@ void user_agent_infer()
     snprintf(
         g_user_agent,
         sizeof(g_user_agent),
-        "SovyetskiSoyouzy/1.0 (%s %s) AntiRalsei/1.0 (HTML 2.0)",
+        "Mozilla/5.0 (%s %s) AppleWebKit/537.36 (KHTML, like Gecko) %s/%s(%s)",
         host.name,
-        host.version);
+        host.version,
+        BROWSER_NAME,
+        BROWSER_VERSION_STRING,
+        BROWSER_VERSION_CODENAME);
     free_host_info(&host);
 }

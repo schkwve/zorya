@@ -7,6 +7,7 @@
  */
 
 #include <string.h>
+#include <stdlib.h>
 
 #include "resolver.h"
 #include <netwerk/protocols/http.h>
@@ -24,7 +25,7 @@ struct net_response resolve_url(struct url url)
 {
     if (strncmp(url.scheme, "http",4) == 0) { // http and https
                 struct http_response *res = malloc(sizeof(struct http_response));
-                *res = http_get(url, strlen(url.scheme) == 5);// I feel so fucking smart now
+                *res = http_get(url, url.scheme[4] == 's');
                 if (!http_is_status_error(res->status)) {
                     return (struct net_response){ .status = RESPONSE_OK,
                                                   .code = 0,
@@ -43,7 +44,8 @@ struct net_response resolve_url(struct url url)
                                       .code = 0,
                                       .page_data = (buffer_t){
                                           .data_ptr = url.path,
-                                          .data_len = strlen(url.path) + 1 } };
+                                          .data_len = strlen(url.path) } 
+                                    };
     } else {
         return (struct net_response){ .status = RESPONSE_ERROR,
                                       .code = ERR_BAD_SCHEME };

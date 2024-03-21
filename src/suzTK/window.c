@@ -14,6 +14,7 @@
 #include <stdlib.h>
 
 #include "window.h"
+#include "config.h"
 #include <utils/logging.h>
 
 /**
@@ -114,11 +115,12 @@ void suzwin_set_title(struct suztk_window *win, const char *title)
 {
     assert(win != NULL);
 
-    char *suffix = " • Sovyetski Soyouzy";
-    size_t full_title_len = strlen(title) + strlen(suffix) + 1;
+    char *sep = " • ";
+    char *suffix = BROWSER_NAME;
+    size_t full_title_len = strlen(title) + strlen(sep) + strlen(suffix) + 1;
     char *full_title = malloc(full_title_len);
 
-    snprintf(full_title, full_title_len, "%s%s", title, suffix);
+    snprintf(full_title, full_title_len, "%s%s%s", title, sep , suffix);
     SDL_SetWindowTitle(win->window, full_title);
     free(full_title);
 }

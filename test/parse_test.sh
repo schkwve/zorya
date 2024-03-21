@@ -1,2 +1,0 @@
-#!/bin/bash
-gcc -D__DEBUG -g -fsanitize=address -o test/parse_test test/parse_test.c src/html/handler.c src/html/parse.c src/utils/logging.c  > /dev/null && ./test/parse_test test/attributes.html && rm -rf test/parse_test 

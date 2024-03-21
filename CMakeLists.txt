@@ -15,17 +15,15 @@ set(WEBSITE https://sovyetskisoyouzy.github.io)
 
 ######################
 
-project(SovietskiSoyouzy
+project(SovyetskiSoyouzy
 	VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
 	DESCRIPTION ${PROJECT_DESCRIPTION}
   HOMEPAGE_URL ${WEBSITE}
 	LANGUAGES C CXX)
 
-# Set executable name
+# Set basic properties
 set(EXECUTABLE_NAME SusieBrowser)
-
-# Set project name
-set(PROJECT_NAME "Sovietski Soyouzy")
+set(PROJECT_NAME "Sovyetski Soyouzy")
 
 # Include FindSDL2 packages
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -96,7 +94,7 @@ set(CPACK_PACKAGE_CONTACT "")
 set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 set(CPACK_PACKAGE_CHECKSUM SHA256)
 #set(CPACK_RESOURCE_FILE_LICENSE "LICENSE.txt")
-#set(CPACK_RESOURCE_FILE_WELCOME "../res/install/welcome.txt"
+#set(CPACK_RESOURCE_FILE_WELCOME "../res/install/welcome.txt")
 
 set(CPACK_PACKAGE_DIRECTORY ${CMAKE_BINARY_DIR}/pkg)
 
