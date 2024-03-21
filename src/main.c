@@ -1,7 +1,7 @@
 /**
  * @file main.c
- * @author lolguy91 <retek1544@gmail.com>, KapPetrov
- * <xicreationsofficial@gmail.com>
+ * @authors lolguy91 <retek1544@gmail.com>
+ *          KapPetrov <xicreationsofficial@gmail.com>
  * @date 29/02/2024
  * @brief Main file
  */
