@@ -15,14 +15,17 @@
 #include "../window.h"
 
 struct suztk_button {
-    struct suztk_window* window;
+    struct suztk_window *window;
     SDL_Rect rectangle;
 
-    const char* title;
+    SDL_Surface *surface;
+    SDL_Texture *texture;
+
+    const char *title;
     void (*action)();
 };
 
-struct suztk_button *suzbutton_create_button(struct suztk_window* window, int x, int y, int width, int height, const char* title, void (*action)());
+struct suztk_button *suzbutton_create_button(struct suztk_window *window, int x, int y, int width, int height, const char* title, void (*action)());
 void suzbutton_destroy_button(struct suztk_button *button);
 void suzbutton_render_button(struct suztk_window *window, struct suztk_button *button);
 

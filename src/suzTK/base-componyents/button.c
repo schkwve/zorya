@@ -49,13 +49,17 @@ bool mouse_inside_button(int x, int y, SDL_Rect rect) {
  * @return Button pointer if it was created successfully;
  *         NULL otherwise.
  */
-struct suztk_button *suzbutton_create_button(struct suztk_window* window, int x, int y, int width, int height, const char* title, void (*action)())
+struct suztk_button *suzbutton_create_button(struct suztk_window *window, int x, int y, int width, int height, const char* title, void (*action)())
 {
     struct suztk_button *new = 
         (struct suztk_button*)malloc(sizeof(struct suztk_button));
 
     new->window = window;
     new->rectangle = (SDL_Rect){x, y, width, height};
+
+    new->surface = SDL_LoadBMP("../res/textures/button.bmp");
+    new->texture = SDL_CreateTextureFromSurface(new->window->renderer, new->surface);
+    SDL_FreeSurface(new->surface);
 
     new->title = malloc(sizeof(char) * strlen(title) + 1); /* strlen() doesn't count \0*/
     strcpy(new->title, title);
@@ -72,8 +76,15 @@ struct suztk_button *suzbutton_create_button(struct suztk_window* window, int x,
  */
 void suzbutton_destroy_button(struct suztk_button *button)
 {
-    free(button->title);
-    free(button);
+    if (button != NULL) {
+        SDL_DestroyTexture(button->texture);
+        
+        free(button->title);
+        free(button);
+
+    } else {
+        log_error("[suzbutton_destroy_button] Button is null!\n");
+    }
 }
 
 /**
@@ -88,8 +99,10 @@ void suzbutton_destroy_button(struct suztk_button *button)
 void suzbutton_render_button(struct suztk_window *window, struct suztk_button *button)
 {
     if (button != NULL) {
-        SDL_SetRenderDrawColor(button->window->renderer, 0, 255, 0, 0xFF);
-        SDL_RenderFillRect(button->window->renderer, &button->rectangle);
+        /*SDL_SetRenderDrawColor(button->window->renderer, 0, 255, 0, 0xFF);
+        SDL_RenderFillRect(button->window->renderer, &button->rectangle);*/
+
+        SDL_RenderCopy(window->renderer, button->texture, NULL, &button->rectangle);
 
         int mouse_x, mouse_y;
         if (SDL_GetMouseState(&mouse_x, &mouse_y) == SDL_BUTTON_LEFT) {
