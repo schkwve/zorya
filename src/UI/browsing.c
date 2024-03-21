@@ -166,7 +166,7 @@ static void render_element(struct parse_element *element)
     render_array[curI].height = text_size;
     render_array[curI].color = color;
     render_array[curI].font = current_font_sansserif;
-    log_debug(
+    log_trace(
         "Rendered an \"%s\". Content: \"%s\"", element->name, element->content);
     curI++;
     curY += text_size + 4;
@@ -193,7 +193,7 @@ static void render_all_elements_from_tree(struct parse_node *tree)
 
 static void render_html(struct parse_node *tree)
 {
-    log_debug("Rendering HTML content");
+    log_trace("Rendering HTML content");
     struct parse_node *body = find_in_html_tree(tree, "body");
     render_all_elements_from_tree(body);
 }

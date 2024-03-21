@@ -23,10 +23,14 @@ enum
     LOG_FATAL
 };
 
-#if defined(__DEBUG)
+#if ENABLE_TRACE_LOGGING == 1
 #define LOG_MIN_LEVEL (LOG_TRACE)
 #else
+#if defined(__DEBUG)
+#define LOG_MIN_LEVEL (LOG_DEBUG)
+#else
 #define LOG_MIN_LEVEL (LOG_INFO)
+#endif
 #endif
 
 /**

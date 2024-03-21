@@ -219,7 +219,7 @@ struct net_connection *net_create_connection(const char *host,
     }
 
     new->alive = true;
-    log_debug("Connected to %s:%s", host, port);
+    log_info("Connected to %s:%s", host, port);
 
     return new;
 }

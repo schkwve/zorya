@@ -207,7 +207,6 @@ struct http_response http_get(struct url url, bool ssl)
     statuschars[2] = ptr[2];
     statuschars[3] = '\0';
     ret.status = atoi(statuschars);
-    log_debug("Status: %d", ret.status);
     ptr += 4;
 
     char *nextline = strchr(ptr, '\n');
@@ -222,7 +221,7 @@ struct http_response http_get(struct url url, bool ssl)
 
     ret.status_desc = malloc(strlen(ptr) + 1);
     strcpy(ret.status_desc, ptr);
-    log_debug("Status description: \"%s\"", ret.status_desc);
+    log_info("Received status %d (%s) from %s", ret.status, ret.status_desc, base_url);
 
     ptr = nextline + 1;
 
@@ -241,7 +240,7 @@ struct http_response http_get(struct url url, bool ssl)
 
         struct http_header header = { .name = ptr, .data = colon + 1 };
 
-        log_debug("Header: %s: %s", header.name, header.data);
+        log_trace("Header: %s: %s", header.name, header.data);
         ret.headers = realloc(
             ret.headers, sizeof(struct http_header) * (ret.header_len + 1));
         ret.headers[ret.header_len] = header;

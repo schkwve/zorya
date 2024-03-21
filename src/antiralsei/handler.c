@@ -33,7 +33,7 @@ void handle_html(struct parse_node *tree, char *fall_back_title)
         t = title->content;
     }
 
-    log_debug("Setting title to '%s'", t);
+    log_trace("Setting title to '%s'", t);
 
     suzwin_set_title(window, t);
 }
