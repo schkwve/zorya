@@ -50,15 +50,15 @@ endif()
 # Set up build type flags
 string(TOLOWER ${CMAKE_BUILD_TYPE} build_type)
 if (build_type STREQUAL debug)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D__DEBUG -DENABLE_TRACE_LOGGING=1 -g3 -fsanitize=address")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D__DEBUG -g3 -fsanitize=address")
 elseif (build_type STREQUAL release)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DENABLE_TRACE_LOGGING=0 -O3")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
 else ()
   message(FATAL_ERROR "Unknown build type specified in CMAKE_BUILD_TYPE!")
 endif()
 
 # .. And normal flags
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fsanitize=undefined -fno-sanitize-recover=all -fsanitize=float-divide-by-zero -fsanitize=float-cast-overflow -fno-sanitize=null -fno-sanitize=alignment")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DENABLE_TRACE_LOGGING=0 -fsanitize=address -fsanitize=undefined -fno-sanitize-recover=all -fsanitize=float-divide-by-zero -fsanitize=float-cast-overflow -fno-sanitize=null -fno-sanitize=alignment")
 
 # Set output directories
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
