@@ -111,22 +111,31 @@ void suzbutton_render_button(struct suztk_window *window,
                              struct suztk_button *button)
 {
     if (button != NULL) {
-        /*SDL_SetRenderDrawColor(button->window->renderer, 0, 255, 0, 0xFF);
-        SDL_RenderFillRect(button->window->renderer, &button->rectangle);*/
-
         SDL_RenderCopy(
             window->renderer, button->texture, NULL, &button->rectangle);
 
         int mouse_x, mouse_y;
-        if (SDL_GetMouseState(&mouse_x, &mouse_y) == SDL_BUTTON_LEFT) {
-            if (mouse_inside_button(mouse_x, mouse_y, button->rectangle)) {
 
-                if (button->action != NULL) {
-                    button->action();
-                } else {
-                    log_error("Function pointer is null!\n");
+        SDL_Event e;
+        SDL_PollEvent(&e);
+        switch (e.type)
+        {
+            case SDL_MOUSEBUTTONDOWN:
+                if (e.button.button == SDL_BUTTON_LEFT) {
+                    SDL_GetMouseState(&mouse_x, &mouse_y);
+                    if (mouse_inside_button(mouse_x, mouse_y, button->rectangle)) {
+                        if (button->action != NULL) {
+                            button->action();
+                        } else {
+                            log_error("Function pointer is null!\n");
+                        }
+                    }
                 }
-            }
+
+                break;
+            
+            default:
+                break;
         }
     } else {
         log_error("[suzbutton_render_button] Button is null!\n");
