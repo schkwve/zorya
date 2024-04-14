@@ -1,5 +1,8 @@
 # Sovyetski Soyouzy
 
+> [!NOTE]
+> Due to the browser taking up unreasonable amounts of RAM during runtime (and the code overall being a mess), the entire browser is currently being rewritten in the `rewrite` branch.
+
 A small, lightweight web browser built (mainly) by Slavs.
 
 ## Building
