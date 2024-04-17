@@ -25,9 +25,6 @@ project(SovyetskiSoyouzy
 set(EXECUTABLE_NAME SusieBrowser)
 set(PROJECT_NAME "Sovyetski Soyouzy")
 
-# Include FindSDL2 packages
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-
 # Make sure every prerequisite is installed
 find_package(OpenSSL REQUIRED)
 
