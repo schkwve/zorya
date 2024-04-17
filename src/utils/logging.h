@@ -1,12 +1,22 @@
 /**
- * @file utils/logging.h
- * @author Jozef Nagy <schkwve@gmail.com>
- * @date 28/02/2024
- * @brief Logging functionality
+ * Copyright (c) 2024 Zorya Browser
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LOG_LOGGING_H
-#define LOG_LOGGING_H
+#ifndef UTILS_LOGGING_H
+#define UTILS_LOGGING_H
 
 #include <stdarg.h>
 
@@ -65,4 +75,4 @@ enum
 
 void log_impl(int level, const char *file, int line, const char *fmt, ...);
 
-#endif /* LOG_LOGGING_H */
+#endif /* UTILS_LOGGING_H */

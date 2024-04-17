@@ -1,12 +1,19 @@
-/*
- * @file config.h
- * @author lolguy91 <retek1544@gmail.com>
- * @date 04/03/2024
- * @brief Browser configuration
+/**
+ * Copyright (c) 2024 Zorya Browser
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-// note for @lolguy91:
-// please learn doxygen-style comments. -schkwve
 
 #ifndef CONFIG_H
 #define CONFIG_H
@@ -21,4 +28,4 @@
 #define BROWSER_VERSION_STRING                                                 \
     (STRINGIZE(BROWSER_VERSION_MAJOR) "." STRINGIZE(BROWSER_VERSION_MINOR) "." STRINGIZE(BROWSER_VERSION_PATCH))
 
-#endif
+#endif /* CONFIG_H */
