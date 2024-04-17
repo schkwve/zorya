@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "string.h"
+#include <utils/string.h>
 
 char *str_tolower(char *str)
 {

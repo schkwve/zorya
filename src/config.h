@@ -13,12 +13,11 @@
 
 #include "utils/string.h"
 
-#define BROWSER_NAME "SovyetskiSoyouzy"
+#define BROWSER_NAME "Zorya"
 
 #define BROWSER_VERSION_MAJOR 0
 #define BROWSER_VERSION_MINOR 1
 #define BROWSER_VERSION_PATCH 0
-#define BROWSER_VERSION_CODENAME "Sus"
 #define BROWSER_VERSION_STRING                                                 \
     (STRINGIZE(BROWSER_VERSION_MAJOR) "." STRINGIZE(BROWSER_VERSION_MINOR) "." STRINGIZE(BROWSER_VERSION_PATCH))
 

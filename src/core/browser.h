@@ -10,12 +10,8 @@
 
 #include <stdbool.h>
 
-extern struct suztk_window *window;
-
 bool browser_init();
-
 bool browser_update();
-
 void browser_destroy();
 
 #endif /* BROWSER_H */

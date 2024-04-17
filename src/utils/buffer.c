@@ -10,7 +10,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "buffer.h"
+#include <utils/buffer.h>
 
 /**
  * @brief Appends data to an existing buffer, or creates a new buffer.

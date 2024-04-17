@@ -1,9 +1,7 @@
 #ifndef SSL_H
 #define SSL_H
 
-#include <stdbool.h>
-
-#include "connect.h"
+#include <network/connect.h>
 
 struct ssl_connection *ssl_priv_create_connection(const char *host,
                                                   const char *port,

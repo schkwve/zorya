@@ -7,74 +7,12 @@
  * @brief Source file for core/browser.h
  */
 
-#include <SDL.h>
-
-#include <assert.h>
 #include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <stdbool.h>
 
-#include "browser.h"
-#include "config.h"
-#include <antiralsei/htmltree.h>
-#include <core/user_agent.h>
-#include <netwerk/protocols/http.h>
-#include <netwerk/resolver.h>
-#include <netwerk/url.h>
-#include <suzTK/base-componyents/button.h>
-#include <suzTK/window.h>
-#include <utils/buffer.h>
-#include <utils/host.h>
+#include <config.h>
+#include <core/browser.h>
 #include <utils/logging.h>
-
-#include <UI/browsing.h>
-#include <UI/statemachine.h>
-
-struct suztk_window *window;
-struct suztk_button *button;
-
-/**
- * @brief Loads a page
- *
- * @param url
- *        URL of page to load
- */
-static void load_page(const char *url)
-{
-
-    struct url *url_info = malloc(sizeof(struct url));
-    *url_info = parse_url(url);
-
-    struct net_response res = resolve_url(*url_info);
-    if (res.status == RESPONSE_OK) {
-        struct parse_node *tree =
-            parse_html(res.page_data.data_ptr, res.page_data.data_len);
-
-        struct ui_browsing_args *args = malloc(sizeof(struct ui_browsing_args));
-        args->tree = tree;
-        args->url = url_info;
-
-        ui_statemachine_goto_page("browsing", (void *)args);
-        if (res.raw_response_type == RAW_RESPONSE_TYPE_HTTP) {
-            // clarification: derefencing the raw response as an http_response
-            // struct
-            free_http_response(*((struct http_response *)res.raw_response));
-            free(res.raw_response);
-        }
-    } else if (res.status == RESPONSE_ERROR) {
-        // TODO: transition to error screen
-        log_error(
-            "Failed to load page \"%s\" with error code %d", url, res.code);
-    } else if (res.status == RESPONSE_HTTP_ERROR) {
-        // TODO: transition to error screen
-        log_error("Failed to load page \"%s\" with HTTP error code %d",
-                  url,
-                  res.code);
-    } else if (res.status == RESPONSE_BUILTIN) {
-        // TODO: open builtin page
-    }
-}
 
 /**
  * @brief Initializes the browser.
@@ -87,21 +25,10 @@ bool browser_init()
     // OpenSSL can shit itself if SIGPIPE isn't ignored
     signal(SIGPIPE, SIG_IGN);
 
-    log_trace("Browser identifies as \"%s %s (%s)\"",
+    log_trace("Browser identifies as \"%s v%s\"",
               BROWSER_NAME,
-              BROWSER_VERSION_STRING,
-              BROWSER_VERSION_CODENAME);
+              BROWSER_VERSION_STRING);
 
-    user_agent_infer();
-    log_debug("User Agent: %s", g_user_agent);
-
-    window =
-        suzwin_create_window(1280, 720, 0, "LOL SUS BROWSER"); // easter egg ;)
-    suzwin_set_icon(window, "../res/logo.png");
-
-    button = suzbutton_create_button(window, 500, 500, 50, 50, "test", NULL);
-
-    load_page("https://kevinalavik.github.io/html-2.0-test/");
     return true;
 }
 
@@ -113,18 +40,9 @@ bool browser_init()
  */
 bool browser_update()
 {
-    ui_statemachine_render_current_page();
-    suzbutton_set_title(button, "apple");
-    suzbutton_render_button(window, button);
-
-    suzwin_render_window(window);
-
-    //  TODO: Update
     return true;
 }
 
 void browser_destroy()
 {
-    ui_statemachine_destroy_current_page();
-    suzwin_destroy_window(window);
 }

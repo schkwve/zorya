@@ -5,10 +5,10 @@
  * @date 2/03/2024
  */
 
-#include "url.h"
-
 #include <stdlib.h>
 #include <string.h>
+
+#include <network/url.h>
 #include <utils/logging.h>
 
 /**

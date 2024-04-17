@@ -9,7 +9,7 @@
 #ifndef NETWERK_RESOLVER_H
 #define NETWERK_RESOLVER_H
 
-#include <netwerk/url.h>
+#include <network/url.h>
 #include <utils/buffer.h>
 
 #define RESPONSE_OK 0

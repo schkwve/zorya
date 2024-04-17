@@ -6,4 +6,4 @@
 
 char *str_tolower(char *str);
 
-#endif /* UTILS_STRING_H  */
+#endif /* UTILS_STRING_H */
