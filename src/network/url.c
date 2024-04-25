@@ -31,6 +31,7 @@
  */
 struct url parse_url(const char *url)
 {
+    //TODO: make this func more versatile and more readable
     char *urlCopy = malloc(strlen(url) + 1);
     strcpy(urlCopy, url);
     struct url res = {
