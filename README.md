@@ -1,4 +1,4 @@
-# Sovyetski Soyouzy
+# Zorya
 
 > [!NOTE]
 > Due to the browser taking up unreasonable amounts of RAM during runtime (and the code overall being a mess), the entire browser is currently being rewritten in the `rewrite` branch.
